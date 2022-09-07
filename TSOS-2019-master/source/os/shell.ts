@@ -37,6 +37,11 @@ module TSOS {
                                   "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
 
+            // date
+            sc = new ShellCommand(this.shellDate,
+                                 "date",
+                                 "- Displays the current date and time.");
+
             // shutdown
             sc = new ShellCommand(this.shellShutdown,
                                   "shutdown",
@@ -213,6 +218,10 @@ module TSOS {
                 _StdOut.advanceLine();
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
+        }
+
+        public shellDate(args: string[]) {
+            _StdOut.putText("The current date and time is " + Date());
         }
 
         public shellShutdown(args: string[]) {
