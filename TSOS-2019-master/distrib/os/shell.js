@@ -33,6 +33,9 @@ var TSOS;
             // whereami
             sc = new TSOS.ShellCommand(this.shellWhereAmI, "whereami", "- Displays your location.");
             this.commandList[this.commandList.length] = sc;
+            //hello
+            sc = new TSOS.ShellCommand(this.shellHello, "hello", "- Displays a greeting.");
+            this.commandList[this.commandList.length] = sc;
             // shutdown
             sc = new TSOS.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
             this.commandList[this.commandList.length] = sc;
@@ -188,6 +191,20 @@ var TSOS;
         shellWhereAmI(args) {
             _StdOut.putText("In the right place at the right time.");
         }
+        shellHello(args) {
+            var date = new Date();
+            var hours = date.getHours();
+            //Checking for the time for different output messages
+            if (hours < 12) {
+                _StdOut.putText("Good morning, my favorite user.");
+            }
+            else if (hours >= 12 && hours < 17) {
+                _StdOut.putText("Good afternoon, my favorite user.");
+            }
+            else if (hours >= 17 && hours <= 24) {
+                _StdOut.putText("Good evening, my favorite user.");
+            }
+        }
         shellShutdown(args) {
             _StdOut.putText("Shutting down...");
             // Call Kernel shutdown routine.
@@ -213,6 +230,9 @@ var TSOS;
                         break;
                     case "whereami":
                         _StdOut.putText("Whereami displays your location.");
+                        break;
+                    case "hello":
+                        _StdOut.putText("Hello displays a greeting.");
                         break;
                     case "shutdown":
                         _StdOut.putText("Shutdown calls the kernel shutdown routine, shutting downthe virtual OS but leaves the underlying host / hardware simulation running.");
