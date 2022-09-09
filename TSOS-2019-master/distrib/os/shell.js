@@ -27,6 +27,12 @@ var TSOS;
             // help
             sc = new TSOS.ShellCommand(this.shellHelp, "help", "- This is the help command. Seek help.");
             this.commandList[this.commandList.length] = sc;
+            // date
+            sc = new TSOS.ShellCommand(this.shellDate, "date", "- Displays the current date and time.");
+            this.commandList[this.commandList.length] = sc;
+            // whereami
+            sc = new TSOS.ShellCommand(this.shellWhereAmI, "whereami", "- Displays your location.");
+            this.commandList[this.commandList.length] = sc;
             // shutdown
             sc = new TSOS.ShellCommand(this.shellShutdown, "shutdown", "- Shuts down the virtual OS but leaves the underlying host / hardware simulation running.");
             this.commandList[this.commandList.length] = sc;
@@ -176,6 +182,12 @@ var TSOS;
                 _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
             }
         }
+        shellDate(args) {
+            _StdOut.putText("The current date and time is " + Date());
+        }
+        shellWhereAmI(args) {
+            _StdOut.putText("In the right place at the right time.");
+        }
         shellShutdown(args) {
             _StdOut.putText("Shutting down...");
             // Call Kernel shutdown routine.
@@ -193,7 +205,33 @@ var TSOS;
                     case "help":
                         _StdOut.putText("Help displays a list of (hopefully) valid commands.");
                         break;
-                    // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
+                    case "ver":
+                        _StdOut.putText("Ver displays the name and version of the operating system.");
+                        break;
+                    case "date":
+                        _StdOut.putText("Date displays the current date and time.");
+                        break;
+                    case "whereami":
+                        _StdOut.putText("Whereami displays your location.");
+                        break;
+                    case "shutdown":
+                        _StdOut.putText("Shutdown calls the kernel shutdown routine, shutting downthe virtual OS but leaves the underlying host / hardware simulation running.");
+                        break;
+                    case "cls":
+                        _StdOut.putText("Cls clears the screen and resets the cursor position.");
+                        break;
+                    case "man":
+                        _StdOut.putText("Man takes a command argument and outputs what the command does.");
+                        break;
+                    case "trace":
+                        _StdOut.putText("Trace followed by on or off turns the OS trace on or off.");
+                        break;
+                    case "rot13":
+                        _StdOut.putText("Rot13 takes a string argument and does the rot13 obfuscation on the string");
+                        break;
+                    case "prompt":
+                        _StdOut.putText("Prompt takes a string as an argument and sets the prompt to that string.");
+                        break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
