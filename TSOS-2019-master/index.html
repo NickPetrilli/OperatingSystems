@@ -75,6 +75,16 @@
       </canvas>
    </div>
 
+   <div id = "dateAndTime" style = "margin-left:520px;">
+      <script>
+      var today = new Date();
+      var date = today.getMonth() + '/' + today.getDate() + '/' + today.getFullYear();
+      var time = today.getHours() + ":" + today.getMinutes();
+      var dateAndTime = date + ' ' + time;
+      document.getElementById("dateAndTime").innerHTML = dateAndTime;
+      </script>
+   </div>
+
    <div id="divLog" style="margin-left:520px;">
       <label>
          Host Log
