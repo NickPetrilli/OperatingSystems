@@ -78,11 +78,20 @@
    <div id = "dateAndTime" style = "margin-left:520px;">
       <script>
       var today = new Date();
-      var date = today.getMonth() + '/' + today.getDate() + '/' + today.getFullYear();
+      var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
       var time = today.getHours() + ":" + today.getMinutes();
       var dateAndTime = date + ' ' + time;
-      document.getElementById("dateAndTime").innerHTML = dateAndTime;
+      document.getElementById("dateAndTime").innerHTML = "Date and Time: " + dateAndTime;
       </script>
+   </div>
+
+   <div id = "divStatus" style = "margin-left:520px;">
+      <script>
+         //starting status message
+         let status = "Status: I love Operating Systems";
+         document.getElementById("divStatus").innerHTML = status;
+      </script>
+
    </div>
 
    <div id="divLog" style="margin-left:520px;">

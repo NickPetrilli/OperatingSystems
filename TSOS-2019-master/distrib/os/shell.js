@@ -54,6 +54,12 @@ var TSOS;
             // prompt <string>
             sc = new TSOS.ShellCommand(this.shellPrompt, "prompt", "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
+            //status <string>
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Sets the status message.");
+            this.commandList[this.commandList.length] = sc;
+            // bsod - blue screen of death
+            sc = new TSOS.ShellCommand(this.shellBsod, "bsod", " - Displays a blue screen of death.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             // Display the initial prompt.
@@ -301,6 +307,24 @@ var TSOS;
             else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
+        }
+        shellStatus(args) {
+            if (args.length > 0) {
+                var statusLength = args.length;
+                var status = "Status: ";
+                for (let i = 0; i < statusLength; i++) {
+                    status = status + args[i] + " ";
+                }
+                document.getElementById('divStatus').innerHTML = status;
+            }
+            else {
+                _StdOut.putText("Usage: status <string>  Please supply a string.");
+            }
+        }
+        shellBsod(args) {
+            //shell command is only for testing purposes
+            //need to change the canvas color to blue
+            _StdOut.putText("The OS has crashed!");
         }
     }
     TSOS.Shell = Shell;

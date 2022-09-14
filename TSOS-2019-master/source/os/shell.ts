@@ -91,6 +91,12 @@ module TSOS {
                                   "<string> - Sets the prompt.");
             this.commandList[this.commandList.length] = sc;
 
+            //status <string>
+            sc = new ShellCommand(this.shellStatus,
+                                 "status",
+                                 "<string> - Sets the status message.");
+            this.commandList[this.commandList.length] = sc;
+
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -352,6 +358,21 @@ module TSOS {
                 _OsShell.promptStr = args[0];
             } else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
+            }
+        }
+
+        public shellStatus(args: string[]) {
+            if (args.length > 0) {
+                var statusLength = args.length;
+                var status = "Status: ";
+                // Valid for multiple word input
+                for (let i = 0; i < statusLength; i++) {
+                    status = status + args[i] + " ";
+                }
+                document.getElementById('divStatus').innerHTML = status;
+            }
+            else {
+                _StdOut.putText("Usage: status <string>  Please supply a string.");
             }
         }
 
