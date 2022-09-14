@@ -201,5 +201,12 @@ module TSOS {
                 return CanvasTextFunctions.draw( ctx, font,size,x-w/2,y,text);
             };
         }
+
+        public static bsod() {
+            var canvas = <HTMLCanvasElement> document.getElementById('display');
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "blue";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
     }
 }

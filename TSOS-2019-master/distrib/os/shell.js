@@ -57,8 +57,8 @@ var TSOS;
             //status <string>
             sc = new TSOS.ShellCommand(this.shellStatus, "status", "<string> - Sets the status message.");
             this.commandList[this.commandList.length] = sc;
-            // bsod - blue screen of death
-            sc = new TSOS.ShellCommand(this.shellBsod, "bsod", " - Displays a blue screen of death.");
+            //bsod - blue screen of death
+            sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "- Displays a blue screen of death.");
             this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -312,6 +312,7 @@ var TSOS;
             if (args.length > 0) {
                 var statusLength = args.length;
                 var status = "Status: ";
+                // Valid for multiple word input
                 for (let i = 0; i < statusLength; i++) {
                     status = status + args[i] + " ";
                 }
@@ -322,9 +323,7 @@ var TSOS;
             }
         }
         shellBsod(args) {
-            //shell command is only for testing purposes
-            //need to change the canvas color to blue
-            _StdOut.putText("The OS has crashed!");
+            TSOS.CanvasTextFunctions.bsod();
         }
     }
     TSOS.Shell = Shell;

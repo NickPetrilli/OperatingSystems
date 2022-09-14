@@ -96,6 +96,12 @@ module TSOS {
                                  "status",
                                  "<string> - Sets the status message.");
             this.commandList[this.commandList.length] = sc;
+            
+            //bsod - blue screen of death
+            sc = new ShellCommand(this.shellBsod,
+                                 "bsod",
+                                 "- Displays a blue screen of death.");
+            this.commandList[this.commandList.length] = sc;
 
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
@@ -374,6 +380,10 @@ module TSOS {
             else {
                 _StdOut.putText("Usage: status <string>  Please supply a string.");
             }
+        }
+
+        public shellBsod(args: string[]) {
+           CanvasTextFunctions.bsod();
         }
 
     }

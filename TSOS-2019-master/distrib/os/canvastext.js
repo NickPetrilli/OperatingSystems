@@ -93,6 +93,12 @@ var TSOS;
                 return CanvasTextFunctions.draw(ctx, font, size, x - w / 2, y, text);
             };
         }
+        static bsod() {
+            var canvas = document.getElementById('display');
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = "blue";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
     }
     CanvasTextFunctions.symbols = {
         ' ': { width: 16, points: [] },
