@@ -43,34 +43,34 @@ var TSOS;
                 if (isShifted == true) {
                     switch (keyCode) {
                         case 48:
-                            chr = ")";
+                            chr = String.fromCharCode(41); // )
                             break;
                         case 49:
-                            chr = "!";
+                            chr = String.fromCharCode(33); // !
                             break;
                         case 50:
-                            chr = "@";
+                            chr = String.fromCharCode(64); // @
                             break;
                         case 51:
-                            chr = "#";
+                            chr = String.fromCharCode(35); // #
                             break;
                         case 52:
-                            chr = "$";
+                            chr = String.fromCharCode(36); // $
                             break;
                         case 53:
-                            chr = "%";
+                            chr = String.fromCharCode(37); // %
                             break;
                         case 54:
-                            chr = "^";
+                            chr = String.fromCharCode(94); // ^
                             break;
                         case 55:
-                            chr = "&";
+                            chr = String.fromCharCode(38); // &
                             break;
                         case 56:
-                            chr = "*";
+                            chr = String.fromCharCode(42); // *
                             break;
                         case 57:
-                            chr = "(";
+                            chr = String.fromCharCode(40); // (
                             break;
                     }
                 }
