@@ -82,31 +82,84 @@ module TSOS {
                     chr = String.fromCharCode(keyCode);
                 }
                 _KernelInputQueue.enqueue(chr);
-            } else if ((keyCode == 32) || (keyCode == 13)) {
+            } else if ((keyCode == 186) || (keyCode == 187) || (keyCode == 188) || (keyCode == 189) || 
+                      (keyCode == 190) || (keyCode == 191) || (keyCode == 219) || (keyCode == 220) ||
+                      (keyCode == 221) || (keyCode == 222)) {
+                        if (!isShifted) {
+                            switch(keyCode) {
+                                case 186:
+                                    chr = String.fromCharCode(59); // ;
+                                    break;
+                                case 187:
+                                    chr = String.fromCharCode(61); // =
+                                    break;
+                                case 188:
+                                    chr = String.fromCharCode(44); // ,
+                                    break;
+                                case 189:
+                                    chr = String.fromCharCode(45); // -
+                                    break;
+                                case 190:
+                                    chr = String.fromCharCode(46); // .
+                                    break;
+                                case 191:
+                                    chr = String.fromCharCode(47); // /
+                                    break;
+                                case 219:
+                                    chr = String.fromCharCode(91); // [
+                                    break;
+                                case 220:
+                                    chr = String.fromCharCode(92); // \
+                                    break;
+                                case 221:
+                                    chr = String.fromCharCode(93); // ]
+                                    break;
+                                case 222:
+                                    chr = String.fromCharCode(39); // '
+                                    break;
+                            }
+                        } 
+                        else {
+                            switch(keyCode) {
+                                case 186:
+                                    chr = String.fromCharCode(58); // :
+                                    break;
+                                case 187:
+                                    chr = String.fromCharCode(43); // +
+                                    break;
+                                case 188:
+                                    chr = String.fromCharCode(60); // <
+                                    break;
+                                case 189:
+                                    chr = String.fromCharCode(95); // _
+                                    break;
+                                case 190:
+                                    chr = String.fromCharCode(62); // >
+                                    break;
+                                case 191:
+                                    chr = String.fromCharCode(63); // ?
+                                    break;
+                                case 219:
+                                    chr = String.fromCharCode(123); // {
+                                    break;
+                                case 220:
+                                    chr = String.fromCharCode(124); // |
+                                    break;
+                                case 221:
+                                    chr = String.fromCharCode(125); // }
+                                    break;
+                                case 222:
+                                    chr = String.fromCharCode(34); // "
+                                    break;                               
+                            }
+                        }
+                        _KernelInputQueue.enqueue(chr);
+
+            } else if ((keyCode == 32) || (keyCode == 13)) { //32 = space, 13 = enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
 
-            
-            /*
-            ||   // digits
-                        (keyCode == 32)                     ||   // space
-                        (keyCode == 13)                     ||   // enter
-                        (keyCode == 8)                      ||   // backspace
-                        (keyCode == 188)                    ||   // ,
-                        (keyCode == 190)                    ||   // .
-                        (keyCode == 191)                    ||   // /
-                        (keyCode == 186)                    ||   // ;
-                        (keyCode == 222)                    ||   // '
-                        (keyCode == 219)                    ||   // [
-                        (keyCode == 221)                    ||   // ]
-                        (keyCode == 189)                    ||   // -
-                        (keyCode == 187)) {                      // =
-                            
-                chr = String.fromCharCode(keyCode);
-                _KernelInputQueue.enqueue(chr);
-            }
-            */
         }
     }
 }
