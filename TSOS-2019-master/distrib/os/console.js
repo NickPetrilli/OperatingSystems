@@ -37,6 +37,10 @@ var TSOS;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
+                else if (chr == String.fromCharCode(8)) { // backspace key
+                    // handle backspace
+                    //need to access the previous letter typed and then update it 
+                }
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -74,6 +78,17 @@ var TSOS;
                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                 _FontHeightMargin;
             // TODO: Handle scrolling. (iProject 1)
+            //Check if the current y position is off the canvas
+            if (this.currentYPosition > 500) {
+                //Split the buffer on new line, and remove the first element of array
+                var arr = this.buffer.split('\n');
+                arr.shift();
+                this.clearScreen();
+                this.resetXY();
+                for (let i = 0; i < arr.length; i++) {
+                    this.putText(arr[i]);
+                }
+            }
         }
     }
     TSOS.Console = Console;
