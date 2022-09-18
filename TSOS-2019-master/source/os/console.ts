@@ -41,10 +41,12 @@ module TSOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                } else if (chr == String.fromCharCode(8)) { // backspace key
-                    // handle backspace
-                    //need to access the previous letter typed and then update it 
+                } else if (chr === String.fromCharCode(8)) { // backspace key
+
                     
+                }else if (chr == String.fromCharCode(9)) { // tab key
+                    
+
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -87,19 +89,16 @@ module TSOS {
             // TODO: Handle scrolling. (iProject 1)
 
             //Check if the current y position is off the canvas
-            if (this.currentYPosition > 500) {
+            if (this.currentYPosition > _Canvas.height) {
 
-                //Split the buffer on new line, and remove the first element of array
-                var arr = this.buffer.split('\n');
-                arr.shift(); 
+                //Take a snapshot by getting the image data of the canvas
+                var imageData = _Canvas.getContext('2d').getImageData(0, 0, _Canvas.width, _Canvas.height);
+                
+                _Canvas.height += this.currentYPosition - _Canvas.height;
+                _Canvas.getContext('2d').putImageData(imageData, 0, 0);
 
-                this.clearScreen();
-                this.resetXY();
-
-                for (let i = 0; i < arr.length; i++) {
-                    this.putText(arr[i]);
-                }
-
+                var console = document.getElementById('divConsole');
+                console.scrollTop = console.scrollHeight;
 
             }
         }
