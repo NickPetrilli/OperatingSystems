@@ -152,7 +152,7 @@ var TSOS;
                 }
                 _KernelInputQueue.enqueue(chr);
             }
-            else if ((keyCode == 32) || (keyCode == 13)) { //32 = space, 13 = enter
+            else if ((keyCode == 32) || (keyCode == 13) || (keyCode == 8)) { //32 = space, 13 = enter, 8 = backspace
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }

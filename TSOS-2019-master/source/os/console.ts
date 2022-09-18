@@ -42,10 +42,23 @@ module TSOS {
                     // ... and reset our buffer.
                     this.buffer = "";
                 } else if (chr === String.fromCharCode(8)) { // backspace key
+                    if (this.buffer.length > 0) {
+                        //Calculate offset of the character for x and y coordinates
+                        var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.charAt(this.buffer.length - 1));
+                        var xBeginnningPos = this.currentXPosition - offsetX;
 
-                    
-                }else if (chr == String.fromCharCode(9)) { // tab key
-                    
+                        var offsetY = _DefaultFontSize; 
+                        var yBeginningPos = this.currentYPosition - offsetY;
+                        
+                        //Clear area from where we began to the current position - last two parameters are width and height
+                        _DrawingContext.clearRect(xBeginnningPos, yBeginningPos, offsetX, offsetY);
+
+                        this.currentXPosition = xBeginnningPos;
+                        //Remove last character of buffer
+                        this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+                    }
+
+                }else if (chr === String.fromCharCode(9)) { // tab key
 
                 } else {
                     // This is a "normal" character, so ...
@@ -93,13 +106,12 @@ module TSOS {
 
                 //Take a snapshot by getting the image data of the canvas
                 var imageData = _Canvas.getContext('2d').getImageData(0, 0, _Canvas.width, _Canvas.height);
-                
-                _Canvas.height += this.currentYPosition - _Canvas.height;
-                _Canvas.getContext('2d').putImageData(imageData, 0, 0);
 
+                _Canvas.height += (this.currentYPosition - _Canvas.height);
+                _Canvas.getContext('2d').putImageData(imageData, 0, 0);
+                
                 var console = document.getElementById('divConsole');
                 console.scrollTop = console.scrollHeight;
-
             }
         }
     }
