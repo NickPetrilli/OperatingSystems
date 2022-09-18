@@ -60,6 +60,9 @@ var TSOS;
             //bsod - blue screen of death
             sc = new TSOS.ShellCommand(this.shellBsod, "bsod", "- Displays a blue screen of death.");
             this.commandList[this.commandList.length] = sc;
+            //load
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Loads program from user program input text area.");
+            this.commandList[this.commandList.length] = sc;
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             // Display the initial prompt.
@@ -324,6 +327,28 @@ var TSOS;
         }
         shellBsod(args) {
             TSOS.CanvasTextFunctions.bsod();
+        }
+        shellLoad(args) {
+            //Only hex digits and spaces are allowed
+            var hexDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', ' '];
+            var isValid = true;
+            _UserProgramInput = document.getElementById('taProgramInput').value;
+            if (_UserProgramInput.length == 0) {
+                isValid = false;
+            }
+            for (var i = 0; i < _UserProgramInput.length; i++) {
+                var char = _UserProgramInput[i];
+                if (hexDigits.indexOf(char) === -1) {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (!isValid) {
+                _StdOut.putText("Invalid user program.");
+            }
+            else {
+                _StdOut.putText("User program loaded.");
+            }
         }
     }
     TSOS.Shell = Shell;
