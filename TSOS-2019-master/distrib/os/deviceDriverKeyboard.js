@@ -152,8 +152,17 @@ var TSOS;
                 }
                 _KernelInputQueue.enqueue(chr);
             }
-            else if ((keyCode == 32) || (keyCode == 13) || (keyCode == 8)) { //32 = space, 13 = enter, 8 = backspace
+            else if ((keyCode == 32) || (keyCode == 13) || //32 = space, 13 = enter 
+                (keyCode == 8) || (keyCode == 9)) { //8 = backspace, 9 = tab
                 chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
+            else if (keyCode == 38) {
+                chr = "upArrow";
+                _KernelInputQueue.enqueue(chr);
+            }
+            else if (keyCode == 40) {
+                chr = "downArrow";
                 _KernelInputQueue.enqueue(chr);
             }
         }

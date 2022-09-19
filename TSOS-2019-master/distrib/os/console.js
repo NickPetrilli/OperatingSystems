@@ -7,12 +7,15 @@
 var TSOS;
 (function (TSOS) {
     class Console {
-        constructor(currentFont = _DefaultFontFamily, currentFontSize = _DefaultFontSize, currentXPosition = 0, currentYPosition = _DefaultFontSize, buffer = "") {
+        constructor(currentFont = _DefaultFontFamily, currentFontSize = _DefaultFontSize, currentXPosition = 0, currentYPosition = _DefaultFontSize, buffer = "", commandHistory = [], commandPointer = 0, shouldClear = false) {
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
+            this.commandHistory = commandHistory;
+            this.commandPointer = commandPointer;
+            this.shouldClear = shouldClear;
         }
         init() {
             this.clearScreen();
@@ -34,24 +37,34 @@ var TSOS;
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    this.commandHistory.push(this.buffer);
+                    //Push adds the command to the back of the array, so last command will be at index length - 1
+                    this.commandPointer = this.commandHistory.length - 1;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
                 else if (chr === String.fromCharCode(8)) { // backspace key
-                    if (this.buffer.length > 0) {
-                        //Calculate offset of the character for x and y coordinates
-                        var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.charAt(this.buffer.length - 1));
-                        var xBeginnningPos = this.currentXPosition - offsetX;
-                        var offsetY = _DefaultFontSize;
-                        var yBeginningPos = this.currentYPosition - offsetY;
-                        //Clear area from where we began to the current position - last two parameters are width and height
-                        _DrawingContext.clearRect(xBeginnningPos, yBeginningPos, offsetX, offsetY);
-                        this.currentXPosition = xBeginnningPos;
-                        //Remove last character of buffer
-                        this.buffer = this.buffer.substring(0, this.buffer.length - 1);
-                    }
+                    this.backspace();
                 }
                 else if (chr === String.fromCharCode(9)) { // tab key
+                }
+                else if (chr === "upArrow") { // up arrow
+                    //_StdOut.putText("Up arrow test");
+                    if (this.commandPointer != 0) {
+                        this.clearLine();
+                        this.putText(this.commandHistory[this.commandPointer]);
+                        this.buffer = this.commandHistory[this.commandPointer];
+                        this.commandPointer--;
+                    }
+                }
+                else if (chr === "downArrow") { // down arrow
+                    //_StdOut.putText("Down arrow test");
+                    if (this.commandPointer != this.commandHistory.length - 1) {
+                        this.clearLine();
+                        this.putText(this.commandHistory[this.commandPointer]);
+                        this.buffer = this.commandHistory[this.commandPointer];
+                        this.commandPointer++;
+                    }
                 }
                 else {
                     // This is a "normal" character, so ...
@@ -94,10 +107,38 @@ var TSOS;
             if (this.currentYPosition > _Canvas.height) {
                 //Take a snapshot by getting the image data of the canvas
                 var imageData = _Canvas.getContext('2d').getImageData(0, 0, _Canvas.width, _Canvas.height);
-                _Canvas.height += (this.currentYPosition - _Canvas.height);
+                _Canvas.height += (this.currentYPosition - _Canvas.height) + 10;
                 _Canvas.getContext('2d').putImageData(imageData, 0, 0);
                 var console = document.getElementById('divConsole');
                 console.scrollTop = console.scrollHeight;
+            }
+        }
+        backspace() {
+            if (this.buffer.length > 0) {
+                //Calculate offset of the character for x and y coordinates
+                var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer.charAt(this.buffer.length - 1));
+                var xBeginnningPos = this.currentXPosition - offsetX;
+                var offsetY = _DefaultFontSize;
+                var yBeginningPos = this.currentYPosition - offsetY;
+                //Clear area from where we began to the current position - last two parameters are width and height
+                _DrawingContext.clearRect(xBeginnningPos, yBeginningPos, offsetX, offsetY + 5);
+                this.currentXPosition = xBeginnningPos;
+                //Remove last character of buffer
+                this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+            }
+        }
+        clearLine() {
+            if (this.buffer.length > 0) {
+                //Calculate offset of the character for x and y coordinates
+                var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, this.buffer);
+                var xBeginnningPos = this.currentXPosition - offsetX;
+                var offsetY = _DefaultFontSize;
+                var yBeginningPos = this.currentYPosition - offsetY;
+                //Clear area from where we began to the current position - last two parameters are width and height
+                _DrawingContext.clearRect(xBeginnningPos, yBeginningPos, offsetX, offsetY + 5);
+                this.currentXPosition = xBeginnningPos;
+                //Remove last character of buffer
+                this.buffer = "";
             }
         }
     }

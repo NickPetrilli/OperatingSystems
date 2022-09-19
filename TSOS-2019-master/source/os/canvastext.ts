@@ -205,8 +205,11 @@ module TSOS {
         public static bsod() {
             var canvas = <HTMLCanvasElement> document.getElementById('display');
             var ctx = canvas.getContext("2d");
+            //_DrawingContext.fillStyle = "blue";
+            //_DrawingContext.fillRect(0, 0, _DrawingContext.width, _DrawingContext.height);
             ctx.fillStyle = "blue";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            TSOS.Control.hostBtnHaltOS_click(true);
         }
     }
 }
