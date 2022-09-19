@@ -33,6 +33,33 @@
    <!-- Uncomment the line below to enable GLaDOS testing. -->
    <script type="text/javascript" src="http://alanclasses.github.io/TSOS/test/glados-ip1.js"></script>
    
+   <script>
+      setInterval(function () {
+         var today = new Date();
+         var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+         var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+         var date = days[today.getDay()] + " " + months[today.getMonth()] + ' ' + today.getDate() + ", " + today.getFullYear();
+         var minutes = today.getMinutes() > 9 ? today.getMinutes() : "0" + today.getMinutes();
+         var seconds = today.getSeconds() > 9 ? today.getSeconds() : "0" + today.getSeconds();
+
+         var ampm = "AM";
+         var hours = today.getHours();
+         if (hours > 11) {
+            ampm = "PM";
+            if (hours > 12) {
+               hours -= 12;
+            }
+         }
+            if (hours == 0) {
+               hours = 12;
+            }
+
+         var time = hours + ":" + minutes + ":" + seconds + " " + ampm;
+         document.getElementById("dateAndTime").innerHTML = date + " " + time;
+      }, 1000);
+   </script>
+   
 </head>
 
 <body onload="onDocumentLoad()">
@@ -76,13 +103,6 @@
    </div>
 
    <div id = "dateAndTime" style = "margin-left:520px;">
-      <script>
-      var today = new Date();
-      var date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
-      var time = today.getHours() + ":" + today.getMinutes();
-      var dateAndTime = date + ' ' + time;
-      document.getElementById("dateAndTime").innerHTML = "Date and Time: " + dateAndTime;
-      </script>
    </div>
 
    <div id = "divStatus" style = "margin-left:520px;">
