@@ -15,8 +15,7 @@ module TSOS {
                     public currentYPosition = _DefaultFontSize,
                     public buffer = "",
                     public commandHistory = [],
-                    public commandPointer = 0,
-                    public shouldClear = false) {
+                    public commandPointer = 0) {
         }
 
         public init(): void {
@@ -54,6 +53,20 @@ module TSOS {
                     this.backspace();
 
                 } else if (chr === String.fromCharCode(9)) { // tab key
+                    if (this.buffer.length > 0) {
+                        var length = this.buffer.length;
+                        var input = this.buffer;
+                        for (var i = 0; i < _OsShell.commandList.length; i++) {
+                            if (_OsShell.commandList[i].command.substring(0, length) === input) {
+                                //Break so only even if there are multiple commands that match input, only one will be printed
+                                this.clearLine();
+                                this.putText(_OsShell.commandList[i].command);
+                                this.buffer = _OsShell.commandList[i].command;
+                                break; 
+                            }
+                        }
+                        
+                    }
 
 
                 } else if (chr === "upArrow") { // up arrow
@@ -94,10 +107,15 @@ module TSOS {
                 decided to write one function and use the term "text" to connote string or char.
             */
             if (text !== "") {
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                /* 
+                if (this.currentXPosition + offset > _Canvas.width) {
+                    this.advanceLine();
+                }
+                */
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
             }
          }
@@ -113,7 +131,6 @@ module TSOS {
                                      _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                                      _FontHeightMargin;
 
-            // TODO: Handle scrolling. (iProject 1)
 
             //Check if the current y position is off the canvas
             if (this.currentYPosition > _Canvas.height) {
@@ -158,7 +175,7 @@ module TSOS {
                 _DrawingContext.clearRect(xBeginnningPos, yBeginningPos, offsetX, offsetY + 5);
 
                 this.currentXPosition = xBeginnningPos;
-                //Remove last character of buffer
+                //Remove the entire buffer
                 this.buffer = "";
             }
         }

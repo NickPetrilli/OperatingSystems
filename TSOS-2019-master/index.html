@@ -39,7 +39,7 @@
          var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
          var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-         var date = days[today.getDay()] + " " + months[today.getMonth()] + ' ' + today.getDate() + ", " + today.getFullYear();
+         var date = days[today.getDay()] + ", " + months[today.getMonth()] + ' ' + today.getDate() + ", " + today.getFullYear();
          var minutes = today.getMinutes() > 9 ? today.getMinutes() : "0" + today.getMinutes();
          var seconds = today.getSeconds() > 9 ? today.getSeconds() : "0" + today.getSeconds();
 
@@ -56,7 +56,7 @@
             }
 
          var time = hours + ":" + minutes + ":" + seconds + " " + ampm;
-         document.getElementById("dateAndTime").innerHTML = date + ", " + time;
+         document.getElementById("dateAndTime").innerHTML = date + " " + time;
       }, 1000);
    </script>
    
@@ -94,7 +94,7 @@
              onclick="TSOS.Control.hostBtnReset_click(this);">
    </div>
 
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left; overflow: scroll;">
+   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left; overflow-y: scroll; overflow-x: hidden;">
       <canvas id="display"
               width="500px"
               height="500px"

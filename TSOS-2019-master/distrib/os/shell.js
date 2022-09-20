@@ -320,6 +320,7 @@ var TSOS;
                     status = status + args[i] + " ";
                 }
                 document.getElementById('divStatus').innerHTML = status;
+                _StdOut.putText("Status updated.");
             }
             else {
                 _StdOut.putText("Usage: status <string>  Please supply a string.");

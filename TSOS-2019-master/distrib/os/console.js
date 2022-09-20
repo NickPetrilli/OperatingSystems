@@ -7,7 +7,7 @@
 var TSOS;
 (function (TSOS) {
     class Console {
-        constructor(currentFont = _DefaultFontFamily, currentFontSize = _DefaultFontSize, currentXPosition = 0, currentYPosition = _DefaultFontSize, buffer = "", commandHistory = [], commandPointer = 0, shouldClear = false) {
+        constructor(currentFont = _DefaultFontFamily, currentFontSize = _DefaultFontSize, currentXPosition = 0, currentYPosition = _DefaultFontSize, buffer = "", commandHistory = [], commandPointer = 0) {
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
@@ -15,7 +15,6 @@ var TSOS;
             this.buffer = buffer;
             this.commandHistory = commandHistory;
             this.commandPointer = commandPointer;
-            this.shouldClear = shouldClear;
         }
         init() {
             this.clearScreen();
@@ -47,6 +46,18 @@ var TSOS;
                     this.backspace();
                 }
                 else if (chr === String.fromCharCode(9)) { // tab key
+                    if (this.buffer.length > 0) {
+                        var length = this.buffer.length;
+                        var input = this.buffer;
+                        for (var i = 0; i < _OsShell.commandList.length; i++) {
+                            if (_OsShell.commandList[i].command.substring(0, length) === input) {
+                                this.clearLine();
+                                this.putText(_OsShell.commandList[i].command);
+                                this.buffer = _OsShell.commandList[i].command;
+                                break; //only prints one command
+                            }
+                        }
+                    }
                 }
                 else if (chr === "upArrow") { // up arrow
                     //_StdOut.putText("Up arrow test");
@@ -85,10 +96,15 @@ var TSOS;
                 decided to write one function and use the term "text" to connote string or char.
             */
             if (text !== "") {
+                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
+                /*
+                if (this.currentXPosition + offset > _Canvas.width) {
+                    this.advanceLine();
+                }
+                */
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
                 // Move the current X position.
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
             }
         }
@@ -102,7 +118,6 @@ var TSOS;
             this.currentYPosition += _DefaultFontSize +
                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                 _FontHeightMargin;
-            // TODO: Handle scrolling. (iProject 1)
             //Check if the current y position is off the canvas
             if (this.currentYPosition > _Canvas.height) {
                 //Take a snapshot by getting the image data of the canvas
@@ -137,7 +152,7 @@ var TSOS;
                 //Clear area from where we began to the current position - last two parameters are width and height
                 _DrawingContext.clearRect(xBeginnningPos, yBeginningPos, offsetX, offsetY + 5);
                 this.currentXPosition = xBeginnningPos;
-                //Remove last character of buffer
+                //Remove the entire buffer
                 this.buffer = "";
             }
         }
