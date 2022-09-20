@@ -108,7 +108,8 @@ module TSOS {
             */
             if (text !== "") {
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                /* 
+                /*
+                Basic line wrap for typing, but prints an empty line when up any commands that reach the canvas width  
                 if (this.currentXPosition + offset > _Canvas.width) {
                     this.advanceLine();
                 }
