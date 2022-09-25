@@ -349,6 +349,7 @@ var TSOS;
             }
             else {
                 _StdOut.putText("User program loaded.");
+                //Actually load the program here
             }
         }
     }

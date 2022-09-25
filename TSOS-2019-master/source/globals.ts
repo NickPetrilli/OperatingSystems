@@ -55,6 +55,14 @@ var _OsShell: TSOS.Shell;
 
 var _UserProgramInput: string;
 
+//Hardware (host)
+var _CPU: TSOS.Cpu;
+var _Memory: TSOS.Memory;
+var _MemoryAccessor: TSOS.MemoryAccessor;
+
+//Software (OS)
+var _MemoryManager: any = null;
+
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode: boolean = false;
 

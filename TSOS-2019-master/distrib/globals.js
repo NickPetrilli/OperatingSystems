@@ -41,6 +41,12 @@ var _StdOut = null;
 var _Console;
 var _OsShell;
 var _UserProgramInput;
+//Hardware (host)
+var _CPU;
+var _Memory;
+var _MemoryAccessor;
+//Software (OS)
+var _MemoryManager = null;
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode = false;
 // Global Device Driver Objects - page 12

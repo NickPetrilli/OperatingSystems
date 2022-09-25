@@ -51,10 +51,11 @@ var TSOS;
                         var input = this.buffer;
                         for (var i = 0; i < _OsShell.commandList.length; i++) {
                             if (_OsShell.commandList[i].command.substring(0, length) === input) {
+                                //Break so only even if there are multiple commands that match input, only one will be printed
                                 this.clearLine();
                                 this.putText(_OsShell.commandList[i].command);
                                 this.buffer = _OsShell.commandList[i].command;
-                                break; //only prints one command
+                                break;
                             }
                         }
                     }
@@ -98,6 +99,7 @@ var TSOS;
             if (text !== "") {
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 /*
+                Basic line wrap for typing, but prints an empty line when up any commands that reach the canvas width
                 if (this.currentXPosition + offset > _Canvas.width) {
                     this.advanceLine();
                 }
