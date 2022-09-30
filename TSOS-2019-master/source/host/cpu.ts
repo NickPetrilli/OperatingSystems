@@ -20,7 +20,9 @@ module TSOS {
                     public Xreg: number = 0,
                     public Yreg: number = 0,
                     public Zflag: number = 0,
-                    public isExecuting: boolean = false) {
+                    public isExecuting: boolean = false,
+                    public instruction: string = 'N/A',
+                    public currentPCB: TSOS.ProcessControlBlock = null) {
 
         }
 
@@ -37,6 +39,134 @@ module TSOS {
             _Kernel.krnTrace('CPU cycle');
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+
+            if (this.currentPCB !== null && this.isExecuting) {
+
+                switch(this.instruction) {
+                    case 'A9': // Load the accumulator with a constant
+                        this.loadAccWithConstant();
+                        break;
+                    case 'AD': // Load acc from memory
+                        this.loadAccFromMemory();
+                        break;
+                    case '8D': // Store acc in memory
+                        this.storeAccInMemory();
+                        break;
+                    case '6D': // Add with carry 
+                        this.addWithCarry();
+                        break;
+                    case 'A2': // Load X Register with a constant
+                        this.loadXRegWithConstant();
+                        break;
+                    case 'AE': //Load X Register from memory
+                        this.loadXRegFromMemory();
+                        break;
+                    case 'A0': // Load Y Register with a constant
+                        this.loadYRegWithConstant();
+                        break;
+                    case 'AC': // Load Y Register from memory
+                        this.loadYRegFromMemory();
+                        break;
+                    case 'EA': // No op
+                        this.PC++;
+                        break;
+                    case '00': // Break (system call)
+                        this.breakSystemCall();
+                        break;
+                    case 'EC': // Compare a byte in memory to the X register, sets Z flag if equal
+                        this.compareMemToXReg();
+                        break;
+                    case 'D0': // Branch N bytes if Z flag = 0
+                        this.branch();
+                        break;
+                    case 'EE': // Increment the value of a byte
+                        this.incrementValue();
+                        break;
+                    case 'FF': // System call
+                        this.systemCall();
+                        break;
+                    default:
+                        alert("Illegal instruction");
+                        this.isExecuting = false;
+                        break;
+                } 
+            }
+
+
+
+
+        }
+
+
+        private loadAccWithConstant() {
+            this.PC++;
+
+        }
+
+        private loadAccFromMemory() {
+            this.PC++;
+
+        }
+
+        private storeAccInMemory() {
+            this.PC++;
+
+        }
+
+        private addWithCarry() {
+            this.PC++;
+
+        }
+
+        private loadXRegWithConstant() {
+            this.PC++;
+
+        }
+
+        private loadXRegFromMemory() {
+            this.PC++;
+
+        }
+
+        private loadYRegWithConstant() {
+            this.PC++
+
+        }
+
+        private loadYRegFromMemory() {
+            this.PC++;
+
+        }
+
+        private breakSystemCall() {
+            this.isExecuting = false;
+            this.currentPCB = null;
+            this.PC = 0;
+            this.Acc = 0;
+            this.Xreg = 0;
+            this.Yreg = 0;
+            this.Zflag = 0;
+            
+        }
+
+        private compareMemToXReg() {
+            this.PC++;
+
+        }
+
+        private branch() {
+            this.PC++;
+
+        }
+
+        private incrementValue() {
+            this.PC++;
+
+        }
+
+        private systemCall() {
+            this.PC++;
+
         }
     }
 }
