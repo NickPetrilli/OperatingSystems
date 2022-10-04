@@ -58,6 +58,7 @@ var _UserProgramInput: string;
 //Hardware (host)
 var _CPU: TSOS.Cpu;
 var _Memory: TSOS.Memory;
+var _MemorySize: number = 256; //Only for iProject2 
 var _MemoryAccessor: TSOS.MemoryAccessor;
 
 //Software (OS)

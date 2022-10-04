@@ -44,6 +44,7 @@ var _UserProgramInput;
 //Hardware (host)
 var _CPU;
 var _Memory;
+var _MemorySize = 256; //Only for iProject2 
 var _MemoryAccessor;
 //Software (OS)
 var _MemoryManager = null;

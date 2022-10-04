@@ -34,6 +34,7 @@ var TSOS;
             // Set focus on the start button.
             // Use the TypeScript cast to HTMLInputElement
             document.getElementById("btnStartOS").focus();
+            this.initMemoryDisplay();
             // Check for our testing and enrichment core, which
             // may be referenced here (from index.html) as function Glados().
             if (typeof Glados === "function") {
@@ -42,6 +43,56 @@ var TSOS;
                 _GLaDOS = new Glados();
                 _GLaDOS.init();
             }
+        }
+        static initMemoryDisplay() {
+            var memoryDisplay = document.getElementById("memoryTable");
+            var tableBody = memoryDisplay.createTBody();
+            var rowCount = 0;
+            //Create rows and columns for each row 
+            for (var i = 0; i < _MemorySize; i += 8) {
+                var iStr = i.toString();
+                var row = tableBody.insertRow(rowCount);
+                //Pad with zeros accordingly
+                if (i < 10) {
+                    iStr = '0' + iStr;
+                }
+                if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                iStr = '0x' + iStr;
+                row.textContent = iStr + '\t';
+                var cell = row.insertCell(0);
+                for (var j = 0; j < 8; j++) {
+                    cell = row.insertCell(j);
+                    cell.textContent = '00\t';
+                }
+                rowCount++;
+            }
+            /*
+            var htmlString = '';
+
+            //For each row in the table, generate each column
+            for (var i = 0; i < _MemorySize; i += 8) {
+                //Pad with zeros accordingly
+                var iStr = i.toString();
+                if (i < 10) {
+                    iStr = '0' + iStr;
+                }
+                if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                htmlString += '<tr>' + '<th>0x' + iStr + '</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>';
+                htmlString += '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '</tr>' ;
+
+                //htmlString += '0x' + iStr + '\t' + '00' + '\t' + '00' + '\t' + '00' + '\t' + '00';
+                //htmlString += '\t' + '00' + '\t' + '00' + '\t' + '00' + '\t' + '00' + '\n';
+
+                
+
+                
+            }
+            memoryDisplay.innerHTML = htmlString;
+            */
         }
         static hostLog(msg, source = "?") {
             // Note the OS CLOCK.
@@ -69,8 +120,8 @@ var TSOS;
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new TSOS.Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
-            _Memory = new TSOS.Memory();
-            //_Memory.init();
+            _Memory = new TSOS.Memory(256);
+            _Memory.init();
             _MemoryAccessor = new TSOS.MemoryAccessor();
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);

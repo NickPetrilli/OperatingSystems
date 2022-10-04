@@ -118,13 +118,14 @@
 
    </div>
 
-   <div id="divLog" style="margin-left:520px;">
+   <div id="divLog" style="margin-left:520px;" >
       <label>
          Host Log
          <br>
          <textarea name="taHostLog"
                    id  ="taHostLog"
-                   rows="26"
+                   style="overflow-y: scroll;"
+                   rows="15"
                    cols="48"
          ></textarea>
       </label>
@@ -141,6 +142,20 @@
          ></textarea>
       </label>
    </div>
+
+
+   <div id="divMemoryDisplay" style="margin-left: 520px">
+      <label>
+         Memory Display
+         <br>
+         <table name="memoryTable"
+                id="memoryTable"
+                class="memoryTable"
+         ></table>
+         
+      </label>
+   </div>
+  
 </div>
 
 <p class="footerText" style="clear:both;">

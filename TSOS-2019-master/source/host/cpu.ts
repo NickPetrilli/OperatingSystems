@@ -35,12 +35,13 @@ module TSOS {
             this.isExecuting = false;
         }
 
-        public cycle(): void {
-            _Kernel.krnTrace('CPU cycle');
+        public cycle(): void {            
             // TODO: Accumulate CPU usage and profiling statistics here.
-            // Do the real work here. Be sure to set this.isExecuting appropriately.
 
             if (this.currentPCB !== null && this.isExecuting) {
+
+                _Kernel.krnTrace('CPU cycle');
+                this.instruction = _MemoryManager.read(this.currentPCB, this.PC);
 
                 switch(this.instruction) {
                     case 'A9': // Load the accumulator with a constant
@@ -92,25 +93,31 @@ module TSOS {
                 } 
             }
 
+            this.currentPCB.update(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
 
 
-
-        }
-
+        }// end of cycle
 
         private loadAccWithConstant() {
             this.PC++;
-
+            this.Acc = parseInt(_MemoryManager.read(this.currentPCB, this.PC), 16);
+            this.PC++;
         }
 
         private loadAccFromMemory() {
             this.PC++;
-
+            var addr = parseInt(_MemoryManager.read(this.currentPCB, this.PC), 16);
+            this.PC++;
+            this.Acc = parseInt(_MemoryManager.read(this.currentPCB, addr), 16);
+            this.PC++
         }
 
         private storeAccInMemory() {
             this.PC++;
-
+            var addr = parseInt(_MemoryManager.read(this.currentPCB, this.PC), 16);
+            this.PC++;
+            _MemoryManager.write(this.currentPCB, addr, this.Acc.toString(16));
+            this.PC++;
         }
 
         private addWithCarry() {

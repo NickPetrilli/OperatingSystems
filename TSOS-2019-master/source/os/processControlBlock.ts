@@ -7,7 +7,7 @@
 
 
 module TSOS {
-    
+
     export class ProcessControlBlock {
         
         public priority: number;
@@ -38,7 +38,13 @@ module TSOS {
         }
 
 
-
+        public update(pc: number, acc: number, XReg: number, YReg: number, ZFlag: number) {
+            this.programCounter = pc;
+            this.acc = acc;
+            this.XRegister = XReg;
+            this.YRegister = YReg;
+            this.ZFlag = ZFlag;
+        }
 
     }
 }

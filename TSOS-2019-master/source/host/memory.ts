@@ -22,7 +22,20 @@ module TSOS {
             }
         }
 
+        public getByte(addr: number): string {
+            return this.memory[addr];
+        }
 
+        public setByte(addr: number, data: string) {
+            if (data.length === 1) {
+                data = '0' + data;
+            }
+            this.memory[addr] = data;
+        }
+
+        public getSize() {
+            return this.memory.length;
+        }
         
     }
 }

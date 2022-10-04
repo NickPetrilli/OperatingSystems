@@ -42,6 +42,8 @@ module TSOS {
             // Use the TypeScript cast to HTMLInputElement
             (<HTMLInputElement> document.getElementById("btnStartOS")).focus();
 
+            this.initMemoryDisplay();
+
             // Check for our testing and enrichment core, which
             // may be referenced here (from index.html) as function Glados().
             if (typeof Glados === "function") {
@@ -50,6 +52,60 @@ module TSOS {
                 _GLaDOS = new Glados();
                 _GLaDOS.init();
             }
+        }
+
+        public static initMemoryDisplay(): void {
+            var memoryDisplay = <HTMLTableElement> document.getElementById("memoryTable");
+            var tableBody = memoryDisplay.createTBody();
+            var rowCount = 0;
+            //Create rows and columns for each row 
+            for (var i = 0; i < _MemorySize; i += 8) {
+                var iStr = i.toString();
+                var row = tableBody.insertRow(rowCount);
+                //Pad with zeros accordingly
+                if (i < 10) {
+                    iStr = '0' + iStr;
+                }
+                if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                iStr = '0x' + iStr;
+                row.textContent = iStr + '\t';
+                var cell = row.insertCell(0);
+                for (var j = 0; j < 8; j++) {
+                    cell = row.insertCell(j);
+                    cell.textContent= '00\t';
+
+                }
+                rowCount++;
+
+            }
+
+            /*
+            var htmlString = '';
+
+            //For each row in the table, generate each column
+            for (var i = 0; i < _MemorySize; i += 8) {
+                //Pad with zeros accordingly
+                var iStr = i.toString();
+                if (i < 10) {
+                    iStr = '0' + iStr;
+                }
+                if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                htmlString += '<tr>' + '<th>0x' + iStr + '</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>';
+                htmlString += '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '</tr>' ;
+
+                //htmlString += '0x' + iStr + '\t' + '00' + '\t' + '00' + '\t' + '00' + '\t' + '00';
+                //htmlString += '\t' + '00' + '\t' + '00' + '\t' + '00' + '\t' + '00' + '\n';
+
+                
+
+                
+            }
+            memoryDisplay.innerHTML = htmlString;
+            */
         }
 
         public static hostLog(msg: string, source: string = "?"): void {
