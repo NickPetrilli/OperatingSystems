@@ -43,6 +43,7 @@ module TSOS {
             (<HTMLInputElement> document.getElementById("btnStartOS")).focus();
 
             this.initMemoryDisplay();
+            this.initCpuDisplay();
 
             // Check for our testing and enrichment core, which
             // may be referenced here (from index.html) as function Glados().
@@ -56,12 +57,12 @@ module TSOS {
 
         public static initMemoryDisplay(): void {
             var memoryDisplay = <HTMLTableElement> document.getElementById("memoryTable");
-            var tableBody = memoryDisplay.createTBody();
+            //var tableBody = memoryDisplay.createTBody();
             var rowCount = 0;
             //Create rows and columns for each row 
             for (var i = 0; i < _MemorySize; i += 8) {
                 var iStr = i.toString();
-                var row = tableBody.insertRow(rowCount);
+                var row = memoryDisplay.insertRow(rowCount);
                 //Pad with zeros accordingly
                 if (i < 10) {
                     iStr = '0' + iStr;
@@ -70,42 +71,39 @@ module TSOS {
                     iStr = '0' + iStr;
                 }
                 iStr = '0x' + iStr;
-                row.textContent = iStr + '\t';
+                row.textContent = iStr;
                 var cell = row.insertCell(0);
                 for (var j = 0; j < 8; j++) {
                     cell = row.insertCell(j);
-                    cell.textContent= '00\t';
+                    cell.textContent= '00';
 
                 }
                 rowCount++;
 
             }
+        }
 
-            /*
-            var htmlString = '';
-
-            //For each row in the table, generate each column
-            for (var i = 0; i < _MemorySize; i += 8) {
-                //Pad with zeros accordingly
-                var iStr = i.toString();
-                if (i < 10) {
-                    iStr = '0' + iStr;
-                }
-                if (i < 100) {
-                    iStr = '0' + iStr;
-                }
-                htmlString += '<tr>' + '<th>0x' + iStr + '</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>';
-                htmlString += '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '<th>00</th>' + '</tr>' ;
-
-                //htmlString += '0x' + iStr + '\t' + '00' + '\t' + '00' + '\t' + '00' + '\t' + '00';
-                //htmlString += '\t' + '00' + '\t' + '00' + '\t' + '00' + '\t' + '00' + '\n';
-
-                
-
-                
+        public static initCpuDisplay() {
+            var headers = ['PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
+            var table = <HTMLTableElement> document.getElementById("cpuTable");
+            var headerRow = table.createTHead().insertRow();
+            for (var i = 0; i < headers.length; i++) {
+                headerRow.insertCell(i).textContent = headers[i];
             }
-            memoryDisplay.innerHTML = htmlString;
-            */
+            var bodyRow = table.insertRow();
+            var pc = _CPU.PC;
+            var acc = _CPU.Acc;
+            var XReg = _CPU.Xreg;
+            var YReg = _CPU.Yreg;
+            var ZFlag = _CPU.Zflag;
+
+            bodyRow.insertCell(0).textContent = TSOS.Utils.hexLog(pc, 3);
+            bodyRow.insertCell(1).textContent = "--"
+            bodyRow.insertCell(2).textContent = TSOS.Utils.hexLog(acc, 2);
+            bodyRow.insertCell(3).textContent = TSOS.Utils.hexLog(XReg, 2);
+            bodyRow.insertCell(4).textContent = TSOS.Utils.hexLog(YReg, 2);
+            bodyRow.insertCell(5).textContent = ZFlag.toString();
+
         }
 
         public static hostLog(msg: string, source: string = "?"): void {

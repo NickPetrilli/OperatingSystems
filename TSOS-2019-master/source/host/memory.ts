@@ -22,10 +22,12 @@ module TSOS {
             }
         }
 
+        //Used by the memory accessor to read data
         public getByte(addr: number): string {
             return this.memory[addr];
         }
 
+        //Used by the memory accessor to write data
         public setByte(addr: number, data: string) {
             if (data.length === 1) {
                 data = '0' + data;

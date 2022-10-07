@@ -6,6 +6,24 @@
 var TSOS;
 (function (TSOS) {
     class Utils {
+        // Code from my 6502 project
+        // Takes in a hex number memory address and a length for the hex number to be formatted to when outputted
+        static hexLog(hexNum, desiredLength) {
+            let output = hexNum.toString(16).toUpperCase();
+            try {
+                //Check to see if the number is already at the desired length, if it isn't then add padding zeroes until it is
+                if (output.length < desiredLength) {
+                    let numZero = desiredLength - output.length;
+                    for (let i = 0; i < numZero; i++) {
+                        output = 0 + output;
+                    }
+                }
+            }
+            catch (_a) {
+                output = "ERR [hexValue conversion]: number undefined";
+            }
+            return output;
+        }
         static trim(str) {
             // Use a regular expression to remove leading and trailing spaces.
             return str.replace(/^\s+ | \s+$/g, "");

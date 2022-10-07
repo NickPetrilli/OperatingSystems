@@ -63,6 +63,16 @@
          document.getElementById("dateAndTime").innerHTML = date + " " + time;
       }, 1000);
    </script>
+
+   <style>
+      tr { 
+         border-bottom: 1px solid black;
+
+      }
+      td {
+         border-left: 1px solid black;
+      }
+   </style>
    
 </head>
 
@@ -143,17 +153,33 @@
       </label>
    </div>
 
+   <div id="divCpuDisplay" style="margin-left: 520px">
+      <label>
+         CPU
+         <br>
+         <div id="divCpuTable" style="height: 50px; width: 200px; overflow: auto">
+         <table name="cpuTable"
+                id="cpuTable"
+                class="cpuTable"
+         ></table>
+         
+         </div>
+      </label>
+   </div>
 
    <div id="divMemoryDisplay" style="margin-left: 520px">
       <label>
          Memory Display
          <br>
+         <div id="divMemoryTable" style="height: 200px; width: 252px; overflow:auto" class="memoryTable">
          <table name="memoryTable"
                 id="memoryTable"
-                class="memoryTable"
+   
          ></table>
-         
+
+         </div>
       </label>
+         
    </div>
   
 </div>

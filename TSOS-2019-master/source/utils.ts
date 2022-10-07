@@ -8,6 +8,27 @@ module TSOS {
 
     export class Utils {
 
+        // Code from my 6502 project
+        // Takes in a hex number memory address and a length for the hex number to be formatted to when outputted
+        public static hexLog(hexNum: number, desiredLength: number): string {
+            let output: string = hexNum.toString(16).toUpperCase();
+            try {
+                //Check to see if the number is already at the desired length, if it isn't then add padding zeroes until it is
+                if (output.length < desiredLength) {
+                    let numZero: number = desiredLength - output.length;
+                    for (let i = 0; i < numZero; i++) {
+                        output = 0 + output;
+                    }
+                }
+            }
+            catch {
+                output = "ERR [hexValue conversion]: number undefined";
+            }
+            
+            
+            return output;
+        }
+
         public static trim(str): string {
             // Use a regular expression to remove leading and trailing spaces.
             return str.replace(/^\s+ | \s+$/g, "");
