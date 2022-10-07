@@ -3,38 +3,19 @@
 *
 * Memory Manager
 * ----------- */
+//Memory manager responsible for allocating and deallocating memory
 var TSOS;
 (function (TSOS) {
     class MemoryManager {
-        constructor(maxProcesses) {
-            //Each process takes up 256 bytes in memory, represented in blocks
-            this.memorySize = _Memory.getSize();
-            this.numOfBlocks = this.memorySize / maxProcesses;
-            this.allocated = new Array(maxProcesses);
-            for (var i = 0; i < this.allocated.length; i++) {
-                this.allocated[i] = -1;
-            }
+        constructor() {
         }
-        read(pcb, addr) {
-            if (addr >= 0 && addr < this.numOfBlocks) {
-                return _Memory.getByte(pcb.baseRegister + addr);
+        load(program, priority) {
+            var pcb = new TSOS.ProcessControlBlock(priority);
+            for (var i = 0; i < _MemorySize; i++) {
+                _Memory.setByte(i, program[i]);
             }
-            else {
-                alert('Memory Access Error');
-            }
-        }
-        write(pcb, addr, data) {
-            if (addr >= 0 && addr < 256) {
-                if (parseInt(data, 16) > 255) {
-                    //Cant store more than FF
-                }
-                else {
-                    _Memory.setByte(pcb.baseRegister + addr, data);
-                }
-            }
-            else {
-                alert('Memory Access Error');
-            }
+            TSOS.Control.updateMemoryDisplay();
+            return pcb.processID;
         }
     }
     TSOS.MemoryManager = MemoryManager;

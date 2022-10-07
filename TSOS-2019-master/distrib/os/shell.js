@@ -348,8 +348,20 @@ var TSOS;
                 _StdOut.putText("Invalid user program.");
             }
             else {
-                _StdOut.putText("User program loaded.");
-                //Actually load the program here
+                var stringProgram = '';
+                var arrayProgram = _UserProgramInput.split(' ');
+                for (var i = 0; i < arrayProgram.length; i++) {
+                    stringProgram += arrayProgram[i];
+                }
+                //At this point we have one string of all of the instructions without spaces
+                //Will need to further split into each instruction of two chars
+                var chars = stringProgram.split('');
+                var instructions = [];
+                for (var i = 0; i < chars.length; i += 2) {
+                    instructions.push([chars[i] + chars[i + 1]]);
+                }
+                var processID = _MemoryManager.load(instructions, 1);
+                _StdOut.putText("Process ID: " + processID);
             }
         }
     }

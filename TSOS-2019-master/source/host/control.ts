@@ -57,7 +57,6 @@ module TSOS {
 
         public static initMemoryDisplay(): void {
             var memoryDisplay = <HTMLTableElement> document.getElementById("memoryTable");
-            //var tableBody = memoryDisplay.createTBody();
             var rowCount = 0;
             //Create rows and columns for each row 
             for (var i = 0; i < _MemorySize; i += 8) {
@@ -104,6 +103,30 @@ module TSOS {
             bodyRow.insertCell(4).textContent = TSOS.Utils.hexLog(YReg, 2);
             bodyRow.insertCell(5).textContent = ZFlag.toString();
 
+        }
+
+        public static updateMemoryDisplay() {
+            var memoryDisplay = <HTMLTableElement> document.getElementById("memoryTable");
+            
+            var rowCount = 0;
+            for (var i = 0; i < _MemorySize; i += 8) {
+                var iStr = i.toString();
+                var row = memoryDisplay.insertRow(rowCount);
+                //Pad with zeros accordingly
+                if (i < 10) {
+                    iStr = '0' + iStr;
+                }
+                if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                iStr = '0x' + iStr;
+                row.textContent = iStr;
+                var cell = row.insertCell(0);
+                for (var i = 0; i < _MemorySize; i++) {
+                    cell = row.insertCell(i);
+                    cell.textContent = _Memory.memory[i];
+                }
+            }
         }
 
         public static hostLog(msg: string, source: string = "?"): void {

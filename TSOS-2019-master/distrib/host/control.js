@@ -47,7 +47,6 @@ var TSOS;
         }
         static initMemoryDisplay() {
             var memoryDisplay = document.getElementById("memoryTable");
-            //var tableBody = memoryDisplay.createTBody();
             var rowCount = 0;
             //Create rows and columns for each row 
             for (var i = 0; i < _MemorySize; i += 8) {
@@ -89,6 +88,28 @@ var TSOS;
             bodyRow.insertCell(3).textContent = TSOS.Utils.hexLog(XReg, 2);
             bodyRow.insertCell(4).textContent = TSOS.Utils.hexLog(YReg, 2);
             bodyRow.insertCell(5).textContent = ZFlag.toString();
+        }
+        static updateMemoryDisplay() {
+            var memoryDisplay = document.getElementById("memoryTable");
+            var rowCount = 0;
+            for (var i = 0; i < _MemorySize; i += 8) {
+                var iStr = i.toString();
+                var row = memoryDisplay.insertRow(rowCount);
+                //Pad with zeros accordingly
+                if (i < 10) {
+                    iStr = '0' + iStr;
+                }
+                if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                iStr = '0x' + iStr;
+                row.textContent = iStr;
+                var cell = row.insertCell(0);
+                for (var i = 0; i < _MemorySize; i++) {
+                    cell = row.insertCell(i);
+                    cell.textContent = _Memory.memory[i];
+                }
+            }
         }
         static hostLog(msg, source = "?") {
             // Note the OS CLOCK.

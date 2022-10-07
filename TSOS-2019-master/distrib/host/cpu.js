@@ -89,21 +89,21 @@ var TSOS;
         } // end of cycle
         loadAccWithConstant() {
             this.PC++;
-            this.Acc = parseInt(_MemoryManager.read(this.currentPCB, this.PC), 16);
+            this.Acc = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
             this.PC++;
         }
         loadAccFromMemory() {
             this.PC++;
-            var addr = parseInt(_MemoryManager.read(this.currentPCB, this.PC), 16);
+            var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
             this.PC++;
-            this.Acc = parseInt(_MemoryManager.read(this.currentPCB, addr), 16);
+            this.Acc = parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16);
             this.PC++;
         }
         storeAccInMemory() {
             this.PC++;
-            var addr = parseInt(_MemoryManager.read(this.currentPCB, this.PC), 16);
+            var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
             this.PC++;
-            _MemoryManager.write(this.currentPCB, addr, this.Acc.toString(16));
+            _MemoryAccessor.write(this.currentPCB, addr, this.Acc.toString(16));
             this.PC++;
         }
         addWithCarry() {

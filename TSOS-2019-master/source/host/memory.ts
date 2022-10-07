@@ -9,7 +9,7 @@ module TSOS {
 
     export class Memory {
 
-        private memory;
+        public memory;
 
         //Length will be size 256, 0-255
         constructor(length: number) {
@@ -35,9 +35,9 @@ module TSOS {
             this.memory[addr] = data;
         }
 
-        public getSize() {
+        public getSize(): number {
             return this.memory.length;
         }
-        
+
     }
 }

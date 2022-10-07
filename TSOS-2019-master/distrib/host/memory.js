@@ -15,9 +15,11 @@ var TSOS;
                 this.memory[i] = '00';
             }
         }
+        //Used by the memory accessor to read data
         getByte(addr) {
             return this.memory[addr];
         }
+        //Used by the memory accessor to write data
         setByte(addr, data) {
             if (data.length === 1) {
                 data = '0' + data;
