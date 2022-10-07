@@ -85,7 +85,7 @@ module TSOS {
         public static initCpuDisplay() {
             var headers = ['PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
             var table = <HTMLTableElement> document.getElementById("cpuTable");
-            var headerRow = table.createTHead().insertRow();
+            var headerRow = table.insertRow();
             for (var i = 0; i < headers.length; i++) {
                 headerRow.insertCell(i).textContent = headers[i];
             }
@@ -105,7 +105,7 @@ module TSOS {
 
         }
 
-        public static updateMemoryDisplay() {
+        public static updateMemoryDisplay(baseRegister: number, limitRegister: number) {
             var memoryDisplay = <HTMLTableElement> document.getElementById("memoryTable");
             
             var rowCount = 0;
@@ -122,7 +122,7 @@ module TSOS {
                 iStr = '0x' + iStr;
                 row.textContent = iStr;
                 var cell = row.insertCell(0);
-                for (var i = 0; i < _MemorySize; i++) {
+                for (var i = baseRegister; i < limitRegister; i++) {
                     cell = row.insertCell(i);
                     cell.textContent = _Memory.memory[i];
                 }

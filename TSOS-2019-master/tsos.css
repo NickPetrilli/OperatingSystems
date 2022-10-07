@@ -43,13 +43,12 @@ h3 {
 .memoryTable {
   border: 1px solid black;
   border-spacing: 0;
-  border-collapse: collapse;
 }
 
 .cpuTable {
   border: 1px solid black;
   border-spacing: 0;
-  border-collapse: collapse;
+
 }
 
 .footerText {

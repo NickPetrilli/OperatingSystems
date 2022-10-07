@@ -16,9 +16,10 @@ var TSOS;
             this.ZFlag = 0;
             this.processID = this.currentProcessId++;
             this.processState = "New";
-            this.baseRegister = 0;
-            this.limitRegister = 0;
+            this.baseRegister = -1;
+            this.limitRegister = -1;
         }
+        //PCB needs to be updated after each instruction
         update(pc, acc, XReg, YReg, ZFlag) {
             this.programCounter = pc;
             this.acc = acc;

@@ -72,7 +72,7 @@ var TSOS;
         static initCpuDisplay() {
             var headers = ['PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
             var table = document.getElementById("cpuTable");
-            var headerRow = table.createTHead().insertRow();
+            var headerRow = table.insertRow();
             for (var i = 0; i < headers.length; i++) {
                 headerRow.insertCell(i).textContent = headers[i];
             }
@@ -89,7 +89,7 @@ var TSOS;
             bodyRow.insertCell(4).textContent = TSOS.Utils.hexLog(YReg, 2);
             bodyRow.insertCell(5).textContent = ZFlag.toString();
         }
-        static updateMemoryDisplay() {
+        static updateMemoryDisplay(baseRegister, limitRegister) {
             var memoryDisplay = document.getElementById("memoryTable");
             var rowCount = 0;
             for (var i = 0; i < _MemorySize; i += 8) {
@@ -105,7 +105,7 @@ var TSOS;
                 iStr = '0x' + iStr;
                 row.textContent = iStr;
                 var cell = row.insertCell(0);
-                for (var i = 0; i < _MemorySize; i++) {
+                for (var i = baseRegister; i < limitRegister; i++) {
                     cell = row.insertCell(i);
                     cell.textContent = _Memory.memory[i];
                 }

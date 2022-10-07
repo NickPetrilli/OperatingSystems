@@ -17,7 +17,7 @@ module TSOS {
         public YRegister: number;
         public ZFlag: number;
         public processID: number;
-        public processState: string; // New, Ready, Waiting, Running, Terminated
+        public processState: string; // New, Ready, Executing, Terminated
         public baseRegister: number;
         public limitRegister: number;
 
@@ -32,12 +32,12 @@ module TSOS {
             this.ZFlag = 0;
             this.processID = this.currentProcessId++;
             this.processState = "New";
-            this.baseRegister = 0;
-            this.limitRegister = 0;
+            this.baseRegister = -1;
+            this.limitRegister = -1;
 
         }
 
-
+        //PCB needs to be updated after each instruction
         public update(pc: number, acc: number, XReg: number, YReg: number, ZFlag: number) {
             this.programCounter = pc;
             this.acc = acc;
