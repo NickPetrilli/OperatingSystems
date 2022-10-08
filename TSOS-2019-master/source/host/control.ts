@@ -156,7 +156,8 @@ module TSOS {
         }
 
         public static updateCpuDisplay() {
-
+            var table = <HTMLTableElement> document.getElementById("cpuTable");
+            
         }
 
         public static updatePcbDisplay(pcb: TSOS.ProcessControlBlock) {

@@ -137,6 +137,7 @@ var TSOS;
             }
         }
         static updateCpuDisplay() {
+            var table = document.getElementById("cpuTable");
         }
         static updatePcbDisplay(pcb) {
             var table = document.getElementById("pcbTable");

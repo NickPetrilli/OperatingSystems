@@ -24,24 +24,18 @@ var TSOS;
             this.currentPCB = currentPCB;
         }
         init() {
-            this.PC = 0;
-            this.Acc = 0;
-            this.Xreg = 0;
-            this.Yreg = 0;
-            this.Zflag = 0;
-            this.isExecuting = false;
         }
         runProcess(pid) {
             this.currentPCB = _MemoryManager.residentList[pid];
             this.currentPCB.processState = "Executing";
             TSOS.Control.updatePcbDisplay(this.currentPCB);
-            _CPU.isExecuting = true;
+            this.isExecuting = true;
         }
         cycle() {
             // TODO: Accumulate CPU usage and profiling statistics here.
             if (this.currentPCB !== null && this.isExecuting) {
                 _Kernel.krnTrace('CPU cycle');
-                this.instruction = _MemoryManager.read(this.currentPCB, this.PC);
+                this.instruction = _MemoryAccessor.read(this.currentPCB, this.PC);
                 switch (this.instruction) {
                     case 'A9': // Load the accumulator with a constant
                         this.loadAccWithConstant();
@@ -168,7 +162,7 @@ var TSOS;
                 var jump = _MemoryAccessor.read(this.currentPCB, this.PC);
                 this.PC++;
                 var jumpNum = parseInt(jump, 16);
-                this.PC++;
+                this.PC += jumpNum;
             }
             else {
                 this.PC++;

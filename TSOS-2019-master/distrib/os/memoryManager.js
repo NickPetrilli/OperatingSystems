@@ -42,8 +42,6 @@ var TSOS;
         }
         //also need to deallocate memory for when each process finishes
         deallocateMemory(pcb) {
-            //need some sort of indication to know where the first memory location is
-            //clears range of the pcb's base register to the limit register 
         }
         doesProcessExist(pid) {
             if (this.residentList[pid] === undefined) {
