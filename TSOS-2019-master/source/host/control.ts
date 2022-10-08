@@ -44,6 +44,7 @@ module TSOS {
 
             this.initMemoryDisplay();
             this.initCpuDisplay();
+            this.initPcbDisplay();
 
             // Check for our testing and enrichment core, which
             // may be referenced here (from index.html) as function Glados().
@@ -60,13 +61,17 @@ module TSOS {
             var rowCount = 0;
             //Create rows and columns for each row 
             for (var i = 0; i < _MemorySize; i += 8) {
-                var iStr = i.toString();
+                var iStr = i.toString(16).toUpperCase();
                 var row = memoryDisplay.insertRow(rowCount);
                 //Pad with zeros accordingly
+                //Yes, these testing values are in decimal while i is in hex but it works
                 if (i < 10) {
                     iStr = '0' + iStr;
                 }
                 if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                if (i > 100) {
                     iStr = '0' + iStr;
                 }
                 iStr = '0x' + iStr;
@@ -82,26 +87,41 @@ module TSOS {
             }
         }
 
-        public static initCpuDisplay() {
-            var headers = ['PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
+        public static initCpuDisplay(): void {
             var table = <HTMLTableElement> document.getElementById("cpuTable");
+            var headers = ['PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
+            var body = ['000', '--', '00', '00', '00', '0'];
             var headerRow = table.insertRow();
+            var bodyRow = table.insertRow();
             for (var i = 0; i < headers.length; i++) {
                 headerRow.insertCell(i).textContent = headers[i];
+                bodyRow.insertCell(i).textContent = body[i]
             }
-            var bodyRow = table.insertRow();
+            //Below code won't work for some reason, only will work when filling the body row within that loop
+            /*
             var pc = _CPU.PC;
             var acc = _CPU.Acc;
             var XReg = _CPU.Xreg;
             var YReg = _CPU.Yreg;
             var ZFlag = _CPU.Zflag;
-
-            bodyRow.insertCell(0).textContent = TSOS.Utils.hexLog(pc, 3);
+            
+            bodyRow.insertCell(0).textContent = TSOS.Utils.toHexDigit(pc, 3);
             bodyRow.insertCell(1).textContent = "--"
-            bodyRow.insertCell(2).textContent = TSOS.Utils.hexLog(acc, 2);
-            bodyRow.insertCell(3).textContent = TSOS.Utils.hexLog(XReg, 2);
-            bodyRow.insertCell(4).textContent = TSOS.Utils.hexLog(YReg, 2);
+            bodyRow.insertCell(2).textContent = TSOS.Utils.toHexDigit(acc, 2);
+            bodyRow.insertCell(3).textContent = TSOS.Utils.toHexDigit(XReg, 2);
+            bodyRow.insertCell(4).textContent = TSOS.Utils.toHexDigit(YReg, 2);
             bodyRow.insertCell(5).textContent = ZFlag.toString();
+            */
+        }
+
+        public static initPcbDisplay(): void {
+            var table = <HTMLTableElement> document.getElementById("pcbTable");
+            var headers = ['PID', 'State', 'PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
+            var headerRow = table.insertRow();
+            for (var i = 0; i < headers.length; i++) {
+                headerRow.insertCell(i).textContent = headers[i];
+            }
+            
 
         }
 
@@ -110,13 +130,16 @@ module TSOS {
             
             var rowCount = 0;
             for (var i = 0; i < _MemorySize; i += 8) {
-                var iStr = i.toString();
+                var iStr = i.toString(16).toUpperCase();
                 var row = memoryDisplay.insertRow(rowCount);
                 //Pad with zeros accordingly
                 if (i < 10) {
                     iStr = '0' + iStr;
                 }
                 if (i < 100) {
+                    iStr = '0' + iStr;
+                }
+                if (i > 100) {
                     iStr = '0' + iStr;
                 }
                 iStr = '0x' + iStr;
@@ -126,6 +149,7 @@ module TSOS {
                     cell = row.insertCell(i);
                     cell.textContent = _Memory.memory[i];
                 }
+                rowCount++;
             }
         }
 

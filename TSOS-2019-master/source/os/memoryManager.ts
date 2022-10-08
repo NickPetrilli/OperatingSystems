@@ -47,6 +47,11 @@ module TSOS {
             TSOS.Control.updateMemoryDisplay(pcb.baseRegister, pcb.limitRegister);
         }
 
+        //also need to deallocate memory for when each process finishes
+        public deallocateMemory(pcb: TSOS.ProcessControlBlock): void {
+            //need some sort of indication to know where the first memory location is
+            //clears range of the pcb's base register to the limit register 
+        }
 
     }
 }
