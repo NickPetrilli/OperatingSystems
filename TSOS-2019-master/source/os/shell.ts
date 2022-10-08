@@ -109,6 +109,11 @@ module TSOS {
                                  "- Loads program from user program input text area.");
             this.commandList[this.commandList.length] = sc;
 
+            sc = new ShellCommand(this.shellRun,
+                                  "run",
+                                  "<pid> - Runs the process with the given pid.");
+            this.commandList[this.commandList.length] = sc;
+
             // ps  - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -395,7 +400,7 @@ module TSOS {
 
         public shellLoad(args: string[]) {
             //Only hex digits and spaces are allowed
-
+            
             var hexDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', ' '];
             var isValid = true;
 
@@ -416,21 +421,17 @@ module TSOS {
                 _StdOut.putText("Invalid user program.");
             }
             else {
-                var stringProgram = '';
                 var arrayProgram = _UserProgramInput.split(' ');
                 for (var i = 0; i < arrayProgram.length; i++) {
-                    stringProgram += arrayProgram[i];
+                    _StdOut.putText(arrayProgram[i] + ' ');
                 }
-                //At this point we have one string of all of the instructions without spaces
-                //Will need to further split into each instruction of two chars
-                var chars = stringProgram.split('');
-                var instructions = [];
-                for (var i = 0; i < chars.length; i += 2) {
-                    instructions.push([chars[i] + chars[i + 1]]);
-                }
-                var processID = _MemoryManager.load(instructions, 1);
+                var processID = _MemoryManager.load(arrayProgram, 1);
                 _StdOut.putText("Process ID: " + processID);
             }
+
+        }
+
+        public shellRun(args: string[]) {
 
         }
 

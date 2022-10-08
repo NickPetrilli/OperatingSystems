@@ -111,6 +111,7 @@ var TSOS;
         static updateMemoryDisplay(baseRegister, limitRegister) {
             var memoryDisplay = document.getElementById("memoryTable");
             var rowCount = 0;
+            var memoryPointer = 0;
             for (var i = 0; i < _MemorySize; i += 8) {
                 var iStr = i.toString(16).toUpperCase();
                 var row = memoryDisplay.insertRow(rowCount);
@@ -127,9 +128,10 @@ var TSOS;
                 iStr = '0x' + iStr;
                 row.textContent = iStr;
                 var cell = row.insertCell(0);
-                for (var i = baseRegister; i < limitRegister; i++) {
-                    cell = row.insertCell(i);
-                    cell.textContent = _Memory.memory[i];
+                for (var j = baseRegister; j < 8; j++) {
+                    cell = row.insertCell(j);
+                    cell.textContent = _Memory.memory[memoryPointer];
+                    memoryPointer++;
                 }
                 rowCount++;
             }
