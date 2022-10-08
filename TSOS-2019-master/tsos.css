@@ -48,9 +48,13 @@ h3 {
 .cpuTable {
   border: 1px solid black;
   border-spacing: 0;
-
+  text-align: center;
 }
 
+.pcbTable {
+  border: 1px solid black;
+  text-align: center;
+}
 .footerText {
   color: black;
   font-family: Arial, Helvetica, sans-serif;

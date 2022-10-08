@@ -31,6 +31,12 @@ var TSOS;
             this.Zflag = 0;
             this.isExecuting = false;
         }
+        runProcess(pid) {
+            this.currentPCB = _MemoryManager.residentList[pid];
+            this.currentPCB.processState = "Executing";
+            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            _CPU.isExecuting = true;
+        }
         cycle() {
             // TODO: Accumulate CPU usage and profiling statistics here.
             if (this.currentPCB !== null && this.isExecuting) {
@@ -108,21 +114,38 @@ var TSOS;
         }
         addWithCarry() {
             this.PC++;
+            var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
+            this.PC++;
+            this.Acc += parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16);
+            this.PC++;
         }
         loadXRegWithConstant() {
+            this.PC++;
+            this.Xreg = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
             this.PC++;
         }
         loadXRegFromMemory() {
             this.PC++;
+            var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
+            this.PC++;
+            this.Xreg = parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16);
+            this.PC++;
         }
         loadYRegWithConstant() {
+            this.PC++;
+            this.Yreg = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
             this.PC++;
         }
         loadYRegFromMemory() {
             this.PC++;
+            var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
+            this.PC++;
+            this.Yreg = parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16);
+            this.PC++;
         }
         breakSystemCall() {
             this.isExecuting = false;
+            this.currentPCB.processState = "Terminated";
             this.currentPCB = null;
             this.PC = 0;
             this.Acc = 0;
@@ -132,15 +155,53 @@ var TSOS;
         }
         compareMemToXReg() {
             this.PC++;
+            var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
+            this.PC++;
+            if (this.Xreg === parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16)) {
+                this.Zflag = 1;
+            }
+            this.PC++;
         }
         branch() {
             this.PC++;
+            if (this.Zflag === 0) {
+                var jump = _MemoryAccessor.read(this.currentPCB, this.PC);
+                this.PC++;
+                var jumpNum = parseInt(jump, 16);
+                this.PC++;
+            }
+            else {
+                this.PC++;
+            }
         }
         incrementValue() {
             this.PC++;
+            var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
+            this.PC++;
+            var value = parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16);
+            value++;
+            _MemoryAccessor.write(this.currentPCB, addr, value.toString(16));
+            this.PC++;
         }
         systemCall() {
-            this.PC++;
+            //If 1 in X Reg = print the integer stored in the Y Reg
+            //If 2 in X Reg = print the 00-terminated string stored at the address in the Y Reg
+            if (this.Xreg === 1) {
+                _StdOut.putText(this.Yreg);
+            }
+            else if (this.Xreg === 2) {
+                var output = '';
+                var addr = this.Yreg;
+                var data = _MemoryAccessor.read(this.currentPCB, addr);
+                while (data !== '00') {
+                    var letter = String.fromCharCode(parseInt(data, 16));
+                    output += letter;
+                    addr++;
+                    var data = _MemoryAccessor.read(this.currentPCB, addr);
+                }
+                _StdOut.putText(output + '');
+                this.PC++;
+            }
         }
     }
     TSOS.Cpu = Cpu;

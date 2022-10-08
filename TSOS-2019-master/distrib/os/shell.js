@@ -351,14 +351,23 @@ var TSOS;
             }
             else {
                 var arrayProgram = _UserProgramInput.split(' ');
-                for (var i = 0; i < arrayProgram.length; i++) {
-                    _StdOut.putText(arrayProgram[i] + ' ');
-                }
                 var processID = _MemoryManager.load(arrayProgram, 1);
                 _StdOut.putText("Process ID: " + processID);
             }
         }
         shellRun(args) {
+            if (args.length > 0) {
+                var pid = parseInt(args[0]);
+                if (_MemoryManager.doesProcessExist(pid)) {
+                    _CPU.runProcess(pid);
+                }
+                else {
+                    _StdOut.putText("No process with pid: " + pid + " in memory");
+                }
+            }
+            else {
+                _StdOut.putText("Usage: run <pid> Please supply a PID");
+            }
         }
     }
     TSOS.Shell = Shell;

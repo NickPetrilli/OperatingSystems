@@ -108,7 +108,7 @@ var TSOS;
                 headerRow.insertCell(i).textContent = headers[i];
             }
         }
-        static updateMemoryDisplay(baseRegister, limitRegister) {
+        static updateMemoryDisplay(baseRegister) {
             var memoryDisplay = document.getElementById("memoryTable");
             var rowCount = 0;
             var memoryPointer = 0;
@@ -134,6 +134,18 @@ var TSOS;
                     memoryPointer++;
                 }
                 rowCount++;
+            }
+        }
+        static updateCpuDisplay() {
+        }
+        static updatePcbDisplay(pcb) {
+            var table = document.getElementById("pcbTable");
+            var body = [pcb.processID.toString(), pcb.processState, pcb.programCounter.toString(), '--',
+                TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2),
+                TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString()];
+            var bodyRow = table.insertRow();
+            for (var i = 0; i < body.length; i++) {
+                bodyRow.insertCell(i).textContent = body[i];
             }
         }
         static hostLog(msg, source = "?") {

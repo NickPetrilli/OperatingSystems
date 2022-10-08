@@ -8,10 +8,14 @@ var TSOS;
 (function (TSOS) {
     class MemoryManager {
         constructor() {
+            this.residentList = [];
         }
         load(program, priority) {
             var pcb = new TSOS.ProcessControlBlock(priority);
+            this.residentList[pcb.processID] = pcb;
+            pcb.processState = "Resident";
             this.allocateMemory(pcb, program);
+            TSOS.Control.updatePcbDisplay(pcb);
             return pcb.processID;
         }
         //allocating memory needs to set the base and limit registers of the pcb
@@ -34,12 +38,18 @@ var TSOS;
             for (var i = 0; i < program.length; i++) {
                 _Memory.setByte(pcb.baseRegister + i, program[i]);
             }
-            TSOS.Control.updateMemoryDisplay(pcb.baseRegister, pcb.limitRegister);
+            TSOS.Control.updateMemoryDisplay(pcb.baseRegister);
         }
         //also need to deallocate memory for when each process finishes
         deallocateMemory(pcb) {
             //need some sort of indication to know where the first memory location is
             //clears range of the pcb's base register to the limit register 
+        }
+        doesProcessExist(pid) {
+            if (this.residentList[pid] === undefined) {
+                return false;
+            }
+            return true;
         }
     }
     TSOS.MemoryManager = MemoryManager;

@@ -10,15 +10,21 @@ module TSOS {
 
     export class MemoryManager {
 
+        //Array to keep track of processes that are loaded
+        public residentList: TSOS.ProcessControlBlock[];
+
         constructor() {
+            this.residentList = [];
 
         }
 
         public load(program: Array<string>, priority: number): number {
             var pcb = new ProcessControlBlock(priority);
+            this.residentList[pcb.processID] = pcb;
+            pcb.processState = "Resident";
 
             this.allocateMemory(pcb, program);
-
+            TSOS.Control.updatePcbDisplay(pcb);
 
             return pcb.processID;
         }
@@ -44,13 +50,20 @@ module TSOS {
                 _Memory.setByte(pcb.baseRegister + i, program[i]);
             }
 
-            TSOS.Control.updateMemoryDisplay(pcb.baseRegister, pcb.limitRegister);
+            TSOS.Control.updateMemoryDisplay(pcb.baseRegister);
         }
 
         //also need to deallocate memory for when each process finishes
         public deallocateMemory(pcb: TSOS.ProcessControlBlock): void {
             //need some sort of indication to know where the first memory location is
             //clears range of the pcb's base register to the limit register 
+        }
+
+        public doesProcessExist(pid: number): boolean {
+            if (this.residentList[pid] === undefined) {
+                return false;
+            }
+            return true;
         }
 
     }

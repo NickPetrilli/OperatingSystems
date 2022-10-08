@@ -95,7 +95,7 @@ module TSOS {
             var bodyRow = table.insertRow();
             for (var i = 0; i < headers.length; i++) {
                 headerRow.insertCell(i).textContent = headers[i];
-                bodyRow.insertCell(i).textContent = body[i]
+                bodyRow.insertCell(i).textContent = body[i];
             }
             //Below code won't work for some reason, only will work when filling the body row within that loop
             /*
@@ -125,7 +125,7 @@ module TSOS {
 
         }
 
-        public static updateMemoryDisplay(baseRegister: number, limitRegister: number) {
+        public static updateMemoryDisplay(baseRegister: number) {
             var memoryDisplay = <HTMLTableElement> document.getElementById("memoryTable");
             var rowCount = 0;
             var memoryPointer = 0;
@@ -153,6 +153,22 @@ module TSOS {
                 
                 rowCount++;
             }
+        }
+
+        public static updateCpuDisplay() {
+
+        }
+
+        public static updatePcbDisplay(pcb: TSOS.ProcessControlBlock) {
+            var table = <HTMLTableElement> document.getElementById("pcbTable");
+            var body = [pcb.processID.toString(), pcb.processState, pcb.programCounter.toString(), '--', 
+            TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2), 
+            TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString()];
+            var bodyRow = table.insertRow();
+            for (var i = 0; i < body.length; i++) {
+                bodyRow.insertCell(i).textContent = body[i];
+            }
+
         }
 
         public static hostLog(msg: string, source: string = "?"): void {

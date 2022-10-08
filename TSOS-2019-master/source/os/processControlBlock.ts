@@ -17,7 +17,7 @@ module TSOS {
         public YRegister: number;
         public ZFlag: number;
         public processID: number;
-        public processState: string; // New, Ready, Executing, Terminated
+        public processState: string; // New, Ready, Resident, Executing, Terminated
         public baseRegister: number;
         public limitRegister: number;
 
