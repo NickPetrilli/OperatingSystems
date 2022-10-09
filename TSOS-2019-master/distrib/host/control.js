@@ -84,28 +84,16 @@ var TSOS;
                 headerRow.insertCell(i).textContent = headers[i];
                 bodyRow.insertCell(i).textContent = body[i];
             }
-            //Below code won't work for some reason, only will work when filling the body row within that loop
-            /*
-            var pc = _CPU.PC;
-            var acc = _CPU.Acc;
-            var XReg = _CPU.Xreg;
-            var YReg = _CPU.Yreg;
-            var ZFlag = _CPU.Zflag;
-            
-            bodyRow.insertCell(0).textContent = TSOS.Utils.toHexDigit(pc, 3);
-            bodyRow.insertCell(1).textContent = "--"
-            bodyRow.insertCell(2).textContent = TSOS.Utils.toHexDigit(acc, 2);
-            bodyRow.insertCell(3).textContent = TSOS.Utils.toHexDigit(XReg, 2);
-            bodyRow.insertCell(4).textContent = TSOS.Utils.toHexDigit(YReg, 2);
-            bodyRow.insertCell(5).textContent = ZFlag.toString();
-            */
         }
         static initPcbDisplay() {
             var table = document.getElementById("pcbTable");
             var headers = ['PID', 'State', 'PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
+            var body = ['--', '--', '000', '--', '00', '00', '00', '0'];
             var headerRow = table.insertRow();
+            var bodyRow = table.insertRow();
             for (var i = 0; i < headers.length; i++) {
                 headerRow.insertCell(i).textContent = headers[i];
+                bodyRow.insertCell(i).textContent = body[i];
             }
         }
         static updateMemoryDisplay(baseRegister) {
@@ -136,12 +124,21 @@ var TSOS;
                 rowCount++;
             }
         }
-        static updateCpuDisplay() {
+        static updateCpuDisplay(pcb, instruction) {
             var table = document.getElementById("cpuTable");
+            table.deleteRow(1);
+            var body = [TSOS.Utils.toHexDigit(pcb.programCounter, 3), instruction,
+                TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2),
+                TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString()];
+            var bodyRow = table.insertRow();
+            for (var i = 0; i < body.length; i++) {
+                bodyRow.insertCell(i).textContent = body[i];
+            }
         }
         static updatePcbDisplay(pcb) {
             var table = document.getElementById("pcbTable");
-            var body = [pcb.processID.toString(), pcb.processState, pcb.programCounter.toString(), '--',
+            table.deleteRow(1);
+            var body = [pcb.processID.toString(), pcb.processState, TSOS.Utils.toHexDigit(pcb.programCounter, 3), "--",
                 TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2),
                 TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString()];
             var bodyRow = table.insertRow();

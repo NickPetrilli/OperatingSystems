@@ -86,6 +86,8 @@ var TSOS;
                 }
             }
             this.currentPCB.update(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
+            TSOS.Control.updateCpuDisplay(this.currentPCB, this.instruction);
+            TSOS.Control.updatePcbDisplay(this.currentPCB);
         } // end of cycle
         loadAccWithConstant() {
             this.PC++;
@@ -181,7 +183,8 @@ var TSOS;
             //If 1 in X Reg = print the integer stored in the Y Reg
             //If 2 in X Reg = print the 00-terminated string stored at the address in the Y Reg
             if (this.Xreg === 1) {
-                _StdOut.putText(this.Yreg);
+                _StdOut.putText(this.Yreg.toString());
+                this.PC++;
             }
             else if (this.Xreg === 2) {
                 var output = '';

@@ -55,7 +55,7 @@ module TSOS {
 
         //also need to deallocate memory for when each process finishes
         public deallocateMemory(pcb: TSOS.ProcessControlBlock): void {
-            
+
         }
 
         public doesProcessExist(pid: number): boolean {
