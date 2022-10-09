@@ -36,8 +36,35 @@ h3 {
   cursor: default;
 }
 
-.normal_button {
+.start_button {
   width: 100px;
+  background-color: green;
+  color: white;
+  border: white;
+}
+
+.halt_button {
+  width: 100px;
+  background-color: rgb(255, 0, 0);
+  color: white;
+}
+
+.reset_button {
+  width: 100px;
+  background-color: blue;
+  color: white;
+}
+
+.singleStep_button {
+  width: 200px;
+  background-color: turquoise;
+  color: black;
+}
+
+.step_button {
+  width: 50px;
+  background-color: darkblue;
+  color: white;
 }
 
 .memoryTable {

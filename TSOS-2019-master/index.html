@@ -91,7 +91,7 @@
       <input type="button"
              id = "btnStartOS"
              name="brnStartOS"
-             class="normal_button"
+             class="start_button"
              value="Start"
              tabindex="0"
              onclick="TSOS.Control.hostBtnStartOS_click(this);">
@@ -99,7 +99,7 @@
       <input type="button"
              id = "btnHaltOS"
              name="brnHaltOS"
-             class="normal_button"
+             class="halt_button"
              disabled="disabled"
              value="Halt"
              tabindex="1"
@@ -108,11 +108,30 @@
       <input type="button"
              id = "btnReset"
              name="brnReset"
-             class="normal_button"
+             class="reset_button"
              disabled="disabled"
              value="Reset"
              tabindex="2"
              onclick="TSOS.Control.hostBtnReset_click(this);">
+
+      <input type="button"
+             id="btnSingleStep"
+             name="btnSingleStep"
+             class="singleStep_button"
+             disabled="disabled"
+             value="Single-Step Execution: Off"
+             tabindex="2"
+             onclick="TSOS.Control.hostBtnSingleStep_click(this);">
+
+      <input type="button"
+             id="btnStep"
+             name="btnStep"
+             class="step_button"
+             disabled="disabled"
+             value=">"
+             tabindex="2"
+             onclick="TSOS.Control.hostBtnStep_click(this);">
+
    </div>
 
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left; overflow-y: scroll; overflow-x: hidden;">
@@ -165,9 +184,7 @@
          <div id="divMemoryTable" style="height: 200px; width: 252px; overflow:auto" class="memoryTable">
          <table name="memoryTable"
                 id="memoryTable"
-   
-         ></table>
-
+         ></table>  
          </div>
       </label>
          

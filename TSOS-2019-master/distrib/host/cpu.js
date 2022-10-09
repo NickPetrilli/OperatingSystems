@@ -22,6 +22,7 @@ var TSOS;
             this.isExecuting = isExecuting;
             this.instruction = instruction;
             this.currentPCB = currentPCB;
+            TSOS.Cpu.singleStep = false;
         }
         init() {
         }
@@ -86,6 +87,10 @@ var TSOS;
                 }
             }
             this.currentPCB.update(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
+            //Stop executing if single step is on
+            if (TSOS.Cpu.singleStep) {
+                this.isExecuting = false;
+            }
             TSOS.Control.updateCpuDisplay(this.currentPCB, this.instruction);
             TSOS.Control.updatePcbDisplay(this.currentPCB);
         } // end of cycle
@@ -161,10 +166,11 @@ var TSOS;
         branch() {
             this.PC++;
             if (this.Zflag === 0) {
-                var jump = _MemoryAccessor.read(this.currentPCB, this.PC);
+                var branch = _MemoryAccessor.read(this.currentPCB, this.PC);
                 this.PC++;
-                var jumpNum = parseInt(jump, 16);
-                this.PC += jumpNum;
+                var branchDistance = parseInt(branch, 16);
+                _StdOut.putText(branchDistance);
+                this.PC += branchDistance;
             }
             else {
                 this.PC++;

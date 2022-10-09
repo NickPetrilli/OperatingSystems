@@ -197,6 +197,8 @@ module TSOS {
             // .. enable the Halt and Reset buttons ...
             (<HTMLButtonElement>document.getElementById("btnHaltOS")).disabled = false;
             (<HTMLButtonElement>document.getElementById("btnReset")).disabled = false;
+            (<HTMLButtonElement>document.getElementById("btnSingleStep")).disabled = false;
+            (<HTMLButtonElement>document.getElementById("btnStep")).disabled = false;
 
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
@@ -231,6 +233,23 @@ module TSOS {
             // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
+        }
+
+        public static hostBtnSingleStep_click(btn): void {
+            //Toggle single step mode
+            TSOS.Cpu.singleStep = !(TSOS.Cpu.singleStep);
+            (<HTMLButtonElement> document.getElementById("btnStep")).disabled = !(TSOS.Cpu.singleStep);
+            btn.value = (TSOS.Cpu.singleStep) ? 'Single-Step Execution: On' : 'Single-Step Execution: Off';
+
+            //If single step is turned off while executing a program, we need to start executing again
+            if (!TSOS.Cpu.singleStep && !_CPU.isExecuting && _CPU.PC !== 0) {
+                _CPU.isExecuting = true;
+            }
+        }
+
+        public static hostBtnStep_click(btn): void {
+            //Execute next step in program
+            _CPU.isExecuting = true;
         }
     }
 }

@@ -108,14 +108,16 @@ module TSOS {
             */
             if (text !== "") {
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                /*
-                Basic line wrap for typing, but prints an empty line when up any commands that reach the canvas width  
-                if (this.currentXPosition + offset > _Canvas.width) {
-                    this.advanceLine();
-                }
-                */
+                
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+
+                //Basic line wrap for typing, but prints an empty line when up any commands that reach the canvas width 
+                if (this.currentXPosition + offset > _Canvas.width) {
+                    this.advanceLine();
+                    
+                }
+
                 // Move the current X position.
                 this.currentXPosition = this.currentXPosition + offset;
             }
