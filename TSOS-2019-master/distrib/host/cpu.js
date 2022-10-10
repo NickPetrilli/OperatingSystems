@@ -156,16 +156,13 @@ var TSOS;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
+            TSOS.Control.updatePcbDisplay(this.currentPCB);
         }
         compareMemToXReg() {
             this.PC++;
             var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
             this.PC++;
-            /*
-            if (this.Xreg === parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16)) {
-                this.Zflag = 1;
-            }
-            */
+            //Sets the z flag to 1 if comparison is true, and 0 if false 
             this.Zflag = (this.Xreg === parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16)) ? 1 : 0;
             this.PC++;
         }
