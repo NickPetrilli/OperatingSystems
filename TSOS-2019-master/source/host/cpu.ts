@@ -97,6 +97,9 @@ module TSOS {
                         break;
                 } 
             }
+            if (this.PC > 256) {
+                this.PC = this.PC % 256;
+            }
 
             this.currentPCB.update(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
 
@@ -186,9 +189,8 @@ module TSOS {
             this.PC++;
             var addr = parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16);
             this.PC++;
-            if (this.Xreg === parseInt(_MemoryAccessor.read(this.currentPCB, this.PC), 16)) {
-                this.Zflag = 1;
-            }
+            //Sets the z flag to 1 if comparison is true, and 0 if false 
+            this.Zflag = (this.Xreg === parseInt(_MemoryAccessor.read(this.currentPCB, addr), 16)) ? 1 : 0;
             this.PC++;
         }
 
@@ -198,10 +200,12 @@ module TSOS {
                 var branch = _MemoryAccessor.read(this.currentPCB, this.PC);
                 this.PC++;
                 var branchDistance = parseInt(branch, 16);
-                _StdOut.putText(branchDistance);
+                //_StdOut.putText("Branching " + branchDistance + " PC before = " + this.PC);
                 this.PC += branchDistance;
+                //_StdOut.putText("PC after = " + this.PC);
             }
             else {
+                //_StdOut.putText("Not branching");
                 this.PC++;
             }
         }

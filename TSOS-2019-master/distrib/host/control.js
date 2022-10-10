@@ -127,7 +127,7 @@ var TSOS;
         static updateCpuDisplay(pcb, instruction) {
             var table = document.getElementById("cpuTable");
             table.deleteRow(1);
-            var body = [TSOS.Utils.toHexDigit(pcb.programCounter, 3), instruction,
+            var body = [pcb.programCounter.toString(), instruction,
                 TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2),
                 TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString()];
             var bodyRow = table.insertRow();
@@ -138,7 +138,7 @@ var TSOS;
         static updatePcbDisplay(pcb) {
             var table = document.getElementById("pcbTable");
             table.deleteRow(1);
-            var body = [pcb.processID.toString(), pcb.processState, TSOS.Utils.toHexDigit(pcb.programCounter, 3), "--",
+            var body = [pcb.processID.toString(), pcb.processState, pcb.programCounter.toString(), "--",
                 TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2),
                 TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString()];
             var bodyRow = table.insertRow();
