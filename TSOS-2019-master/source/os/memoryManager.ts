@@ -12,9 +12,11 @@ module TSOS {
 
         //Array to keep track of processes that are loaded
         public residentList: TSOS.ProcessControlBlock[];
+        public readyQueue: TSOS.Queue;
 
         constructor() {
             this.residentList = [];
+            this.readyQueue = new Queue();
 
         }
 

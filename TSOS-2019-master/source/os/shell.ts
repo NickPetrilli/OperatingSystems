@@ -109,13 +109,47 @@ module TSOS {
                                  "- Loads program from user program input text area.");
             this.commandList[this.commandList.length] = sc;
 
+            //run <pid>
             sc = new ShellCommand(this.shellRun,
                                   "run",
                                   "<pid> - Runs the process with the given pid.");
             this.commandList[this.commandList.length] = sc;
 
-            // ps  - list the running processes and their IDs
-            // kill <id> - kills the specified process id.
+            //clearmem
+            sc = new ShellCommand(this.shellClearMem,
+                                 "clearmem",
+                                 "- Clears all memory partitions");
+            this.commandList[this.commandList.length] = sc;
+
+            //runall
+            sc = new ShellCommand(this.shellRunAll,
+                                  "runall",
+                                  "- Runs all of the processes in memory");
+            this.commandList[this.commandList.length] = sc;
+
+            //ps
+            sc = new ShellCommand(this.shellPs,
+                                  "ps",
+                                  "- Lists all the running proceses and their IDs");
+            this.commandList[this.commandList.length] = sc;
+
+            //kill <pid>
+            sc = new ShellCommand(this.shellKill,
+                                  "kill <pid>",
+                                  "<pid> - Kills the process running with the given pid");
+            this.commandList[this.commandList.length] = sc;
+
+            //killall
+            sc = new ShellCommand(this.shellKillAll,
+                                  "killall",
+                                  "- Kills all of the processes");
+            this.commandList[this.commandList.length] = sc;
+
+            //quantum
+            sc = new ShellCommand(this.shellQuantum,
+                                "quantum <num>",
+                                "<num> - Sets the quantum for Round Robin scheduling");
+            this.commandList[this.commandList.length] = sc;
 
             // Display the initial prompt.
             this.putPrompt();
@@ -431,7 +465,10 @@ module TSOS {
         public shellRun(args: string[]) {
             if (args.length > 0) {
                 var pid = parseInt(args[0]);
-                if (_MemoryManager.doesProcessExist(pid)) {
+                if (isNaN(pid)) {
+                    _StdOut.putText("Must provide a valid number");
+                }
+                else if (_MemoryManager.doesProcessExist(pid)) {
                     _CPU.runProcess(pid);
                 }
                 else {
@@ -441,8 +478,43 @@ module TSOS {
             else {
                 _StdOut.putText("Usage: run <pid> Please supply a PID");
             }
+        }
 
+        public shellClearMem(args: string[]) {
+            _Memory.clearMemory();
+            TSOS.Control.updateMemoryDisplay(0);
+        }
 
+        public shellRunAll(args: string[]) {
+
+        }
+
+        public shellPs(args: string[]) {
+
+        }
+
+        public shellKill(args: string[]) {
+
+        }
+
+        public shellKillAll(args: string[]) {
+
+        }
+
+        public shellQuantum(args: string[]) {
+            if (args.length === 0) {
+                _StdOut.putText("Must provide a quantum.");
+            }
+            else {
+                var quantum = parseInt(args[0]);
+                //is Not a Number - returns true if not a number
+                if (isNaN(quantum)) {
+                    _StdOut.putText("Quantum must be an integer");
+                }
+                else {
+                    _CpuScheduler.setQuantum(quantum);
+                }
+            }
         }
 
     }

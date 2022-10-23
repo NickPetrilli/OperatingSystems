@@ -58,11 +58,12 @@ var _UserProgramInput: string;
 //Hardware (host)
 var _CPU: TSOS.Cpu;
 var _Memory: TSOS.Memory;
-var _MemorySize: number = 256; //Only for iProject2 
+var _MemorySize: number = 768; 
 var _MemoryAccessor: TSOS.MemoryAccessor;
 
 //Software (OS)
 var _MemoryManager: any = null;
+var _CpuScheduler: TSOS.CpuScheduler;
 
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode: boolean = false;

@@ -39,5 +39,11 @@ module TSOS {
             return this.memory.length;
         }
 
+        public clearMemory(): void {
+            for (var i = 0; i < this.memory.length; i++) {
+                this.memory[i] = '00';
+            }
+        }
+
     }
 }
