@@ -7,14 +7,13 @@ var TSOS;
 (function (TSOS) {
     class ProcessControlBlock {
         constructor(priority) {
-            this.currentProcessId = 0;
             this.priority = priority;
             this.programCounter = 0;
             this.acc = 0;
             this.XRegister = 0;
             this.YRegister = 0;
             this.ZFlag = 0;
-            this.processID = this.currentProcessId++;
+            this.processID = ProcessControlBlock.currentProcessId++;
             this.processState = "New";
             this.baseRegister = -1;
             this.limitRegister = -1;
@@ -28,6 +27,7 @@ var TSOS;
             this.ZFlag = ZFlag;
         }
     }
+    ProcessControlBlock.currentProcessId = 0;
     TSOS.ProcessControlBlock = ProcessControlBlock;
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=processControlBlock.js.map

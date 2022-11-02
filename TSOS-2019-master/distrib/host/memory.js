@@ -6,7 +6,7 @@
 var TSOS;
 (function (TSOS) {
     class Memory {
-        //Length will be size 256, 0-255
+        //Length will be size 768, 0-767
         constructor(length) {
             this.memory = new Array(length);
         }
@@ -28,6 +28,18 @@ var TSOS;
         }
         getSize() {
             return this.memory.length;
+        }
+        //Used for clearmem shell command
+        clearMemory() {
+            for (var i = 0; i < this.memory.length; i++) {
+                this.memory[i] = '00';
+            }
+        }
+        //Used when a process terminates or is killed by the user
+        clearRange(base, limit) {
+            for (var i = 0; i < (limit - base); i++) {
+                this.memory[base + i] = '00';
+            }
         }
     }
     TSOS.Memory = Memory;

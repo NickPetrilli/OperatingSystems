@@ -63,10 +63,27 @@ var TSOS;
             //load
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "- Loads program from user program input text area.");
             this.commandList[this.commandList.length] = sc;
+            //run <pid>
             sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - Runs the process with the given pid.");
             this.commandList[this.commandList.length] = sc;
-            // ps  - list the running processes and their IDs
-            // kill <id> - kills the specified process id.
+            //clearmem
+            sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "- Clears all memory partitions");
+            this.commandList[this.commandList.length] = sc;
+            //runall
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "- Runs all of the processes in memory");
+            this.commandList[this.commandList.length] = sc;
+            //ps
+            sc = new TSOS.ShellCommand(this.shellPs, "ps", "- Lists all the running proceses and their IDs");
+            this.commandList[this.commandList.length] = sc;
+            //kill <pid>
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<pid> - Kills the process running with the given pid");
+            this.commandList[this.commandList.length] = sc;
+            //killall
+            sc = new TSOS.ShellCommand(this.shellKillAll, "killall", "- Kills all of the processes");
+            this.commandList[this.commandList.length] = sc;
+            //quantum
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<num> - Sets the quantum for Round Robin scheduling");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -358,7 +375,10 @@ var TSOS;
         shellRun(args) {
             if (args.length > 0) {
                 var pid = parseInt(args[0]);
-                if (_MemoryManager.doesProcessExist(pid)) {
+                if (isNaN(pid)) {
+                    _StdOut.putText("Must provide a valid number");
+                }
+                else if (_MemoryManager.doesProcessExist(pid)) {
                     _CPU.runProcess(pid);
                 }
                 else {
@@ -367,6 +387,60 @@ var TSOS;
             }
             else {
                 _StdOut.putText("Usage: run <pid> Please supply a PID");
+            }
+        }
+        shellClearMem(args) {
+            _Memory.clearMemory();
+            TSOS.Control.updateMemoryDisplay(0);
+        }
+        shellRunAll(args) {
+            _CPU.runAllProcesses();
+        }
+        shellPs(args) {
+            var processes = _MemoryManager.getAllRunningProcesses();
+            if (processes.length === 0) {
+                _StdOut.putText("There are no running processes");
+            }
+            else {
+                _StdOut.putText("Running Processes: ");
+                for (var process in processes) {
+                    _StdOut.putText(processes[process].processID + " ");
+                }
+            }
+        }
+        shellKill(args) {
+            if (args.length === 0) {
+                _StdOut.putText("Must provide a pid to kill");
+            }
+            else {
+                var pid = parseInt(args[0]);
+                if (isNaN(pid)) {
+                    _StdOut.putText("pid must be an integer");
+                }
+                else {
+                    _MemoryManager.killProcess(pid);
+                }
+            }
+        }
+        shellKillAll(args) {
+            var processes = _MemoryManager.getAllRunningProcesses();
+            for (var process in processes) {
+                _MemoryManager.killProcess(process);
+            }
+        }
+        shellQuantum(args) {
+            if (args.length === 0) {
+                _StdOut.putText("Must provide a quantum.");
+            }
+            else {
+                var quantum = parseInt(args[0]);
+                //is Not a Number - returns true if not a number
+                if (isNaN(quantum)) {
+                    _StdOut.putText("Quantum must be an integer");
+                }
+                else {
+                    _CpuScheduler.setQuantum(quantum);
+                }
             }
         }
     }

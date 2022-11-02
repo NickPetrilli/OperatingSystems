@@ -44,10 +44,11 @@ var _UserProgramInput;
 //Hardware (host)
 var _CPU;
 var _Memory;
-var _MemorySize = 256; //Only for iProject2 
+var _MemorySize = 768;
 var _MemoryAccessor;
 //Software (OS)
 var _MemoryManager = null;
+var _CpuScheduler;
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode = false;
 // Global Device Driver Objects - page 12

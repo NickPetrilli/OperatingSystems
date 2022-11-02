@@ -71,7 +71,7 @@ module TSOS {
                 if (i < 100) {
                     iStr = '0' + iStr;
                 }
-                if (i > 100) {
+                if (i > 100 && i < 256) {
                     iStr = '0' + iStr;
                 }
                 iStr = '0x' + iStr;
@@ -127,13 +127,13 @@ module TSOS {
                 if (i < 100) {
                     iStr = '0' + iStr;
                 }
-                if (i > 100) {
+                if (i > 100 && i < 256) {
                     iStr = '0' + iStr;
                 }
                 iStr = '0x' + iStr;
                 row.textContent = iStr;
                 var cell = row.insertCell(0);
-                for (var j = baseRegister; j < 8; j++) {
+                for (var j = 0; j < 8; j++) {
                     cell = row.insertCell(j);
                     cell.textContent = _Memory.memory[memoryPointer];
                     memoryPointer++;
@@ -206,7 +206,7 @@ module TSOS {
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new Cpu();  // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init();       //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
-            _Memory = new Memory(768);
+            _Memory = new Memory(_MemorySize);
             _Memory.init();
             _MemoryAccessor = new MemoryAccessor();
 

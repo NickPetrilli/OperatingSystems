@@ -29,7 +29,18 @@ var TSOS;
         runProcess(pid) {
             this.currentPCB = _MemoryManager.residentList[pid];
             this.currentPCB.processState = "Executing";
+            //_MemoryManager.readyQueue.enqueue(pcb);
             TSOS.Control.updatePcbDisplay(this.currentPCB);
+            this.isExecuting = true;
+        }
+        runAllProcesses() {
+            for (var i = 0; i < _MemoryManager.residentList.length; i++) {
+                var pcb = _MemoryManager.residentList[i];
+                if (pcb.processState == "Resident") {
+                    pcb.processState = "Ready";
+                    _MemoryManager.readyQueue.enqueue(pcb);
+                }
+            }
             this.isExecuting = true;
         }
         cycle() {

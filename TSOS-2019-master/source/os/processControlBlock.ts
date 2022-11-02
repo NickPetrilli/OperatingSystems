@@ -21,7 +21,7 @@ module TSOS {
         public baseRegister: number;
         public limitRegister: number;
 
-        public currentProcessId: number = 0;
+        static currentProcessId: number = 0;
 
         constructor(priority: number) {
             this.priority = priority;
@@ -30,7 +30,7 @@ module TSOS {
             this.XRegister = 0;
             this.YRegister = 0;
             this.ZFlag = 0;
-            this.processID = this.currentProcessId++;
+            this.processID = ProcessControlBlock.currentProcessId++;
             this.processState = "New";
             this.baseRegister = -1;
             this.limitRegister = -1;

@@ -23,5 +23,9 @@ module TSOS {
             this.quantum = q;
         }
 
+        public contextSwitch(): void {
+
+        }
+
     }
 }

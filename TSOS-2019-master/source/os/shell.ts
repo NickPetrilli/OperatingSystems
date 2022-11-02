@@ -135,7 +135,7 @@ module TSOS {
 
             //kill <pid>
             sc = new ShellCommand(this.shellKill,
-                                  "kill <pid>",
+                                  "kill",
                                   "<pid> - Kills the process running with the given pid");
             this.commandList[this.commandList.length] = sc;
 
@@ -147,7 +147,7 @@ module TSOS {
 
             //quantum
             sc = new ShellCommand(this.shellQuantum,
-                                "quantum <num>",
+                                "quantum",
                                 "<num> - Sets the quantum for Round Robin scheduling");
             this.commandList[this.commandList.length] = sc;
 
@@ -486,19 +486,42 @@ module TSOS {
         }
 
         public shellRunAll(args: string[]) {
-
+            _CPU.runAllProcesses();
         }
 
         public shellPs(args: string[]) {
-
+            var processes = _MemoryManager.getAllRunningProcesses();
+            if (processes.length === 0) {
+                _StdOut.putText("There are no running processes");
+            }
+            else {
+                _StdOut.putText("Running Processes: ");
+                for (var process in processes) {
+                    _StdOut.putText(processes[process].processID + " ");
+                }
+            }
         }
 
         public shellKill(args: string[]) {
-
+            if (args.length === 0) {
+                _StdOut.putText("Must provide a pid to kill");
+            }
+            else {
+                var pid = parseInt(args[0]);
+                if (isNaN(pid)) {
+                    _StdOut.putText("pid must be an integer");
+                }
+                else {
+                    _MemoryManager.killProcess(pid);
+                }
+            }
         }
 
         public shellKillAll(args: string[]) {
-
+            var processes = _MemoryManager.getAllRunningProcesses();
+            for (var process in processes) {
+                _MemoryManager.killProcess(process);
+            }
         }
 
         public shellQuantum(args: string[]) {
