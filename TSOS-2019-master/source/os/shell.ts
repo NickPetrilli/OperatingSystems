@@ -482,7 +482,7 @@ module TSOS {
 
         public shellClearMem(args: string[]) {
             _Memory.clearMemory();
-            TSOS.Control.updateMemoryDisplay(0);
+            TSOS.Control.updateMemoryDisplay();
         }
 
         public shellRunAll(args: string[]) {

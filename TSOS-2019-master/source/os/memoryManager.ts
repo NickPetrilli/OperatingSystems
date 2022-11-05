@@ -33,7 +33,7 @@ module TSOS {
         public load(program: Array<string>, priority: number): number {
             var pcb = new ProcessControlBlock(priority);
             this.residentList[pcb.processID] = pcb;
-            //pcb.processState = "Resident";
+            pcb.processState = "Resident";
 
             this.allocateMemory(pcb, program);
             TSOS.Control.updatePcbDisplay(pcb);
@@ -43,7 +43,6 @@ module TSOS {
 
         //allocating memory needs to set the base and limit registers of the pcb
         public allocateMemory(pcb: TSOS.ProcessControlBlock, program: Array<string>): void {
-            
             for (var i = 0; i < this.allocated.length; i++) {
                 if (this.allocated[i] === -1) {
                     this.allocated[i] = pcb.processID;
@@ -53,14 +52,12 @@ module TSOS {
                 }
             }
             
-            
             //Check for error setting base reg 
             if (pcb.baseRegister === -1) {
                 alert("ERROR: BASE REGISTER IS NOT SET");
             }
             //Actually puts the program instructions into memory
             //Changes so now the program fills the entire allocated memory even if the program isn't that size
-
             for (var i = 0; i < 256; i++) {
                 var code = program[i];
                 if (code === undefined) {
@@ -69,7 +66,7 @@ module TSOS {
                 _Memory.setByte(pcb.baseRegister + i, code);
             }
 
-            TSOS.Control.updateMemoryDisplay(pcb.baseRegister);
+            TSOS.Control.updateMemoryDisplay();
         }
         
 
@@ -96,14 +93,14 @@ module TSOS {
             var pcb = this.residentList[pid];
             pcb.processState = "Terminated";
             this.deallocateMemory(pcb);
+            if (_CPU.currentPCB.processID === pid) {
+                _CPU.currentPCB = null;
+            }
             //Check if this is the last process in the list, if so then turn the cpu executing to be off
             if (this.readyQueue.getSize() === 0 && _CPU.currentPCB === null) {
                 _CPU.isExecuting = false;
             }
-            else if (_CPU.currentPCB.processID === pid) {
-                _CPU.currentPCB = null;
-
-            }
+ 
         }
 
         public getAllRunningProcesses(): TSOS.ProcessControlBlock[] {

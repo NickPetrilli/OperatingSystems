@@ -101,8 +101,8 @@ module TSOS {
 
         public static initPcbDisplay(): void {
             var table = <HTMLTableElement> document.getElementById("pcbTable");
-            var headers = ['PID', 'State', 'PC', 'IR', 'ACC', 'X', 'Y', 'Z'];
-            var body = ['--', '--', '000', '--', '00', '00', '00', '0'];
+            var headers = ['PID', 'State', 'PC', 'IR', 'ACC', 'X', 'Y', 'Z', 'Base', 'Limit', 'Location'];
+            var body = ['--', '--', '000', '--', '00', '00', '00', '0', '0', '0', '--'];
             var headerRow = table.insertRow();
             var bodyRow = table.insertRow();
             for (var i = 0; i < headers.length; i++) {
@@ -113,12 +113,15 @@ module TSOS {
 
         }
 
-        public static updateMemoryDisplay(baseRegister: number) {
+        public static updateMemoryDisplay() {
             var memoryDisplay = <HTMLTableElement> document.getElementById("memoryTable");
             var rowCount = 0;
             var memoryPointer = 0;
             for (var i = 0; i < _MemorySize; i += 8) {
                 var iStr = i.toString(16).toUpperCase();
+                //Delete the existing row because we are basically rebuilding the table each time
+                //Without it memory is doubled
+                memoryDisplay.deleteRow(rowCount);
                 var row = memoryDisplay.insertRow(rowCount);
                 //Pad with zeros accordingly
                 if (i < 10) {
@@ -156,12 +159,19 @@ module TSOS {
 
         }
 
-        public static updatePcbDisplay(pcb: TSOS.ProcessControlBlock) {
+        public static updatePcbDisplay(pcb: TSOS.ProcessControlBlock, instruction?: string) {
             var table = <HTMLTableElement> document.getElementById("pcbTable");
-            table.deleteRow(1);
-            var body = [pcb.processID.toString(), pcb.processState, pcb.programCounter.toString(), "--", 
+            //Deletes the initial placeholder row
+            if (pcb.processID === 0) {
+                table.deleteRow(1);
+            }
+            if (instruction === undefined) {
+                instruction = "--";
+            }
+            var body = [pcb.processID.toString(), pcb.processState, pcb.programCounter.toString(), instruction, 
             TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2), 
-            TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString()];
+            TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString(), pcb.baseRegister.toString(), 
+            pcb.limitRegister.toString(), "Segment " + _MemoryManager.allocated[pcb.processID].toString()];
             var bodyRow = table.insertRow();
             for (var i = 0; i < body.length; i++) {
                 bodyRow.insertCell(i).textContent = body[i];

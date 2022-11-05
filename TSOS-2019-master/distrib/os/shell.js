@@ -391,7 +391,7 @@ var TSOS;
         }
         shellClearMem(args) {
             _Memory.clearMemory();
-            TSOS.Control.updateMemoryDisplay(0);
+            TSOS.Control.updateMemoryDisplay();
         }
         shellRunAll(args) {
             _CPU.runAllProcesses();

@@ -30,6 +30,7 @@
    <script type="text/javascript" src="distrib/os/userCommand.js"></script>
    <script type="text/javascript" src="distrib/os/memoryManager.js"></script>
    <script type="text/javascript" src="distrib/os/processControlBlock.js"></script>
+   <script type="text/javascript" src="distrib/os/cpuScheduler.js"></script>
    <script type="text/javascript" src="distrib/os/kernel.js"></script>
 
    <!-- Other Routines -->
@@ -181,7 +182,7 @@
       <label>
          Memory Display
          <br>
-         <div id="divMemoryTable" style="height: 200px; width: 252px; overflow:auto" class="memoryTable">
+         <div id="divMemoryTable" style="height: 200px; width: 254px; overflow:auto" class="memoryTable">
          <table name="memoryTable"
                 id="memoryTable"
          ></table>  
@@ -206,7 +207,7 @@
 
    <div id="divPcbDisplay" style="margin-left: 520px">
       <label>
-         PCB
+         Ready Queue
          <br>
          <div id="divPcbTable" style="height: 50px; width: 200px;">
          <table name="pcbTable"

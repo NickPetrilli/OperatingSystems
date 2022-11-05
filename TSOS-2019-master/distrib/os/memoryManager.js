@@ -20,7 +20,7 @@ var TSOS;
         load(program, priority) {
             var pcb = new TSOS.ProcessControlBlock(priority);
             this.residentList[pcb.processID] = pcb;
-            //pcb.processState = "Resident";
+            pcb.processState = "Resident";
             this.allocateMemory(pcb, program);
             TSOS.Control.updatePcbDisplay(pcb);
             return pcb.processID;
@@ -48,7 +48,7 @@ var TSOS;
                 }
                 _Memory.setByte(pcb.baseRegister + i, code);
             }
-            TSOS.Control.updateMemoryDisplay(pcb.baseRegister);
+            TSOS.Control.updateMemoryDisplay();
         }
         //Deallocate memory when process finishes or is killed
         deallocateMemory(pcb) {
@@ -70,12 +70,12 @@ var TSOS;
             var pcb = this.residentList[pid];
             pcb.processState = "Terminated";
             this.deallocateMemory(pcb);
+            if (_CPU.currentPCB.processID === pid) {
+                _CPU.currentPCB = null;
+            }
             //Check if this is the last process in the list, if so then turn the cpu executing to be off
             if (this.readyQueue.getSize() === 0 && _CPU.currentPCB === null) {
                 _CPU.isExecuting = false;
-            }
-            else if (_CPU.currentPCB.processID === pid) {
-                _CPU.currentPCB = null;
             }
         }
         getAllRunningProcesses() {

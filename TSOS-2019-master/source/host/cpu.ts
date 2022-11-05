@@ -31,11 +31,32 @@ module TSOS {
         public init(): void {
 
         }
+        
+        //Loads process from cpu scheduler for context switching
+        public loadProcess(pcb: TSOS.ProcessControlBlock): void {
+            this.currentPCB = pcb;
+            //Load the cpu registers from the new pcb
+            this.PC = this.currentPCB.programCounter;
+            this.Acc = this.currentPCB.acc;
+            this.Xreg = this.currentPCB.XRegister;
+            this.Yreg = this.currentPCB.YRegister;
+            this.Zflag = this.currentPCB.ZFlag;
+            
+            this.runNewProcess();
+        }
 
+        //This run process is called by load process above, only used for context switching
+        public runNewProcess() {
+            this.current.pcb.processState = "Executing";
+            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            this.isExecuting = true;
+        }
+
+        //This is the original run process function, used from the shell command of running one process
         public runProcess(pid: number): void {
             this.currentPCB = _MemoryManager.residentList[pid];
             this.currentPCB.processState = "Executing";
-            //_MemoryManager.readyQueue.enqueue(pcb);
+
             TSOS.Control.updatePcbDisplay(this.currentPCB);
             this.isExecuting = true;
         }
@@ -43,7 +64,7 @@ module TSOS {
         public runAllProcesses(): void {
             for (var i = 0; i < _MemoryManager.residentList.length; i++) {
                 var pcb = _MemoryManager.residentList[i];
-                if (pcb.processState == "Resident") {
+                if (pcb.processState === "Resident") {
                     pcb.processState = "Ready";
                     _MemoryManager.readyQueue.enqueue(pcb);
                 }
@@ -58,6 +79,8 @@ module TSOS {
 
                 _Kernel.krnTrace('CPU cycle');
                 this.instruction = _MemoryAccessor.read(this.currentPCB, this.PC);
+
+                _CpuScheduler.incrementCounter();
 
                 switch(this.instruction) {
                     case 'A9': // Load the accumulator with a constant
@@ -120,7 +143,7 @@ module TSOS {
             }
 
             TSOS.Control.updateCpuDisplay(this.currentPCB, this.instruction);
-            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            TSOS.Control.updatePcbDisplay(this.currentPCB, this.instruction);
 
 
         }// end of cycle
