@@ -64,6 +64,7 @@ var _MemoryAccessor: TSOS.MemoryAccessor;
 //Software (OS)
 var _MemoryManager: any = null;
 var _CpuScheduler: TSOS.CpuScheduler;
+var _CpuDispatcher: TSOS.CpuDispatcher;
 
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode: boolean = false;

@@ -39,7 +39,7 @@ var TSOS;
         }
         //This run process is called by load process above, only used for context switching
         runNewProcess() {
-            this.current.pcb.processState = "Executing";
+            this.currentPCB.processState = "Executing";
             TSOS.Control.updatePcbDisplay(this.currentPCB);
             this.isExecuting = true;
         }

@@ -49,6 +49,7 @@ var _MemoryAccessor;
 //Software (OS)
 var _MemoryManager = null;
 var _CpuScheduler;
+var _CpuDispatcher;
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode = false;
 // Global Device Driver Objects - page 12
