@@ -40,14 +40,14 @@ var TSOS;
         //This run process is called by load process above, only used for context switching
         runNewProcess() {
             this.currentPCB.processState = "Executing";
-            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
             this.isExecuting = true;
         }
         //This is the original run process function, used from the shell command of running one process
         runProcess(pid) {
             this.currentPCB = _MemoryManager.residentList[pid];
             this.currentPCB.processState = "Executing";
-            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
             this.isExecuting = true;
         }
         runAllProcesses() {
@@ -124,7 +124,7 @@ var TSOS;
                 this.isExecuting = false;
             }
             TSOS.Control.updateCpuDisplay(this.currentPCB, this.instruction);
-            TSOS.Control.updatePcbDisplay(this.currentPCB, this.instruction);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB, this.instruction);
         } // end of cycle
         loadAccWithConstant() {
             this.PC++;
@@ -179,13 +179,15 @@ var TSOS;
         breakSystemCall() {
             this.isExecuting = false;
             this.currentPCB.processState = "Terminated";
-            this.currentPCB = null;
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
-            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
+            _MemoryManager.deallocateMemory(this.currentPCB);
+            TSOS.Control.updateMemoryDisplay();
+            this.currentPCB = null;
         }
         compareMemToXReg() {
             this.PC++;

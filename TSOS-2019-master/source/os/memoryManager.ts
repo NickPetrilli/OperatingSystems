@@ -36,7 +36,7 @@ module TSOS {
             pcb.processState = "Resident";
 
             this.allocateMemory(pcb, program);
-            TSOS.Control.updatePcbDisplay(pcb);
+            TSOS.Control.updatePcbDisplay(true, pcb);
 
             return pcb.processID;
         }

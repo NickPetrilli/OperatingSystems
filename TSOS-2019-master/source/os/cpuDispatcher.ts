@@ -11,7 +11,7 @@ module TSOS {
     export class CpuDispatcher {
 
         constructor() {
-            
+
         }
 
         public contextSwitch() {
@@ -19,6 +19,7 @@ module TSOS {
                 //Put the executing process back in the ready queue and change to ready state
                 _CpuScheduler.executingPCB.processState = "Ready";
                 _MemoryManager.readyQueue.enqueue(_CpuScheduler.executingPCB);
+                TSOS.Control.updatePcbDisplay(false, _CpuScheduler.executingPCB);
                 //Get the next process and update the current process
                 var nextProcess = _MemoryManager.readyQueue.dequeue();
                 _CpuScheduler.executingPCB = nextProcess;

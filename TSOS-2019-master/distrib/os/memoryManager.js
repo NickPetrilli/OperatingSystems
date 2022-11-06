@@ -22,7 +22,7 @@ var TSOS;
             this.residentList[pcb.processID] = pcb;
             pcb.processState = "Resident";
             this.allocateMemory(pcb, program);
-            TSOS.Control.updatePcbDisplay(pcb);
+            TSOS.Control.updatePcbDisplay(true, pcb);
             return pcb.processID;
         }
         //allocating memory needs to set the base and limit registers of the pcb

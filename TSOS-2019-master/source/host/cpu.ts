@@ -48,7 +48,7 @@ module TSOS {
         //This run process is called by load process above, only used for context switching
         public runNewProcess() {
             this.currentPCB.processState = "Executing";
-            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
             this.isExecuting = true;
         }
 
@@ -57,7 +57,7 @@ module TSOS {
             this.currentPCB = _MemoryManager.residentList[pid];
             this.currentPCB.processState = "Executing";
 
-            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
             this.isExecuting = true;
         }
 
@@ -143,7 +143,7 @@ module TSOS {
             }
 
             TSOS.Control.updateCpuDisplay(this.currentPCB, this.instruction);
-            TSOS.Control.updatePcbDisplay(this.currentPCB, this.instruction);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB, this.instruction);
 
 
         }// end of cycle
@@ -210,13 +210,15 @@ module TSOS {
         private breakSystemCall() { //00
             this.isExecuting = false;
             this.currentPCB.processState = "Terminated";
-            this.currentPCB = null;
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
-            TSOS.Control.updatePcbDisplay(this.currentPCB);
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
+            _MemoryManager.deallocateMemory(this.currentPCB);
+            TSOS.Control.updateMemoryDisplay();
+            this.currentPCB = null;
             
         }
 

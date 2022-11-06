@@ -20,6 +20,9 @@
 //
 module TSOS {
 
+    //Deletes the placeholder row in pcb display
+    let firstCall: boolean = true;
+
     export class Control {
 
         public static hostInit(): void {
@@ -159,12 +162,13 @@ module TSOS {
 
         }
 
-        public static updatePcbDisplay(pcb: TSOS.ProcessControlBlock, instruction?: string) {
+        public static updatePcbDisplay(isLoadCommand: boolean, pcb: TSOS.ProcessControlBlock, instruction?: string) {
             var table = <HTMLTableElement> document.getElementById("pcbTable");
-            //Deletes the initial placeholder row
-            if (pcb.processID === 0) {
+            var numRows = table.rows.length;
+            if (firstCall) {
                 table.deleteRow(1);
-            }
+                firstCall = false;
+            }      
             if (instruction === undefined) {
                 instruction = "--";
             }
@@ -172,7 +176,28 @@ module TSOS {
             TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2), 
             TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString(), pcb.baseRegister.toString(), 
             pcb.limitRegister.toString(), "Segment " + _MemoryManager.allocated[pcb.processID].toString()];
-            var bodyRow = table.insertRow();
+            //To fix the issue with the processes displaying wrong:
+            //Load command adds new process into the display
+            //Anything else is just updating a process already there, so delete and add new info in its place
+            //This will be an issue moving forward as the processID will keep incrementing
+            if (isLoadCommand) {
+                var bodyRow = table.insertRow();
+            }
+            else {
+                if (pcb.processID === 0) {
+                    table.deleteRow(1);
+                    var bodyRow = table.insertRow(1);
+                }
+                if (pcb.processID === 1) {
+                    table.deleteRow(2);
+                    var bodyRow = table.insertRow(2);
+                }
+                if (pcb.processID === 2) {
+                    table.deleteRow(3);
+                    var bodyRow = table.insertRow(3);
+                }
+            }
+            
             for (var i = 0; i < body.length; i++) {
                 bodyRow.insertCell(i).textContent = body[i];
             }
