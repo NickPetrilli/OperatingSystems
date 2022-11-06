@@ -59,6 +59,7 @@ var TSOS;
                     break;
                 }
             }
+            //this.residentList.splice(pcb.processID, 1);
         }
         doesProcessExist(pid) {
             if (this.residentList[pid] === undefined) {
@@ -69,10 +70,13 @@ var TSOS;
         killProcess(pid) {
             var pcb = this.residentList[pid];
             pcb.processState = "Terminated";
+            TSOS.Control.updatePcbDisplay(false, pcb);
             this.deallocateMemory(pcb);
             if (_CPU.currentPCB.processID === pid) {
                 _CPU.currentPCB = null;
             }
+            //Issue: process isn't getting removed from resident list, and if it does then it messes up
+            //accessing the other processes because their position is the same as their pid
             //Check if this is the last process in the list, if so then turn the cpu executing to be off
             if (this.readyQueue.getSize() === 0 && _CPU.currentPCB === null) {
                 _CPU.isExecuting = false;
@@ -83,7 +87,7 @@ var TSOS;
             var processes = [];
             for (var i = 0; i < this.residentList.length; i++) {
                 var pcb = this.residentList[i];
-                if (pcb.processState === "Running" || pcb.processState === "Resident") {
+                if (pcb.processState === "Running" || pcb.processState === "Ready") {
                     processes.push(pcb);
                 }
             }

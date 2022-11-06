@@ -158,6 +158,7 @@ var TSOS;
             //Load command adds new process into the display
             //Anything else is just updating a process already there, so delete and add new info in its place
             //This will be an issue moving forward as the processID will keep incrementing
+            //Also is an issue when processes terminate
             if (isLoadCommand) {
                 var bodyRow = table.insertRow();
             }
@@ -174,6 +175,9 @@ var TSOS;
                     table.deleteRow(3);
                     var bodyRow = table.insertRow(3);
                 }
+            }
+            if (pcb.processState === "Terminated") {
+                table.deleteRow(pcb.processID + 1);
             }
             for (var i = 0; i < body.length; i++) {
                 bodyRow.insertCell(i).textContent = body[i];

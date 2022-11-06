@@ -472,7 +472,7 @@ module TSOS {
                     _CPU.runProcess(pid);
                 }
                 else {
-                    _StdOut.putText("No process with pid: " + pid + " in memory");
+                    _StdOut.putText("No process with pid " + pid + " in memory");
                 }
             }
             else {
@@ -483,6 +483,7 @@ module TSOS {
         public shellClearMem(args: string[]) {
             _Memory.clearMemory();
             TSOS.Control.updateMemoryDisplay();
+            _StdOut.putText("Memory cleared.");
         }
 
         public shellRunAll(args: string[]) {
@@ -512,7 +513,12 @@ module TSOS {
                     _StdOut.putText("pid must be an integer");
                 }
                 else {
+                    if (_MemoryManager.doesProcessExist(pid)) {
                     _MemoryManager.killProcess(pid);
+                }
+                    else {
+                        _StdOut.putText("Process with pid " + pid + " does not exist.")
+                    }  
                 }
             }
         }
@@ -536,6 +542,7 @@ module TSOS {
                 }
                 else {
                     _CpuScheduler.setQuantum(quantum);
+                    _StdOut.putText("Quantum set to " + quantum);
                 }
             }
         }

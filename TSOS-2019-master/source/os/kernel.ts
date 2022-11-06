@@ -110,7 +110,7 @@ module TSOS {
             // Put more here.
         }
 
-        public krnInterruptHandler(irq, params) {
+        public krnInterruptHandler(irq, params?) {
             // This is the Interrupt Handler Routine.  See pages 8 and 560.
             // Trace our entrance here so we can compute Interrupt Latency by analyzing the log file later on. Page 766.
             this.krnTrace("Handling IRQ~" + irq);
@@ -127,9 +127,9 @@ module TSOS {
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
-                //case CONTEXT_SWITCH_IRQ:
-                    //_CpuDispatcher.contextSwitch();
-                    //break;
+                case CONTEXT_SWITCH_IRQ:
+                    _CpuDispatcher.contextSwitch();
+                    break;
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

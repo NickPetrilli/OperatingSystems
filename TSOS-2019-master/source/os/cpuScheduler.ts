@@ -56,8 +56,7 @@ module TSOS {
                 //Each process executes 6 cpu cycles and then moves to the next process
                 if (this.counter === this.quantum) {
                     this.counter = 1;
-                    //_Kernel.krnInterruptHandler(CONTEXT_SWITCH_IRQ);
-                    _CpuDispatcher.contextSwitch();
+                    _Kernel.krnInterruptHandler(CONTEXT_SWITCH_IRQ);
                 }
             }
         }
