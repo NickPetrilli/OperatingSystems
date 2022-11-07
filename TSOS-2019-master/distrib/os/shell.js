@@ -390,9 +390,14 @@ var TSOS;
             }
         }
         shellClearMem(args) {
-            _Memory.clearMemory();
-            TSOS.Control.updateMemoryDisplay();
-            _StdOut.putText("Memory cleared.");
+            if (!_CPU.isExecuting) {
+                _Memory.clearMemory();
+                TSOS.Control.updateMemoryDisplay();
+                _StdOut.putText("Memory cleared.");
+            }
+            else {
+                _StdOut.putText("Memory can't be cleared while the CPU is executing.");
+            }
         }
         shellRunAll(args) {
             _CPU.runAllProcesses();
@@ -443,6 +448,9 @@ var TSOS;
                 //is Not a Number - returns true if not a number
                 if (isNaN(quantum)) {
                     _StdOut.putText("Quantum must be an integer");
+                }
+                else if (quantum <= 0) {
+                    _StdOut.putText("Quantum can't be zero or negative.");
                 }
                 else {
                     _CpuScheduler.setQuantum(quantum);

@@ -43,7 +43,6 @@ var TSOS;
                 if (this.counter === this.quantum) {
                     this.counter = 1;
                     _Kernel.krnInterruptHandler(CONTEXT_SWITCH_IRQ);
-                    //_CpuDispatcher.contextSwitch();
                 }
             }
         }
@@ -55,6 +54,12 @@ var TSOS;
         }
         incrementCounter() {
             this.counter++;
+        }
+        resetCounter() {
+            this.counter = 1;
+        }
+        setExecutingPCB(pcb) {
+            this.executingPCB = pcb;
         }
     }
     TSOS.CpuScheduler = CpuScheduler;

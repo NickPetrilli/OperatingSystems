@@ -28,14 +28,16 @@ var TSOS;
         }
         //Loads process from cpu scheduler for context switching
         loadProcess(pcb) {
-            this.currentPCB = pcb;
-            //Load the cpu registers from the new pcb
-            this.PC = this.currentPCB.programCounter;
-            this.Acc = this.currentPCB.acc;
-            this.Xreg = this.currentPCB.XRegister;
-            this.Yreg = this.currentPCB.YRegister;
-            this.Zflag = this.currentPCB.ZFlag;
-            this.runNewProcess();
+            if (pcb.processState !== "Terminated") {
+                this.currentPCB = pcb;
+                //Load the cpu registers from the new pcb
+                this.PC = this.currentPCB.programCounter;
+                this.Acc = this.currentPCB.acc;
+                this.Xreg = this.currentPCB.XRegister;
+                this.Yreg = this.currentPCB.YRegister;
+                this.Zflag = this.currentPCB.ZFlag;
+                this.runNewProcess();
+            }
         }
         //This run process is called by load process above, only used for context switching
         runNewProcess() {
@@ -53,10 +55,9 @@ var TSOS;
         runAllProcesses() {
             for (var i = 0; i < _MemoryManager.residentList.length; i++) {
                 var pcb = _MemoryManager.residentList[i];
-                if (pcb.processState === "Resident") {
-                    pcb.processState = "Ready";
-                    _MemoryManager.readyQueue.enqueue(pcb);
-                }
+                pcb.processState = "Ready";
+                TSOS.Control.updatePcbDisplay(false, pcb);
+                _MemoryManager.readyQueue.enqueue(pcb);
             }
             this.isExecuting = true;
         }
@@ -177,17 +178,21 @@ var TSOS;
             this.PC++;
         }
         breakSystemCall() {
-            this.isExecuting = false;
             this.currentPCB.processState = "Terminated";
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
+            _MemoryManager.deallocateMemory(this.currentPCB);
+            TSOS.Control.updateMemoryDisplay();
+            this.currentPCB = null;
+            _CpuScheduler.setExecutingPCB(this.currentPCB);
+            _CpuScheduler.resetCounter();
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
-            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
-            _MemoryManager.deallocateMemory(this.currentPCB);
-            TSOS.Control.updateMemoryDisplay();
-            this.currentPCB = null;
+            if (!(_MemoryManager.readyQueue.getSize() > 0)) {
+                this.isExecuting = false;
+            }
         }
         compareMemToXReg() {
             this.PC++;

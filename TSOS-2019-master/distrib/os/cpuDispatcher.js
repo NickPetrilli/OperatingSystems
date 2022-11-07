@@ -10,7 +10,12 @@ var TSOS;
         constructor() {
         }
         contextSwitch() {
-            if (_MemoryManager.readyQueue.getSize() > 0) {
+            if (_MemoryManager.readyQueue.getSize() > 0 && _CPU.currentPCB === null) {
+                var nextProcess = _MemoryManager.readyQueue.dequeue();
+                _CpuScheduler.executingPCB = nextProcess;
+                _CPU.loadProcess(_CpuScheduler.executingPCB);
+            }
+            else if (_MemoryManager.readyQueue.getSize() > 0) {
                 //Put the executing process back in the ready queue and change to ready state
                 _CpuScheduler.executingPCB.processState = "Ready";
                 _MemoryManager.readyQueue.enqueue(_CpuScheduler.executingPCB);
@@ -20,6 +25,7 @@ var TSOS;
                 _CpuScheduler.executingPCB = nextProcess;
                 //And load it to the cpu to start execution
                 _CPU.loadProcess(_CpuScheduler.executingPCB);
+                //alert(_CpuScheduler.executingPCB.processID + " loaded to cpu");
             }
             //Else - nothing in the ready queue
             else {

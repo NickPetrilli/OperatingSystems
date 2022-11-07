@@ -34,6 +34,7 @@ module TSOS {
         
         //Loads process from cpu scheduler for context switching
         public loadProcess(pcb: TSOS.ProcessControlBlock): void {
+            if (pcb.processState !== "Terminated") {
             this.currentPCB = pcb;
             //Load the cpu registers from the new pcb
             this.PC = this.currentPCB.programCounter;
@@ -43,6 +44,8 @@ module TSOS {
             this.Zflag = this.currentPCB.ZFlag;
             
             this.runNewProcess();
+            }
+
         }
 
         //This run process is called by load process above, only used for context switching
@@ -64,10 +67,10 @@ module TSOS {
         public runAllProcesses(): void {
             for (var i = 0; i < _MemoryManager.residentList.length; i++) {
                 var pcb = _MemoryManager.residentList[i];
-                if (pcb.processState === "Resident") {
-                    pcb.processState = "Ready";
-                    _MemoryManager.readyQueue.enqueue(pcb);
-                }
+                pcb.processState = "Ready"; 
+                TSOS.Control.updatePcbDisplay(false, pcb);
+                _MemoryManager.readyQueue.enqueue(pcb);
+                
             }
             this.isExecuting = true;
         }
@@ -146,6 +149,8 @@ module TSOS {
             TSOS.Control.updatePcbDisplay(false, this.currentPCB, this.instruction);
 
 
+
+
         }// end of cycle
 
         private loadAccWithConstant() { //A9 
@@ -208,18 +213,23 @@ module TSOS {
         }
 
         private breakSystemCall() { //00
-            this.isExecuting = false;
             this.currentPCB.processState = "Terminated";
+            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
+            _MemoryManager.deallocateMemory(this.currentPCB);
+            TSOS.Control.updateMemoryDisplay();
+            this.currentPCB = null;
+            _CpuScheduler.setExecutingPCB(this.currentPCB);
+            _CpuScheduler.resetCounter();
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
-            TSOS.Control.updatePcbDisplay(false, this.currentPCB);
-            _MemoryManager.deallocateMemory(this.currentPCB);
-            TSOS.Control.updateMemoryDisplay();
-            this.currentPCB = null;
+            if (!(_MemoryManager.readyQueue.getSize() > 0)) {
+                this.isExecuting = false;
+            }
             
+
         }
 
         private compareMemToXReg() { //EC

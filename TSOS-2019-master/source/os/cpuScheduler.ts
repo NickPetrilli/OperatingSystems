@@ -59,6 +59,7 @@ module TSOS {
                     _Kernel.krnInterruptHandler(CONTEXT_SWITCH_IRQ);
                 }
             }
+
         }
 
         public schedulePriority(): void {
@@ -71,6 +72,14 @@ module TSOS {
 
         public incrementCounter(): void {
             this.counter++;
+        }
+
+        public resetCounter(): void {
+            this.counter = 1;
+        }
+
+        public setExecutingPCB(pcb: TSOS.ProcessControlBlock): void {
+            this.executingPCB = pcb;
         }
 
     }
