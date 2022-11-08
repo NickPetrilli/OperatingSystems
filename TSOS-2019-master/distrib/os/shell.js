@@ -426,6 +426,7 @@ var TSOS;
                 else {
                     if (_MemoryManager.doesProcessExist(pid)) {
                         _MemoryManager.killProcess(pid);
+                        _StdOut.putText("Process with pid " + pid + " has been killed.");
                     }
                     else {
                         _StdOut.putText("Process with pid " + pid + " does not exist.");
@@ -438,6 +439,7 @@ var TSOS;
             for (var process in processes) {
                 _MemoryManager.killProcess(process);
             }
+            _StdOut.putText("All processes have been killed.");
         }
         shellQuantum(args) {
             if (args.length === 0) {
