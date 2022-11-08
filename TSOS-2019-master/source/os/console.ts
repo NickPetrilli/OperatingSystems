@@ -107,19 +107,17 @@ module TSOS {
                 decided to write one function and use the term "text" to connote string or char.
             */
             if (text !== "") {
-                var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-
-                //Basic line wrap for typing
-                if (this.currentXPosition > _Canvas.width - 10) {
-                    this.advanceLine();
+                //Instead of measuring the entire text, break it up to each character for line wrap to work
+                for (var i = 0; i < text.length; i++) {
+                    var char = text.charAt(i);
+                    var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, char);
                     
+                    if (this.currentXPosition + offset > _Canvas.width - 25) {
+                        this.advanceLine();
+                    }
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, char);
+                    this.currentXPosition = this.currentXPosition + offset;
                 }
-
-                // Move the current X position.
-                this.currentXPosition = this.currentXPosition + offset;
             }
          }
 
