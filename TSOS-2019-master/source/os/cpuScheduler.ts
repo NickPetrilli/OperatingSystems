@@ -11,14 +11,14 @@ module TSOS {
     export class CpuScheduler {
 
         private quantum: number; //Round Robin quantum
-        private scheduleMode: string; //Round Robin, Priority, First Come First Serve
+        private scheduleMode: string; //Round Robin, FCFS
 
         public executingPCB: TSOS.ProcessControlBlock;
         private counter: number;
 
         constructor() {
             this.quantum = 6;
-            this.scheduleMode = "Round Robin";
+            this.scheduleMode = "rr";
 
             this.executingPCB = null;
             this.counter = 1;
@@ -34,13 +34,10 @@ module TSOS {
 
         public schedule(): void {
             switch(this.scheduleMode) {
-                case "Round Robin":
+                case "rr":
                     this.scheduleRoundRobin();
                     break;
-                case "Priority":
-                    this.schedulePriority();
-                    break;
-                case "FCFS":
+                case "fcfs":
                     this.scheduleFirstComeFirstServe();
                     break;
             }
@@ -62,12 +59,10 @@ module TSOS {
 
         }
 
-        public schedulePriority(): void {
-            //TODO for iProject 4
-        }
-
         public scheduleFirstComeFirstServe(): void {
-            //TODO for iProject 4
+            //FCFS is essentially Round Robin scheduling with the quantum set as the highest value
+            this.quantum = Number.MAX_VALUE;
+            this.scheduleRoundRobin();
         }
 
         public incrementCounter(): void {
@@ -80,6 +75,14 @@ module TSOS {
 
         public setExecutingPCB(pcb: TSOS.ProcessControlBlock): void {
             this.executingPCB = pcb;
+        }
+
+        public getScheduleMode(): string {
+            return this.scheduleMode;
+        }
+
+        public setSchedulingMode(mode: string): void {
+            this.scheduleMode = mode;
         }
 
     }

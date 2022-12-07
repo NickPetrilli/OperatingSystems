@@ -145,10 +145,70 @@ module TSOS {
                                   "- Kills all of the processes");
             this.commandList[this.commandList.length] = sc;
 
-            //quantum
+            //quantum <num>
             sc = new ShellCommand(this.shellQuantum,
                                 "quantum",
                                 "<num> - Sets the quantum for Round Robin scheduling");
+            this.commandList[this.commandList.length] = sc;
+
+            //format
+            sc = new ShellCommand(this.shellFormat,
+                                  "format",
+                                  "- Initializes and formats the hard disk");
+            this.commandList[this.commandList.length] = sc;
+
+            //create <filename>
+            sc = new ShellCommand(this.shellCreate,
+                                 "create",
+                                 "<filename> - Creates a file with name <filename>");
+            this.commandList[this.commandList.length] = sc;
+
+            //read <filename>
+            sc = new ShellCommand(this.shellRead,
+                                 "read",
+                                  "<filename> - Reads and displays the contents of <filename>");
+            this.commandList[this.commandList.length] = sc;
+
+            //write <filename> "data"
+            sc = new ShellCommand(this.shellWrite,
+                                 "write",
+                                 "<filename> 'data' - Writes the contents of 'data' to <filename>");
+            this.commandList[this.commandList.length] = sc;
+
+            //delete <filename>
+            sc = new ShellCommand(this.shellDelete,
+                                 "delete",
+                                 "<filename> - Remove <filename> from disk storage");
+            this.commandList[this.commandList.length] = sc;
+
+            //copy <existing filename> <new filename>
+            sc = new ShellCommand(this.shellCopy,
+                                 "copy",
+                                 "<existing filename> <new filename> - Copy the contents to <new filename>");
+            this.commandList[this.commandList.length] = sc;
+
+            //rename <current filename> <new filename>
+            sc = new ShellCommand(this.shellRename,
+                                 "rename",
+                                 "<current filename> <new filename> - Rename <current filename> to <new filename>");
+            this.commandList[this.commandList.length] = sc;
+
+            //ls
+            sc = new ShellCommand(this.shellLs,
+                                 "ls",
+                                 "- Displays the files currently stored on the disk");
+            this.commandList[this.commandList.length] = sc;
+
+            //getSchedule
+            sc = new ShellCommand(this.shellGetSchedule,
+                                 "getschedule",
+                                 "- Displays the current CPU scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
+
+            //setSchedule
+            sc = new ShellCommand(this.shellSetSchedule,
+                                 "setSchedule",
+                                 "<string> - Sets the CPU schedule. Options are RR (Round Robin) and FCFS (First Come First Serve).");
             this.commandList[this.commandList.length] = sc;
 
             // Display the initial prompt.
@@ -556,6 +616,60 @@ module TSOS {
                     _StdOut.putText("Quantum set to " + quantum);
                 }
             }
+        }
+
+        public shellFormat(args: string[]) {
+
+        }
+
+        public shellCreate(args: string[]) {
+
+        }
+
+        public shellRead(args: string[]) {
+
+        }
+
+        public shellWrite(args: string[]) {
+
+        }
+
+        public shellDelete(args: string[]) {
+
+        }
+
+        public shellCopy(args: string[]) {
+
+        }
+
+        public shellRename(args: string[]) {
+
+        }
+
+        public shellLs(args: string[]) {
+
+        }
+
+        public shellSetSchedule(args: string[]) {
+            if (args.length === 0) {
+                _StdOut.putText("Must provide a string for scheduling algorithm.");
+            }
+            else {
+                //check for contents of string for RR or FCFS
+                var scheduleMode = args[0].toLowerCase();
+                if (scheduleMode === "rr" || scheduleMode === "fcfs") {
+                    _CpuScheduler.setSchedulingMode(scheduleMode);
+                    _StdOut.putText("Scheduling mode has been changed to: " + scheduleMode);
+                }
+                else {
+                    _StdOut.putText("Must provide a valid scheduling algorithm (RR or FCFS).")
+                }
+            }
+        }
+
+        public shellGetSchedule(args: string[]) {
+            //return the schedule from cpu scheduler
+            _StdOut.putText(_CpuScheduler.getScheduleMode);
         }
 
     }

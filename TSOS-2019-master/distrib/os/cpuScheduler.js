@@ -9,7 +9,7 @@ var TSOS;
     class CpuScheduler {
         constructor() {
             this.quantum = 6;
-            this.scheduleMode = "Round Robin";
+            this.scheduleMode = "RR";
             this.executingPCB = null;
             this.counter = 1;
         }
@@ -21,11 +21,8 @@ var TSOS;
         }
         schedule() {
             switch (this.scheduleMode) {
-                case "Round Robin":
+                case "RR":
                     this.scheduleRoundRobin();
-                    break;
-                case "Priority":
-                    this.schedulePriority();
                     break;
                 case "FCFS":
                     this.scheduleFirstComeFirstServe();
@@ -46,11 +43,10 @@ var TSOS;
                 }
             }
         }
-        schedulePriority() {
-            //TODO for iProject 4
-        }
         scheduleFirstComeFirstServe() {
-            //TODO for iProject 4
+            //FCFS is essentially Round Robin scheduling with the quantum set as the highest value
+            this.quantum = Number.MAX_VALUE;
+            this.scheduleRoundRobin();
         }
         incrementCounter() {
             this.counter++;
@@ -60,6 +56,12 @@ var TSOS;
         }
         setExecutingPCB(pcb) {
             this.executingPCB = pcb;
+        }
+        getScheduleMode() {
+            return this.scheduleMode;
+        }
+        setSchedulingMode(mode) {
+            this.scheduleMode = mode;
         }
     }
     TSOS.CpuScheduler = CpuScheduler;

@@ -81,8 +81,38 @@ var TSOS;
             //killall
             sc = new TSOS.ShellCommand(this.shellKillAll, "killall", "- Kills all of the processes");
             this.commandList[this.commandList.length] = sc;
-            //quantum
+            //quantum <num>
             sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<num> - Sets the quantum for Round Robin scheduling");
+            this.commandList[this.commandList.length] = sc;
+            //format
+            sc = new TSOS.ShellCommand(this.shellFormat, "format", "- Initializes and formats the hard disk");
+            this.commandList[this.commandList.length] = sc;
+            //create <filename>
+            sc = new TSOS.ShellCommand(this.shellCreate, "create", "<filename> - Creates a file with name <filename>");
+            this.commandList[this.commandList.length] = sc;
+            //read <filename>
+            sc = new TSOS.ShellCommand(this.shellRead, "read", "<filename> - Reads and displays the contents of <filename>");
+            this.commandList[this.commandList.length] = sc;
+            //write <filename> "data"
+            sc = new TSOS.ShellCommand(this.shellWrite, "write", "<filename> 'data' - Writes the contents of 'data' to <filename>");
+            this.commandList[this.commandList.length] = sc;
+            //delete <filename>
+            sc = new TSOS.ShellCommand(this.shellDelete, "delete", "<filename> - Remove <filename> from disk storage");
+            this.commandList[this.commandList.length] = sc;
+            //copy <existing filename> <new filename>
+            sc = new TSOS.ShellCommand(this.shellCopy, "copy", "<existing filename> <new filename> - Copy the contents to <new filename>");
+            this.commandList[this.commandList.length] = sc;
+            //rename <current filename> <new filename>
+            sc = new TSOS.ShellCommand(this.shellRename, "rename", "<current filename> <new filename> - Rename <current filename> to <new filename>");
+            this.commandList[this.commandList.length] = sc;
+            //ls
+            sc = new TSOS.ShellCommand(this.shellLs, "ls", "- Displays the files currently stored on the disk");
+            this.commandList[this.commandList.length] = sc;
+            //getSchedule
+            sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", "- Displays the current CPU scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
+            //setSchedule
+            sc = new TSOS.ShellCommand(this.shellSetSchedule, "setSchedule", "<string> - Sets the CPU schedule. Options are RR (Round Robin) and FCFS (First Come First Serve).");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
@@ -459,6 +489,41 @@ var TSOS;
                     _StdOut.putText("Quantum set to " + quantum);
                 }
             }
+        }
+        shellFormat(args) {
+        }
+        shellCreate(args) {
+        }
+        shellRead(args) {
+        }
+        shellWrite(args) {
+        }
+        shellDelete(args) {
+        }
+        shellCopy(args) {
+        }
+        shellRename(args) {
+        }
+        shellLs(args) {
+        }
+        shellSetSchedule(args) {
+            if (args.length === 0) {
+                _StdOut.putText("Must provide a string for scheduling algorithm.");
+            }
+            else {
+                //check for contents of string for RR or FCFS
+                var scheduleMode = args[0];
+                if (scheduleMode === "RR" || scheduleMode === "FCFS") {
+                    _CpuScheduler.setSchedulingMode(scheduleMode);
+                }
+                else {
+                    _StdOut.putText("Must provide a valid scheduling algorithm (RR or FCFS).");
+                }
+            }
+        }
+        shellGetSchedule(args) {
+            //return the schedule from cpu scheduler
+            _StdOut.putText(_CpuScheduler.getScheduleMode);
         }
     }
     TSOS.Shell = Shell;
