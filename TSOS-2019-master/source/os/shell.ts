@@ -619,11 +619,24 @@ module TSOS {
         }
 
         public shellFormat(args: string[]) {
-
+            //Format command initializes all tracks, sectors and blocks on the disk
+            if (_CPU.isExecuting) {
+                _StdOut.putText("Cannot format the disk while the CPU is running.")
+            }
+            else {
+                _krnDiskDriver.formatDisk();
+                _IsDiskFormatted = true;
+                _StdOut.putText("Disk has been formatted.");
+            }
         }
 
         public shellCreate(args: string[]) {
+            if (_IsDiskFormatted) {
 
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
 
         public shellRead(args: string[]) {

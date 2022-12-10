@@ -491,8 +491,22 @@ var TSOS;
             }
         }
         shellFormat(args) {
+            //Format command initializes all tracks, sectors and blocks on the disk
+            if (_CPU.isExecuting) {
+                _StdOut.putText("Cannot format the disk while the CPU is running.");
+            }
+            else {
+                _krnDiskDriver.formatDisk();
+                _IsDiskFormatted = true;
+                _StdOut.putText("Disk has been formatted.");
+            }
         }
         shellCreate(args) {
+            if (_IsDiskFormatted) {
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
         shellRead(args) {
         }
@@ -512,9 +526,10 @@ var TSOS;
             }
             else {
                 //check for contents of string for RR or FCFS
-                var scheduleMode = args[0];
-                if (scheduleMode === "RR" || scheduleMode === "FCFS") {
+                var scheduleMode = args[0].toLowerCase();
+                if (scheduleMode === "rr" || scheduleMode === "fcfs") {
                     _CpuScheduler.setSchedulingMode(scheduleMode);
+                    _StdOut.putText("Scheduling mode has been changed to: " + scheduleMode);
                 }
                 else {
                     _StdOut.putText("Must provide a valid scheduling algorithm (RR or FCFS).");

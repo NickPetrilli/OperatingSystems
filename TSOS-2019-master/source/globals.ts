@@ -62,6 +62,8 @@ var _CPU: TSOS.Cpu;
 var _Memory: TSOS.Memory;
 var _MemorySize: number = 768; 
 var _MemoryAccessor: TSOS.MemoryAccessor;
+var _Disk: TSOS.Disk;
+var _IsDiskFormatted: boolean = false;
 
 //Software (OS)
 var _MemoryManager: any = null;
@@ -73,6 +75,7 @@ var _SarcasticMode: boolean = false;
 
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver: TSOS.DeviceDriverKeyboard  = null;
+var _krnDiskDriver: TSOS.DeviceDriverDisk = null;
 
 var _hardwareClockID: number = null;
 

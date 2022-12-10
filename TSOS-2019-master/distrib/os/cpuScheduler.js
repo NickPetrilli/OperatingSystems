@@ -9,7 +9,7 @@ var TSOS;
     class CpuScheduler {
         constructor() {
             this.quantum = 6;
-            this.scheduleMode = "RR";
+            this.scheduleMode = "rr";
             this.executingPCB = null;
             this.counter = 1;
         }
@@ -21,10 +21,10 @@ var TSOS;
         }
         schedule() {
             switch (this.scheduleMode) {
-                case "RR":
+                case "rr":
                     this.scheduleRoundRobin();
                     break;
-                case "FCFS":
+                case "fcfs":
                     this.scheduleFirstComeFirstServe();
                     break;
             }

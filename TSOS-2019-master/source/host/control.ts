@@ -209,6 +209,32 @@ module TSOS {
 
         }
 
+        public static updateDiskDisplay() {
+            var table = document.getElementById("diskTable");
+            var tableBody = "<tbody>" + "<tr>" +
+            "<th>T:S:B</th><th>Used</th><th>Next</th><th>Data</th>" +
+            "</tr>";
+            for (var i = 0; i < _Disk.numTracks; i++) {
+                for (var j = 0; j < _Disk.numSectors; j++) {
+                    for (var k = 0; k < _Disk.numBlocks; k++) {
+                        var data = sessionStorage.getItem(i + "," + j + "," + k).split(" ");
+                        var blockData = "";
+                        for (var x = 4; x < data.length; x++) {
+                            blockData += (data[x] + " ");
+                        }
+                        blockData.trim();
+                        tableBody += "<tr>" +
+                        `<td> ${i + ',' + j + ',' + k} </td>` +
+                        `<td> ${data[0]} </td>` +
+                        `<td> ${data[1] + ',' + data[2] + ',' + data[3]} </td>` +
+                        `<td> ${blockData} </td>`;
+                    }
+                }
+            }
+            tableBody += "</tbody>";
+            table.innerHTML = tableBody;
+        }
+
         public static hostLog(msg: string, source: string = "?"): void {
             // Note the OS CLOCK.
             var clock: number = _OSclock;

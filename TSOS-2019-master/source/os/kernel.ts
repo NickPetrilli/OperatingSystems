@@ -32,6 +32,7 @@ module TSOS {
             _MemoryManager = new MemoryManager();
             _CpuScheduler = new CpuScheduler();
             _CpuDispatcher = new CpuDispatcher();
+            _Disk = new Disk();
             
 
             // Load the Keyboard Device Driver
@@ -39,6 +40,11 @@ module TSOS {
             _krnKeyboardDriver = new DeviceDriverKeyboard();     // Construct it.
             _krnKeyboardDriver.driverEntry();                    // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
+            //Load the Disk Device Driver
+            this.krnTrace("Loading the disk device driver.");
+            _krnDiskDriver = new DeviceDriverDisk();     // Construct it.
+            _krnDiskDriver.driverEntry();                    // Call the driverEntry() initialization routine.
+            this.krnTrace(_krnDiskDriver.status);
 
             //
             // ... more?
