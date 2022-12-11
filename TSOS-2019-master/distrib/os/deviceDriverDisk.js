@@ -52,6 +52,57 @@ var TSOS;
             }
             return block;
         }
+        createFile(filename) {
+            //First file entry will be directory block 001
+            //TODO: check that file doesn't exist first - return true or false
+            var directoryEntry = this.nextDirectoryEntry();
+            var dataEntry = this.nextDataEntry();
+            var directoryEntryData = this.createNewBlock();
+            var dataEntryData = this.createNewBlock();
+            //Set the used bit to 1 for both the directory entry and data entry
+            directoryEntryData[0] = "1";
+            dataEntryData[0] = "1";
+            //Split on commas to put the T,S,B of data entry in the directory
+            var dataEntrySplit = dataEntry.split(",");
+            directoryEntryData[1] = dataEntrySplit[0];
+            directoryEntryData[2] = dataEntrySplit[1];
+            directoryEntryData[3] = dataEntrySplit[2];
+            for (var i = 0; i < filename.length; i++) {
+                directoryEntryData[i + 4] = this.decimalToHex(filename.charCodeAt(i));
+            }
+            sessionStorage.setItem(directoryEntry, directoryEntryData.join(" "));
+            sessionStorage.setItem(dataEntry, dataEntryData.join(" "));
+            return true;
+        }
+        //Finds the next directory entry to store the filename that is being created
+        nextDirectoryEntry() {
+            for (var i = 0; i < _Disk.numSectors; i++) {
+                for (var j = 0; j < _Disk.numTracks; j++) {
+                    var data = sessionStorage.getItem("0," + i + "," + j).split(" ");
+                    if (data[0] === "0") {
+                        return "0," + i + "," + j;
+                    }
+                }
+            }
+            return null;
+        }
+        nextDataEntry() {
+            //Start at track 1 for data section of file system
+            for (var i = 1; i < _Disk.numTracks; i++) {
+                for (var j = 0; j < _Disk.numSectors; j++) {
+                    for (var k = 0; k < _Disk.numBlocks; k++) {
+                        var data = sessionStorage.getItem(i + "," + j + "," + k);
+                        if (data[0] === "0") {
+                            return i + "," + j + "," + k;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        decimalToHex(decimalNum) {
+            return decimalNum.toString(16);
+        }
     }
     TSOS.DeviceDriverDisk = DeviceDriverDisk;
 })(TSOS || (TSOS = {}));

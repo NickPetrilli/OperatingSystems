@@ -78,7 +78,13 @@ module TSOS {
         }
 
         public getScheduleMode(): string {
-            return this.scheduleMode;
+            if (this.scheduleMode == "rr") {
+                return "Round Robin";
+            }
+            else if (this.scheduleMode === "fcfs") {
+                return "First Come First Serve";
+            }
+            
         }
 
         public setSchedulingMode(mode: string): void {

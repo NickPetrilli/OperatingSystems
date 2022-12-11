@@ -207,7 +207,7 @@ module TSOS {
 
             //setSchedule
             sc = new ShellCommand(this.shellSetSchedule,
-                                 "setSchedule",
+                                 "setschedule",
                                  "<string> - Sets the CPU schedule. Options are RR (Round Robin) and FCFS (First Come First Serve).");
             this.commandList[this.commandList.length] = sc;
 
@@ -631,8 +631,19 @@ module TSOS {
         }
 
         public shellCreate(args: string[]) {
+            var filename = args[0];
             if (_IsDiskFormatted) {
-
+                if (filename === undefined) {
+                    _StdOut.putText("Must provide a filename to create.");
+                }
+                else if (_krnDiskDriver.createFile(filename)){
+                    _StdOut.putText("File " + filename + " has been created.");
+                    TSOS.Control.updateDiskDisplay();
+                }
+                //TODO: after implementing a check for that filename existing, add output for returning false
+                else {
+                    _StdOut.putText("File " + filename + " already exists.");
+                }
             }
             else {
                 _StdOut.putText("Disk is not formatted.");
@@ -672,7 +683,7 @@ module TSOS {
                 var scheduleMode = args[0].toLowerCase();
                 if (scheduleMode === "rr" || scheduleMode === "fcfs") {
                     _CpuScheduler.setSchedulingMode(scheduleMode);
-                    _StdOut.putText("Scheduling mode has been changed to: " + scheduleMode);
+                    _StdOut.putText("Scheduling mode has been changed to " + scheduleMode);
                 }
                 else {
                     _StdOut.putText("Must provide a valid scheduling algorithm (RR or FCFS).")
@@ -682,7 +693,7 @@ module TSOS {
 
         public shellGetSchedule(args: string[]) {
             //return the schedule from cpu scheduler
-            _StdOut.putText(_CpuScheduler.getScheduleMode);
+            _StdOut.putText(_CpuScheduler.getScheduleMode());
         }
 
     }

@@ -112,7 +112,7 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", "- Displays the current CPU scheduling algorithm.");
             this.commandList[this.commandList.length] = sc;
             //setSchedule
-            sc = new TSOS.ShellCommand(this.shellSetSchedule, "setSchedule", "<string> - Sets the CPU schedule. Options are RR (Round Robin) and FCFS (First Come First Serve).");
+            sc = new TSOS.ShellCommand(this.shellSetSchedule, "setschedule", "<string> - Sets the CPU schedule. Options are RR (Round Robin) and FCFS (First Come First Serve).");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
@@ -502,7 +502,19 @@ var TSOS;
             }
         }
         shellCreate(args) {
+            var filename = args[0];
             if (_IsDiskFormatted) {
+                if (filename === undefined) {
+                    _StdOut.putText("Must provide a filename to create.");
+                }
+                else if (_krnDiskDriver.createFile(filename)) {
+                    _StdOut.putText("File " + filename + " has been created.");
+                    TSOS.Control.updateDiskDisplay();
+                }
+                //TODO: after implementing a check for that filename existing, add output for returning false
+                else {
+                    _StdOut.putText("File " + filename + " already exists.");
+                }
             }
             else {
                 _StdOut.putText("Disk is not formatted.");
@@ -529,7 +541,7 @@ var TSOS;
                 var scheduleMode = args[0].toLowerCase();
                 if (scheduleMode === "rr" || scheduleMode === "fcfs") {
                     _CpuScheduler.setSchedulingMode(scheduleMode);
-                    _StdOut.putText("Scheduling mode has been changed to: " + scheduleMode);
+                    _StdOut.putText("Scheduling mode has been changed to " + scheduleMode);
                 }
                 else {
                     _StdOut.putText("Must provide a valid scheduling algorithm (RR or FCFS).");
@@ -538,7 +550,7 @@ var TSOS;
         }
         shellGetSchedule(args) {
             //return the schedule from cpu scheduler
-            _StdOut.putText(_CpuScheduler.getScheduleMode);
+            _StdOut.putText(_CpuScheduler.getScheduleMode());
         }
     }
     TSOS.Shell = Shell;

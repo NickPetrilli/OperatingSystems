@@ -58,7 +58,12 @@ var TSOS;
             this.executingPCB = pcb;
         }
         getScheduleMode() {
-            return this.scheduleMode;
+            if (this.scheduleMode == "rr") {
+                return "Round Robin";
+            }
+            else if (this.scheduleMode === "fcfs") {
+                return "First Come First Serve";
+            }
         }
         setSchedulingMode(mode) {
             this.scheduleMode = mode;
