@@ -511,7 +511,6 @@ var TSOS;
                     _StdOut.putText("File " + filename + " has been created.");
                     TSOS.Control.updateDiskDisplay();
                 }
-                //TODO: after implementing a check for that filename existing, add output for returning false
                 else {
                     _StdOut.putText("File " + filename + " already exists.");
                 }
@@ -590,9 +589,13 @@ var TSOS;
                     _StdOut.putText("Must provide an existing file name followed by a new file name to copy to.");
                 }
                 else {
-                    _krnDiskDriver.copyFile(fileName, newFileName);
-                    _StdOut.putText("File " + newFileName + " has been created with contents from " + fileName);
-                    TSOS.Control.updateDiskDisplay();
+                    if (_krnDiskDriver.copyFile(fileName, newFileName)) {
+                        _StdOut.putText("File " + newFileName + " has been created with contents from " + fileName);
+                        TSOS.Control.updateDiskDisplay();
+                    }
+                    else {
+                        _StdOut.putText("Error copying files: either the first file name doesn't exist, or the second one does.");
+                    }
                 }
             }
             else {
@@ -600,6 +603,18 @@ var TSOS;
             }
         }
         shellRename(args) {
+            if (_IsDiskFormatted) {
+                var fileName = args[0];
+                var newFileName = args[1];
+                if (fileName === undefined || newFileName === undefined) {
+                    _StdOut.putText("Must provide an existing file name followed by the new file name.");
+                }
+                else {
+                }
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
         shellLs(args) {
         }

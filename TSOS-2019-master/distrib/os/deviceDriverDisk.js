@@ -52,27 +52,34 @@ var TSOS;
             }
             return block;
         }
-        createFile(filename) {
+        createFile(fileName) {
             //First file entry will be directory block 001
             //TODO: check that file doesn't exist first - return true or false
-            var directoryEntry = this.nextDirectoryEntry();
-            var dataEntry = this.nextDataEntry();
-            var directoryEntryData = this.createNewBlock();
-            var dataEntryData = this.createNewBlock();
-            //Set the used bit to 1 for both the directory entry and data entry
-            directoryEntryData[0] = "1";
-            dataEntryData[0] = "1";
-            //Split on commas to put the T,S,B of data entry in the directory
-            var dataEntrySplit = dataEntry.split(",");
-            directoryEntryData[1] = dataEntrySplit[0];
-            directoryEntryData[2] = dataEntrySplit[1];
-            directoryEntryData[3] = dataEntrySplit[2];
-            for (var i = 0; i < filename.length; i++) {
-                directoryEntryData[i + 4] = this.decimalToHex(filename.charCodeAt(i));
+            var fileTSB = this.getFileTSB(fileName);
+            if (fileTSB != null) {
+                //alert("File " + fileName + " already exists.");
+                return false;
             }
-            sessionStorage.setItem(directoryEntry, directoryEntryData.join(" "));
-            sessionStorage.setItem(dataEntry, dataEntryData.join(" "));
-            return true;
+            else {
+                var directoryEntry = this.nextDirectoryEntry();
+                var dataEntry = this.nextDataEntry();
+                var directoryEntryData = this.createNewBlock();
+                var dataEntryData = this.createNewBlock();
+                //Set the used bit to 1 for both the directory entry and data entry
+                directoryEntryData[0] = "1";
+                dataEntryData[0] = "1";
+                //Split on commas to put the T,S,B of data entry in the directory
+                var dataEntrySplit = dataEntry.split(",");
+                directoryEntryData[1] = dataEntrySplit[0];
+                directoryEntryData[2] = dataEntrySplit[1];
+                directoryEntryData[3] = dataEntrySplit[2];
+                for (var i = 0; i < fileName.length; i++) {
+                    directoryEntryData[i + 4] = this.decimalToHex(fileName.charCodeAt(i));
+                }
+                sessionStorage.setItem(directoryEntry, directoryEntryData.join(" "));
+                sessionStorage.setItem(dataEntry, dataEntryData.join(" "));
+                return true;
+            }
         }
         //Finds the next directory entry to store the filename that is being created
         nextDirectoryEntry() {
@@ -238,10 +245,28 @@ var TSOS;
             }
         }
         copyFile(fileName, newFileName) {
-            //Create a new entry in the directory with the new file name
-            //Then create a new entry in the data section, read from filename and write to new filename 
-            this.createFile(newFileName);
-            this.writeToFile(newFileName, this.readFile(fileName));
+            //First need to create the new file
+            //Then write to the new file the contents of the existing file
+            //Check that the first file already exists and that the second doesn't
+            var fileTSB = this.getFileTSB(fileName);
+            var newFileTSB = this.getFileTSB(newFileName);
+            if (fileTSB != null) {
+                if (newFileTSB === null) {
+                    this.createFile(newFileName);
+                    this.writeToFile(newFileName, this.readFile(fileName));
+                    return true;
+                }
+                else {
+                    alert("File " + newFileName + " already exists so it can't be copied to.");
+                    return false;
+                }
+            }
+            else {
+                alert("File " + fileName + " doesn't exist and can't be copied.");
+                return false;
+            }
+        }
+        renameFile(fileName, newFileName) {
         }
         decimalToHex(decimalNum) {
             return decimalNum.toString(16);
