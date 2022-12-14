@@ -747,7 +747,13 @@ module TSOS {
                     _StdOut.putText("Must provide an existing file name followed by the new file name.");
                 }
                 else {
-
+                    if (_krnDiskDriver.renameFile(fileName, newFileName)) {
+                        _StdOut.putText("File " + fileName + " has been renamed to " + newFileName);
+                        TSOS.Control.updateDiskDisplay();
+                    }
+                    else {
+                        _StdOut.putText("File " + fileName + " doesn't exist and can't be renamed.");
+                    }
                 }
             }
             else {

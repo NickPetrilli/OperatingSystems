@@ -267,6 +267,28 @@ var TSOS;
             }
         }
         renameFile(fileName, newFileName) {
+            //First need to check that the first file name exists
+            //Go to directory and write over the previous file name
+            var fileTSB = this.getFileTSB(fileName);
+            var oldFileDataTSB = this.getFileDataTSB(fileName);
+            if (fileTSB != null) {
+                //alert(fileTSB);
+                var dataBlock = this.createNewBlock();
+                for (var i = 0; i < newFileName.length; i++) {
+                    dataBlock[i + 4] = this.decimalToHex(newFileName.charCodeAt(i));
+                }
+                dataBlock[0] = "1";
+                var oldFileDataTSBSplit = oldFileDataTSB.split(",");
+                dataBlock[1] = oldFileDataTSBSplit[0];
+                dataBlock[2] = oldFileDataTSBSplit[1];
+                dataBlock[3] = oldFileDataTSBSplit[2];
+                sessionStorage.setItem(fileTSB, dataBlock.join(" "));
+                return true;
+            }
+            else {
+                //alert("File " + fileName + " doesn't exist and cannot be renamed.");
+                return false;
+            }
         }
         decimalToHex(decimalNum) {
             return decimalNum.toString(16);
