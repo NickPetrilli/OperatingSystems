@@ -523,6 +523,7 @@ var TSOS;
         shellRead(args) {
         }
         shellWrite(args) {
+            _krnDiskDriver.writeToFile(args[0], args[1]);
         }
         shellDelete(args) {
         }

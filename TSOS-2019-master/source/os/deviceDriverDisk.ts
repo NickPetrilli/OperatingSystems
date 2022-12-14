@@ -111,8 +111,72 @@ module TSOS {
             return null;
         }
 
+        public writeToFile(fileName: string, fileData: string) {
+            //FILE TSB REFERS TO IN DIRECTORY, FILE DATA TSB REFERS TO IN DATA SECTION
+            //First need to find the t,s,b of the directory entry with the filename
+            //Then need go into that t,s,b to get just the fileName to match it with the command
+            //Then need to get the data t,s,b for where to write to
+            //Finally write the data to that data t,s,b
+            var fileDataTSB = this.getFileDataTSB(fileName);
+            alert(fileDataTSB);
+            //When writing to a file, check the length to see if it needs to be linked to another tsb
+            //Writing to a file will replace any data that was previously in the file
+
+        }
+
+        //Takes in the fileName and returns the t,s,b of where the data in that file is
+        public getFileDataTSB(fileName: string): string {
+            let tsbFile = this.getFileTSB(fileName);
+            if (tsbFile != null) {
+                let tsbFileName = sessionStorage.getItem(tsbFile).split(" ");
+                return tsbFileName[1] + "," + tsbFileName[2] + "," + tsbFileName[3];
+            }
+            else {
+                return null;
+            }
+        }
+
+        //Takes in the fileName and returns the t,s,b of the file in the directory
+        public getFileTSB(fileName: string): string {
+            for (let i = 0; i < _Disk.numSectors; i++) {
+                for (let j = 0; j < _Disk.numBlocks; j++) {
+                    let data = sessionStorage.getItem("0," + i + "," + j).split(" ");
+                    let usedBit = data[0];
+                    let thisFileName = this.getFileName(data);
+                    if (thisFileName == fileName) {
+                        if (usedBit == "1") {
+                            return "0" + "," + i + "," + j;
+                            break;
+                        }
+                        else if (usedBit == "0") {
+                            return null;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        //Takes in the whole block of data containing the filename, and returns just the filename
+        public getFileName(fileNameData: string[]): string {
+            let fileName = "";
+            for (let i = 4; i < fileNameData.length; i++) {
+                if (fileNameData[i] === "-") {
+                    return fileName;
+                }
+                else {
+                    fileName += String.fromCharCode(this.hexToDecimal(fileNameData[i]));
+                }
+            }
+            return fileName;
+        }
+
         public decimalToHex(decimalNum: number): string {
             return decimalNum.toString(16);
+        }
+
+        public hexToDecimal(hexString: string): number {
+            return parseInt(hexString, 16);
         }
     }
 }

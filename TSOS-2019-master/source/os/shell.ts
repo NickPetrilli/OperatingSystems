@@ -655,7 +655,7 @@ module TSOS {
         }
 
         public shellWrite(args: string[]) {
-
+            _krnDiskDriver.writeToFile(args[0], args[1]);
         }
 
         public shellDelete(args: string[]) {
