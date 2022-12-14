@@ -118,18 +118,34 @@ module TSOS {
             //Then need to get the data t,s,b for where to write to
             //Finally write the data to that data t,s,b
             var fileDataTSB = this.getFileDataTSB(fileName);
-            alert(fileDataTSB);
-            //When writing to a file, check the length to see if it needs to be linked to another tsb
-            //Writing to a file will replace any data that was previously in the file
-
+            if (fileDataTSB != null) {
+                //When writing to a file, check the length to see if it needs to be linked to another tsb
+                //Writing to a file will replace any data that was previously in the file
+                //alert(fileDataTSB);
+                //alert(fileData);
+                var dataBlock = this.createNewBlock();
+                if (fileData.length <= 60) {
+                    for (var i = 0; i < fileData.length; i++) {
+                        dataBlock[i + 4] = this.decimalToHex(fileData.charCodeAt(i));
+                    }
+                    dataBlock[0] = "1";
+                    sessionStorage.setItem(fileDataTSB, dataBlock.join(" "));
+                }
+                else {
+                    //TODO: Link to another tsb
+                }
+            }
+            else {
+                alert("File " + fileName + " can't be written to.");
+            }
         }
 
         //Takes in the fileName and returns the t,s,b of where the data in that file is
         public getFileDataTSB(fileName: string): string {
             let tsbFile = this.getFileTSB(fileName);
             if (tsbFile != null) {
-                let tsbFileName = sessionStorage.getItem(tsbFile).split(" ");
-                return tsbFileName[1] + "," + tsbFileName[2] + "," + tsbFileName[3];
+                let tsbFileData = sessionStorage.getItem(tsbFile).split(" ");
+                return tsbFileData[1] + "," + tsbFileData[2] + "," + tsbFileData[3];
             }
             else {
                 return null;
@@ -145,7 +161,7 @@ module TSOS {
                     let thisFileName = this.getFileName(data);
                     if (thisFileName == fileName) {
                         if (usedBit == "1") {
-                            return "0" + "," + i + "," + j;
+                            return "0," + i + "," + j;
                             break;
                         }
                         else if (usedBit == "0") {

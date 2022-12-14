@@ -523,7 +523,17 @@ var TSOS;
         shellRead(args) {
         }
         shellWrite(args) {
-            _krnDiskDriver.writeToFile(args[0], args[1]);
+            if (_IsDiskFormatted) {
+                //First parameter is file name, need to remove quotes from second parameter
+                var fileName = args[0];
+                var dataToWrite = args[1].replace('"', '').replace('"', '');
+                _krnDiskDriver.writeToFile(fileName, dataToWrite);
+                _StdOut.putText("Writing to file " + fileName);
+                TSOS.Control.updateDiskDisplay();
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
         shellDelete(args) {
         }

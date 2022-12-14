@@ -101,29 +101,64 @@ var TSOS;
             return null;
         }
         writeToFile(fileName, fileData) {
-            //When writing to a file, check the length to see if it needs to be linked to another tsb
-            //Writing to a file will replace any data that was previously in the file
-            //First need to find the directory tsb of the desired filename
-            //Then need to get the data tsb for where to write to
-            //var fileDataTSB = this.getFileDataTSB(fileName);
+            //FILE TSB REFERS TO IN DIRECTORY, FILE DATA TSB REFERS TO IN DATA SECTION
+            //First need to find the t,s,b of the directory entry with the filename
+            //Then need go into that t,s,b to get just the fileName to match it with the command
+            //Then need to get the data t,s,b for where to write to
+            //Finally write the data to that data t,s,b
             var fileDataTSB = this.getFileDataTSB(fileName);
-            alert(fileDataTSB);
+            if (fileDataTSB != null) {
+                //When writing to a file, check the length to see if it needs to be linked to another tsb
+                //Writing to a file will replace any data that was previously in the file
+                //alert(fileDataTSB);
+                //alert(fileData);
+                var dataBlock = this.createNewBlock();
+                if (fileData.length <= 60) {
+                    for (var i = 0; i < fileData.length; i++) {
+                        dataBlock[i + 4] = this.decimalToHex(fileData.charCodeAt(i));
+                    }
+                    dataBlock[0] = "1";
+                    sessionStorage.setItem(fileDataTSB, dataBlock.join(" "));
+                }
+                else {
+                    //TODO: Link to another tsb
+                }
+            }
+            else {
+                alert("File " + fileName + " can't be written to.");
+            }
         }
-        /*
-                public getFileDataTSB(fileName: string): string {
-                    for (var i = 0; i < _Disk.numSectors; i++) {
-                        for (var j = 0; j < _Disk.numTracks; j++) {
-                            var data = sessionStorage.getItem("0," + i + "," + j).split(" ");
-                            var usedBit = data[0];
-                            var thisFileName = this.getFileName(fileName, data);
-                            if (thisFileName === fileName && usedBit === "1") {
-                                return "0," + i + "," + j;
-                            }
+        //Takes in the fileName and returns the t,s,b of where the data in that file is
+        getFileDataTSB(fileName) {
+            let tsbFile = this.getFileTSB(fileName);
+            if (tsbFile != null) {
+                let tsbFileData = sessionStorage.getItem(tsbFile).split(" ");
+                return tsbFileData[1] + "," + tsbFileData[2] + "," + tsbFileData[3];
+            }
+            else {
+                return null;
+            }
+        }
+        //Takes in the fileName and returns the t,s,b of the file in the directory
+        getFileTSB(fileName) {
+            for (let i = 0; i < _Disk.numSectors; i++) {
+                for (let j = 0; j < _Disk.numBlocks; j++) {
+                    let data = sessionStorage.getItem("0," + i + "," + j).split(" ");
+                    let usedBit = data[0];
+                    let thisFileName = this.getFileName(data);
+                    if (thisFileName == fileName) {
+                        if (usedBit == "1") {
+                            return "0," + i + "," + j;
+                            break;
+                        }
+                        else if (usedBit == "0") {
+                            return null;
                         }
                     }
-                    return null;
                 }
-                */
+            }
+            return null;
+        }
         //Takes in the whole block of data containing the filename, and returns just the filename
         getFileName(fileNameData) {
             let fileName = "";
@@ -142,35 +177,6 @@ var TSOS;
         }
         hexToDecimal(hexString) {
             return parseInt(hexString, 16);
-        }
-        getFileDataTSB(fileName) {
-            let tsbFile = this.getFileTSB(fileName);
-            if (tsbFile != null) {
-                let tsbFileName = sessionStorage.getItem(tsbFile).split(" ");
-                return tsbFileName[1] + "," + tsbFileName[2] + "," + tsbFileName[3];
-            }
-            else {
-                return null;
-            }
-        }
-        getFileTSB(fileName) {
-            for (let i = 0; i < _Disk.numSectors; i++) {
-                for (let j = 0; j < _Disk.numBlocks; j++) {
-                    let thisData = sessionStorage.getItem("0," + i + "," + j).split(" ");
-                    let usedBit = thisData[0];
-                    let thisFileName = this.getFileName(thisData);
-                    if (thisFileName == fileName) {
-                        if (usedBit == "1") {
-                            return "0" + "," + i + "," + j;
-                            break;
-                        }
-                        else if (usedBit == "0") {
-                            return null;
-                        }
-                    }
-                }
-            }
-            return null;
         }
     }
     TSOS.DeviceDriverDisk = DeviceDriverDisk;
