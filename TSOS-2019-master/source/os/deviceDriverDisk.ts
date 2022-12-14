@@ -111,6 +111,23 @@ module TSOS {
             return null;
         }
 
+        public readFile(fileName: string): string {
+            var fileDataTSB = this.getFileDataTSB(fileName);
+            if (fileDataTSB != null) {
+                var fileDataArr = sessionStorage.getItem(fileDataTSB);
+                let splitFileDataArr = fileDataArr.split(" ");
+                var fileData = "";
+                for (let i = 4; i < splitFileDataArr.length; i++) {
+                    fileData += String.fromCharCode(this.hexToDecimal(splitFileDataArr[i]));
+                }
+                return fileData;
+            }
+            else {
+                //alert("File " + fileName + " doesn't exist and cannot be read");
+                return null;
+            }
+        }
+
         public writeToFile(fileName: string, fileData: string) {
             //FILE TSB REFERS TO IN DIRECTORY, FILE DATA TSB REFERS TO IN DATA SECTION
             //First need to find the t,s,b of the directory entry with the filename

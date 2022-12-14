@@ -651,7 +651,25 @@ module TSOS {
         }
 
         public shellRead(args: string[]) {
+            if (_IsDiskFormatted) {
+                var fileName = args[0];
+                if (fileName === undefined) {
+                    _StdOut.putText("Must provide a file name to read from.");
+                }
+                else {
+                var fileData = _krnDiskDriver.readFile(fileName);
+                if (fileData != null) {
+                    _StdOut.putText("Contents of file " + fileName + ": " + fileData);
+                }
+                else {
+                    _StdOut.putText("File " + fileName +  " doesn't exist and cannot be read.");
+                }
+                }
 
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
 
         public shellWrite(args: string[]) {
@@ -660,7 +678,7 @@ module TSOS {
                 var fileName = args[0];
                 var dataToWrite = args[1].replace('"', '').replace('"', '');
                 _krnDiskDriver.writeToFile(fileName, dataToWrite);
-                _StdOut.putText("Writing to file " + fileName);
+                _StdOut.putText("File updated: " + fileName);
                 TSOS.Control.updateDiskDisplay();
             }
             else {

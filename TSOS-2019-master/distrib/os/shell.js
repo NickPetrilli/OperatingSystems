@@ -521,6 +521,24 @@ var TSOS;
             }
         }
         shellRead(args) {
+            if (_IsDiskFormatted) {
+                var fileName = args[0];
+                if (fileName === undefined) {
+                    _StdOut.putText("Must provide a file name to read from.");
+                }
+                else {
+                    var fileData = _krnDiskDriver.readFile(fileName);
+                    if (fileData != null) {
+                        _StdOut.putText("Contents of file " + fileName + ": " + fileData);
+                    }
+                    else {
+                        _StdOut.putText("File " + fileName + " doesn't exist and cannot be read.");
+                    }
+                }
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
         shellWrite(args) {
             if (_IsDiskFormatted) {
@@ -528,7 +546,7 @@ var TSOS;
                 var fileName = args[0];
                 var dataToWrite = args[1].replace('"', '').replace('"', '');
                 _krnDiskDriver.writeToFile(fileName, dataToWrite);
-                _StdOut.putText("Writing to file " + fileName);
+                _StdOut.putText("File updated: " + fileName);
                 TSOS.Control.updateDiskDisplay();
             }
             else {
