@@ -6,13 +6,13 @@
 //Memory manager responsible for allocating and deallocating memory and managing the processes
 var TSOS;
 (function (TSOS) {
-    const numPrograms = 3;
+    //const numPrograms = 3;
     class MemoryManager {
         constructor() {
             this.residentList = [];
             this.readyQueue = new TSOS.Queue();
             //New array for memory allocation separate from the actual memory array
-            this.allocated = new Array(numPrograms);
+            this.allocated = new Array(10);
             for (var i = 0; i < this.allocated.length; i++) {
                 this.allocated[i] = -1;
             }
@@ -32,21 +32,30 @@ var TSOS;
                     this.allocated[i] = pcb.processID;
                     pcb.baseRegister = i * 256; //base registers will be 0, 256, and 512
                     pcb.limitRegister = pcb.baseRegister + 255; //limit registers will be 255, 511, and 767
+                    pcb.isInMemory = true;
                     break;
                 }
             }
-            //Check for error setting base reg 
-            if (pcb.baseRegister === -1) {
-                alert("ERROR: BASE REGISTER IS NOT SET");
-            }
-            //Actually puts the program instructions into memory
-            //Changes so now the program fills the entire allocated memory even if the program isn't that size
-            for (var i = 0; i < 256; i++) {
-                var code = program[i];
-                if (code === undefined) {
-                    code = '00';
+            if (!pcb.isInMemory) {
+                //Memory is full, need to write to disk
+                pcb.isInMemory = false;
+                var programStr = '';
+                for (var i = 0; i < program.length; i++) {
+                    programStr += program[i].trim();
                 }
-                _Memory.setByte(pcb.baseRegister + i, code);
+                _krnDiskDriver.createSwapFile(pcb.processID, programStr);
+                TSOS.Control.updateDiskDisplay();
+            }
+            else {
+                //Actually puts the program instructions into memory
+                //Changes so now the program fills the entire allocated memory even if the program isn't that size
+                for (var i = 0; i < 256; i++) {
+                    var code = program[i];
+                    if (code === undefined) {
+                        code = '00';
+                    }
+                    _Memory.setByte(pcb.baseRegister + i, code);
+                }
             }
             TSOS.Control.updateMemoryDisplay();
         }

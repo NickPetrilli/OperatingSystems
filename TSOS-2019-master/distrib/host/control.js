@@ -140,8 +140,9 @@ var TSOS;
                 bodyRow.insertCell(i).textContent = body[i];
             }
         }
-        static updatePcbDisplay(isLoadCommand, pcb, instruction) {
-            var table = document.getElementById("pcbTable");
+        /*
+        public static updatePcbDisplay(isLoadCommand: boolean, pcb: TSOS.ProcessControlBlock, instruction?: string) {
+            var table = <HTMLTableElement> document.getElementById("pcbTable");
             var numRows = table.rows.length;
             if (firstCall) {
                 table.deleteRow(1);
@@ -151,9 +152,9 @@ var TSOS;
                 instruction = "--";
             }
             var body = [pcb.processID.toString(), pcb.processState, pcb.programCounter.toString(), instruction,
-                TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2),
-                TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString(), pcb.baseRegister.toString(),
-                pcb.limitRegister.toString(), "Segment " + _MemoryManager.allocated[pcb.processID].toString()];
+            TSOS.Utils.toHexDigit(pcb.acc, 2), TSOS.Utils.toHexDigit(pcb.XRegister, 2),
+            TSOS.Utils.toHexDigit(pcb.YRegister, 2), pcb.ZFlag.toString(), pcb.baseRegister.toString(),
+            pcb.limitRegister.toString(), "Segment " + _MemoryManager.allocated[pcb.processID].toString()];
             //To fix the issue with the processes displaying wrong:
             //Load command adds new process into the display
             //Anything else is just updating a process already there, so delete and add new info in its place
@@ -176,14 +177,38 @@ var TSOS;
                     var bodyRow = table.insertRow(3);
                 }
             }
-            /*
-            if (pcb.processState === "Terminated") {
-                table.deleteRow(pcb.processID + 1);
-            }
-            */
+
             for (var i = 0; i < body.length; i++) {
                 bodyRow.insertCell(i).textContent = body[i];
             }
+
+        }
+        */
+        static updatePcbDisplay(isLoadCommand, pcb, instruction) {
+            let table = document.getElementById("pcbTable");
+            if (instruction === undefined) {
+                instruction = "--";
+            }
+            let tableBody = "<tbody>" + "<tr>" +
+                "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>ACC</th><th>X</th><th>Y</th><th>Z</th><th>Base</th><th>Limit</th><th>Location</th>" +
+                "</tr>";
+            for (let i = 0; i < _MemoryManager.residentList.length; i++) {
+                tableBody += "<tr>" +
+                    `<td> ${_MemoryManager.residentList[i].processID.toString()} </td>` +
+                    `<td> ${_MemoryManager.residentList[i].processState} </td>` +
+                    `<td> ${_MemoryManager.residentList[i].programCounter.toString()} </td>` +
+                    `<td> ${instruction} </td>` +
+                    `<td> ${TSOS.Utils.toHexDigit(_MemoryManager.residentList[i].acc, 2)} </td>` +
+                    `<td> ${TSOS.Utils.toHexDigit(_MemoryManager.residentList[i].XRegister, 2)} </td>` +
+                    `<td> ${TSOS.Utils.toHexDigit(_MemoryManager.residentList[i].YRegister, 2)} </td>` +
+                    `<td> ${_MemoryManager.residentList[i].ZFlag.toString()} </td>` +
+                    `<td> ${_MemoryManager.residentList[i].baseRegister.toString()} </td>` +
+                    `<td> ${_MemoryManager.residentList[i].limitRegister.toString()} </td>` +
+                    `<td> ${_MemoryManager.allocated[pcb.processID].toString()} </td>` +
+                    "</tr>";
+            }
+            tableBody += "</tbody>";
+            table.innerHTML = tableBody;
         }
         static updateDiskDisplay() {
             var table = document.getElementById("diskTable");

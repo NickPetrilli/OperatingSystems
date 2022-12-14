@@ -17,6 +17,8 @@ var TSOS;
             this.processState = "New";
             this.baseRegister = -1;
             this.limitRegister = -1;
+            this.isInMemory = false;
+            this.diskLocation = "";
         }
         //PCB needs to be updated after each instruction
         update(pc, acc, XReg, YReg, ZFlag) {

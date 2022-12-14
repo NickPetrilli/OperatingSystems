@@ -91,6 +91,24 @@ module TSOS {
 
         }
 
+        public createSwapFile(pid: number, fileData: string): boolean {
+            var fileName = "@swap" + pid;
+            if (this.createFile(fileName)) {
+                if (this.writeToFile(fileName, fileData, true)) {
+                    alert("Swap file " + fileName + " has been created.");
+                }
+                else {
+                    alert("Issue writing to file" + fileName);
+                    return false;
+                }
+            }
+            else {
+                alert("File " + fileName + " cannot be created.");
+                return false;
+            }
+            return true;
+        }
+
         //Finds the next directory entry to store the filename that is being created
         public nextDirectoryEntry(): string {
             for (var i = 0; i < _Disk.numSectors; i++) {
@@ -136,7 +154,7 @@ module TSOS {
             }
         }
 
-        public writeToFile(fileName: string, fileData: string): boolean {
+        public writeToFile(fileName: string, fileData: string, hexFile?: boolean, nextDataTSB?: string): boolean {
             //FILE TSB REFERS TO IN DIRECTORY, FILE DATA TSB REFERS TO IN DATA SECTION
             //First need to find the t,s,b of the directory entry with the filename
             //Then need go into that t,s,b to get just the fileName to match it with the command
@@ -151,13 +169,55 @@ module TSOS {
                 var dataBlock = this.createNewBlock();
                 if (fileData.length <= 60) {
                     for (var i = 0; i < fileData.length; i++) {
-                        dataBlock[i + 4] = this.decimalToHex(fileData.charCodeAt(i));
+                        if (hexFile) {
+                            dataBlock[i + 4] = fileData.charAt(i);
+                        }
+                        else {
+                            dataBlock[i + 4] = this.decimalToHex(fileData.charCodeAt(i));
+                        }
                     }
                     dataBlock[0] = "1";
-                    sessionStorage.setItem(fileDataTSB, dataBlock.join(" "));
+                    var newDataLoc;
+                    if (nextDataTSB != undefined) {
+                        newDataLoc = nextDataTSB;
+                    }
+                    else {
+                        newDataLoc = fileDataTSB;
+                    }
+                    sessionStorage.setItem(newDataLoc, dataBlock.join(" "));
                 }
                 else {
                     //TODO: Link to another tsb
+                    var newDataBlock = this.createNewBlock();
+                    for (var j = 0; j < 60; j++) {
+                        if (hexFile) {
+                            //Don't need to convert, already in hex
+                            newDataBlock[j + 4] = fileData.charAt(j);
+                        }
+                        else {
+                            newDataBlock[j + 4] = this.decimalToHex(fileData.charCodeAt(j));
+                        }
+                    }
+                    newDataBlock[0] = "1";
+                    var newDataLoc;
+                    if (nextDataTSB != undefined) {
+                        newDataLoc = nextDataTSB;
+                    }
+                    else {
+                        newDataLoc = fileDataTSB;
+                    }
+                    sessionStorage.setItem(newDataLoc, newDataBlock.join(" "));
+                    var nextDataTSB = this.nextDataEntry();
+                    var nextSplit = nextDataTSB.split(",");
+                    var tempStorage = sessionStorage.getItem(newDataLoc).split(" ");
+                    //Update to point to new data tsb 
+                    tempStorage[1] = nextSplit[0];
+                    tempStorage[2] = nextSplit[1];
+                    tempStorage[3] = nextSplit[2];
+                    sessionStorage.setItem(newDataLoc, tempStorage.join(" "));
+                    //Get the data still left if any and call write to file again
+                    var dataStillLeft = fileData.substring(60, fileData.length);
+                    this.writeToFile(fileName, dataStillLeft, hexFile, nextDataTSB);
                 }
                 return true;
             }

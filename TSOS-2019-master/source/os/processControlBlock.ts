@@ -20,6 +20,8 @@ module TSOS {
         public processState: string; // New, Ready, Resident, Executing, Terminated
         public baseRegister: number;
         public limitRegister: number;
+        public isInMemory: boolean;
+        public diskLocation: string; //If isInMemory is false, holds T,S,B string of process location on disk
 
         static currentProcessId: number = 0;
 
@@ -34,6 +36,8 @@ module TSOS {
             this.processState = "New";
             this.baseRegister = -1;
             this.limitRegister = -1;
+            this.isInMemory = false;
+            this.diskLocation = "";
 
         }
 
