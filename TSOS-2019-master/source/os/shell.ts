@@ -718,7 +718,21 @@ module TSOS {
         }
 
         public shellCopy(args: string[]) {
-
+            if (_IsDiskFormatted) {
+                var fileName = args[0];
+                var newFileName = args[1];
+                if (fileName === undefined || newFileName === undefined) {
+                    _StdOut.putText("Must provide an existing file name followed by a new file name to copy to.");
+                }
+                else {
+                    _krnDiskDriver.copyFile(fileName, newFileName);
+                    _StdOut.putText("File " + newFileName + " has been created with contents from " + fileName);
+                    TSOS.Control.updateDiskDisplay();
+                }
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
 
         public shellRename(args: string[]) {

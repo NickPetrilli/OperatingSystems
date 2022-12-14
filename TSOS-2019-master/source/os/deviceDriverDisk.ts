@@ -257,6 +257,13 @@ module TSOS {
             }
         }
 
+        public copyFile(fileName: string, newFileName: string) {
+            //First need to create the new file
+            //Then write to the new file the contents of the existing file 
+            this.createFile(newFileName);
+            this.writeToFile(newFileName, this.readFile(fileName));
+        }
+
         public decimalToHex(decimalNum: number): string {
             return decimalNum.toString(16);
         }

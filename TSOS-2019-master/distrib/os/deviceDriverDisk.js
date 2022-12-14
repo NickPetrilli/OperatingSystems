@@ -237,6 +237,12 @@ var TSOS;
                 return false;
             }
         }
+        copyFile(fileName, newFileName) {
+            //Create a new entry in the directory with the new file name
+            //Then create a new entry in the data section, read from filename and write to new filename 
+            this.createFile(newFileName);
+            this.writeToFile(newFileName, this.readFile(fileName));
+        }
         decimalToHex(decimalNum) {
             return decimalNum.toString(16);
         }
