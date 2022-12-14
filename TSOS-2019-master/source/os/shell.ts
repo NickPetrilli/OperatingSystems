@@ -762,7 +762,23 @@ module TSOS {
         }
 
         public shellLs(args: string[]) {
-
+            if (_IsDiskFormatted) {
+                var fileList = _krnDiskDriver.listFiles();
+                if (fileList.length > 0) {
+                    _StdOut.putText("Current files: ");
+                    _StdOut.advanceLine();
+                    for (var i = 0; i < fileList.length; i++) {
+                        _StdOut.putText(fileList[i]);
+                        _StdOut.advanceLine();
+                    }
+                }
+                else {
+                    _StdOut.putText("There are currently no files on the disk.");
+                }
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
 
         public shellSetSchedule(args: string[]) {

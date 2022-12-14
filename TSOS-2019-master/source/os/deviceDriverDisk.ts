@@ -313,6 +313,23 @@ module TSOS {
             }
         }
 
+        public listFiles(): string[] {
+            var fileList = [];
+            for (var i = 0; i < _Disk.numSectors; i++) {
+                for (var j = 0; j < _Disk.numBlocks; j++) {
+                    var data = sessionStorage.getItem("0," + i + "," + j).split(" ");
+                    //Ignore Master Boot Record
+                    if (!((i == 0) && (j == 0))) {
+                        if (data[0] == "1") { //used bit has to be 1
+                            var fileName = this.getFileName(data);
+                            fileList[fileList.length] = fileName;
+                        }
+                    }
+                }
+            }
+            return fileList;
+        }
+
         public decimalToHex(decimalNum: number): string {
             return decimalNum.toString(16);
         }
