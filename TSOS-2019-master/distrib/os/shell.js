@@ -544,16 +544,43 @@ var TSOS;
             if (_IsDiskFormatted) {
                 //First parameter is file name, need to remove quotes from second parameter
                 var fileName = args[0];
-                var dataToWrite = args[1].replace('"', '').replace('"', '');
-                _krnDiskDriver.writeToFile(fileName, dataToWrite);
-                _StdOut.putText("File updated: " + fileName);
-                TSOS.Control.updateDiskDisplay();
+                if (fileName === undefined) {
+                    _StdOut.putText("Must provide a file name to write to.");
+                }
+                else {
+                    var dataToWrite = args[1].replace('"', '').replace('"', '');
+                    if (_krnDiskDriver.writeToFile(fileName, dataToWrite)) {
+                        _StdOut.putText("File updated: " + fileName);
+                        TSOS.Control.updateDiskDisplay();
+                    }
+                    else {
+                        _StdOut.putText("File " + fileName + " doesn't exist and can't be written to.");
+                    }
+                }
             }
             else {
                 _StdOut.putText("Disk is not formatted.");
             }
         }
         shellDelete(args) {
+            if (_IsDiskFormatted) {
+                var fileName = args[0];
+                if (fileName === undefined) {
+                    _StdOut.putText("Must provide a file name to delete.");
+                }
+                else {
+                    if (_krnDiskDriver.deleteFile(fileName)) {
+                        _StdOut.putText("File " + fileName + " has been deleted.");
+                        TSOS.Control.updateDiskDisplay();
+                    }
+                    else {
+                        _StdOut.putText("File " + fileName + " doesn't exist and couldn't be deleted");
+                    }
+                }
+            }
+            else {
+                _StdOut.putText("Disk is not formatted.");
+            }
         }
         shellCopy(args) {
         }

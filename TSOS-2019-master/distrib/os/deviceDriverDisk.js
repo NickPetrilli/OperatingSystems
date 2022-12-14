@@ -139,9 +139,11 @@ var TSOS;
                 else {
                     //TODO: Link to another tsb
                 }
+                return true;
             }
             else {
-                alert("File " + fileName + " can't be written to.");
+                //alert("File " + fileName + " can't be written to.");
+                return false;
             }
         }
         //Takes in the fileName and returns the t,s,b of where the data in that file is
@@ -187,6 +189,53 @@ var TSOS;
                 }
             }
             return fileName;
+        }
+        deleteFile(fileName) {
+            //Need to delete both the filename entry in the directory, and the data entry 
+            var dataTSBtoDelete = this.getFileDataTSB(fileName);
+            if (this.deleteFileDirectory(fileName) && this.deleteFileData(dataTSBtoDelete)) {
+                //alert("File deleted.");
+                return true;
+            }
+            else {
+                //alert("File couldn't be deleted.");
+                return false;
+            }
+        }
+        deleteFileDirectory(fileName) {
+            var fileTSB = this.getFileTSB(fileName);
+            if (fileTSB != null) {
+                var dataToDelete = sessionStorage.getItem(fileTSB).split(" ");
+                dataToDelete[0] = "0";
+                dataToDelete[1] = "-";
+                dataToDelete[2] = "-";
+                dataToDelete[3] = "-";
+                for (var i = 0; i < fileName.length; i++) {
+                    dataToDelete[i + 4] = "-";
+                }
+                sessionStorage.setItem(fileTSB, dataToDelete.join(" "));
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        deleteFileData(dataTSBtoDelete) {
+            if (dataTSBtoDelete != null) {
+                var dataToDelete = sessionStorage.getItem(dataTSBtoDelete).split(" ");
+                dataToDelete[0] = "0";
+                dataToDelete[1] = "-";
+                dataToDelete[2] = "-";
+                dataToDelete[3] = "-";
+                for (var i = 4; i < 64; i++) {
+                    dataToDelete[i] = "-";
+                }
+                sessionStorage.setItem(dataTSBtoDelete, dataToDelete.join(" "));
+                return true;
+            }
+            else {
+                return false;
+            }
         }
         decimalToHex(decimalNum) {
             return decimalNum.toString(16);

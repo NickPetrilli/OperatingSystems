@@ -128,7 +128,7 @@ module TSOS {
             }
         }
 
-        public writeToFile(fileName: string, fileData: string) {
+        public writeToFile(fileName: string, fileData: string): boolean {
             //FILE TSB REFERS TO IN DIRECTORY, FILE DATA TSB REFERS TO IN DATA SECTION
             //First need to find the t,s,b of the directory entry with the filename
             //Then need go into that t,s,b to get just the fileName to match it with the command
@@ -151,9 +151,11 @@ module TSOS {
                 else {
                     //TODO: Link to another tsb
                 }
+                return true;
             }
             else {
-                alert("File " + fileName + " can't be written to.");
+                //alert("File " + fileName + " can't be written to.");
+                return false;
             }
         }
 
@@ -202,6 +204,57 @@ module TSOS {
                 }
             }
             return fileName;
+        }
+
+        public deleteFile(fileName: string): boolean {
+            //Need to delete both the filename entry in the directory, and the data entry 
+            var dataTSBtoDelete = this.getFileDataTSB(fileName);
+            if (this.deleteFileDirectory(fileName) && this.deleteFileData(dataTSBtoDelete)) {
+                //alert("File deleted.");
+                return true;
+            }
+            else {
+                //alert("File couldn't be deleted.");
+                return false;
+            }
+
+        }
+
+        public deleteFileDirectory(fileName: string): boolean {
+            var fileTSB = this.getFileTSB(fileName);
+            if (fileTSB != null) {
+                var dataToDelete = sessionStorage.getItem(fileTSB).split(" ");
+                dataToDelete[0] = "0";
+                dataToDelete[1] = "-";
+                dataToDelete[2] = "-";
+                dataToDelete[3] = "-";
+                for (var i = 0; i < fileName.length; i++) {
+                    dataToDelete[i + 4] = "-";
+                }
+                sessionStorage.setItem(fileTSB, dataToDelete.join(" "));
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        public deleteFileData(dataTSBtoDelete: string): boolean {
+            if (dataTSBtoDelete != null) {
+                var dataToDelete = sessionStorage.getItem(dataTSBtoDelete).split(" ");
+                dataToDelete[0] = "0";
+                dataToDelete[1] = "-";
+                dataToDelete[2] = "-";
+                dataToDelete[3] = "-";
+                for (var i = 4; i < 64; i++) {
+                    dataToDelete[i] = "-";
+                }
+                sessionStorage.setItem(dataTSBtoDelete, dataToDelete.join(" "));
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
         public decimalToHex(decimalNum: number): string {
