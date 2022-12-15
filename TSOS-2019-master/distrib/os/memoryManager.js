@@ -6,13 +6,13 @@
 //Memory manager responsible for allocating and deallocating memory and managing the processes
 var TSOS;
 (function (TSOS) {
-    //const numPrograms = 3;
+    const numPrograms = 3;
     class MemoryManager {
         constructor() {
             this.residentList = [];
             this.readyQueue = new TSOS.Queue();
             //New array for memory allocation separate from the actual memory array
-            this.allocated = new Array(10);
+            this.allocated = new Array(numPrograms);
             for (var i = 0; i < this.allocated.length; i++) {
                 this.allocated[i] = -1;
             }
@@ -41,8 +41,9 @@ var TSOS;
                 pcb.isInMemory = false;
                 var programStr = '';
                 for (var i = 0; i < program.length; i++) {
-                    programStr += program[i].trim();
+                    programStr += program[i];
                 }
+                alert(programStr);
                 _krnDiskDriver.createSwapFile(pcb.processID, programStr);
                 TSOS.Control.updateDiskDisplay();
             }

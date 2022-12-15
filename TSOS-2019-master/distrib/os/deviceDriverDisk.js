@@ -173,7 +173,6 @@ var TSOS;
                     sessionStorage.setItem(newDataLoc, dataBlock.join(" "));
                 }
                 else {
-                    //TODO: Link to another tsb
                     var newDataBlock = this.createNewBlock();
                     for (var j = 0; j < 60; j++) {
                         if (hexFile) {

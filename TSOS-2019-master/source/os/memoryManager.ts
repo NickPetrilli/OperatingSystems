@@ -58,8 +58,9 @@ module TSOS {
                 pcb.isInMemory = false;
                 var programStr = '';
                 for (var i = 0; i < program.length; i++) {
-                    programStr += program[i].trim();
+                    programStr += program[i];
                 }
+                alert(programStr);
                 _krnDiskDriver.createSwapFile(pcb.processID, programStr);
                 TSOS.Control.updateDiskDisplay();
             }
