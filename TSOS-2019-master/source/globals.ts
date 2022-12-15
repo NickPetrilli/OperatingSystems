@@ -69,6 +69,7 @@ var _IsDiskFormatted: boolean = false;
 var _MemoryManager: any = null;
 var _CpuScheduler: TSOS.CpuScheduler;
 var _CpuDispatcher: TSOS.CpuDispatcher;
+var _CpuSwapper: TSOS.CpuSwapper;
 
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode: boolean = false;

@@ -32,6 +32,7 @@ module TSOS {
             _MemoryManager = new MemoryManager();
             _CpuScheduler = new CpuScheduler();
             _CpuDispatcher = new CpuDispatcher();
+            _CpuSwapper = new CpuSwapper();
             _Disk = new Disk();
             
 

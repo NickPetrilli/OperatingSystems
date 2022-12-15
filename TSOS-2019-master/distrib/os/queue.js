@@ -29,6 +29,9 @@ var TSOS;
             }
             return retVal;
         }
+        getLast() {
+            return this.q[this.q.length - 1];
+        }
         toString() {
             var retVal = "";
             for (var i in this.q) {

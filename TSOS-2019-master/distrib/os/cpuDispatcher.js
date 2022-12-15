@@ -22,6 +22,12 @@ var TSOS;
                 TSOS.Control.updatePcbDisplay(false, _CpuScheduler.executingPCB);
                 //Get the next process and update the current process
                 var nextProcess = _MemoryManager.readyQueue.dequeue();
+                if (!nextProcess.isInMemory) {
+                    var pcbToSwap = _MemoryManager.readyQueue.getLast();
+                    var destinationSegment = pcbToSwap.memSegment;
+                    _CpuSwapper.rollOut(pcbToSwap);
+                    _CpuSwapper.rollIn(nextProcess, destinationSegment);
+                }
                 _CpuScheduler.executingPCB = nextProcess;
                 //And load it to the cpu to start execution
                 _CPU.loadProcess(_CpuScheduler.executingPCB);

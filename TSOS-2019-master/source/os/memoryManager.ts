@@ -58,7 +58,7 @@ module TSOS {
                 pcb.isInMemory = false;
                 var programStr = '';
                 for (var i = 0; i < program.length; i++) {
-                    programStr += program[i];
+                    programStr += program[i] + " ";
                 }
                 alert(programStr);
                 _krnDiskDriver.createSwapFile(pcb.processID, programStr);

@@ -27,6 +27,7 @@ var TSOS;
             _MemoryManager = new TSOS.MemoryManager();
             _CpuScheduler = new TSOS.CpuScheduler();
             _CpuDispatcher = new TSOS.CpuDispatcher();
+            _CpuSwapper = new TSOS.CpuSwapper();
             _Disk = new TSOS.Disk();
             // Load the Keyboard Device Driver
             this.krnTrace("Loading the keyboard device driver.");

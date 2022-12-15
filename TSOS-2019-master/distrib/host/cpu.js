@@ -111,7 +111,7 @@ var TSOS;
                         this.systemCall();
                         break;
                     default:
-                        alert("Illegal instruction");
+                        alert("Illegal instruction " + this.instruction);
                         this.isExecuting = false;
                         break;
                 }

@@ -53,6 +53,7 @@ var _IsDiskFormatted = false;
 var _MemoryManager = null;
 var _CpuScheduler;
 var _CpuDispatcher;
+var _CpuSwapper;
 // At least this OS is not trying to kill you. (Yet.)
 var _SarcasticMode = false;
 // Global Device Driver Objects - page 12
