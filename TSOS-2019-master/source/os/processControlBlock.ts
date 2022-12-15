@@ -22,6 +22,7 @@ module TSOS {
         public limitRegister: number;
         public isInMemory: boolean;
         public diskLocation: string; //If isInMemory is false, holds T,S,B string of process location on disk
+        public memSegment: number; //If isInMemory is true, holds the segment of 0, 1, or 2
 
         static currentProcessId: number = 0;
 
@@ -38,6 +39,7 @@ module TSOS {
             this.limitRegister = -1;
             this.isInMemory = false;
             this.diskLocation = "";
+            this.memSegment = -1;
 
         }
 

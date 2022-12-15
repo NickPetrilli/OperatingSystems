@@ -210,15 +210,14 @@ module TSOS {
             if (instruction === undefined) {
                 instruction = "--";
             }
-            var location = -1;
             if (pcb.baseRegister === 0) {
-                location = 0;
+                pcb.memSegment = 0;
             }
             else if (pcb.baseRegister === 256) {
-                location = 1;
+                pcb.memSegment = 1;
             }
             else if (pcb.baseRegister === 512) {
-                location = 2;
+                pcb.memSegment = 2;
             }
             let tableBody = "<tbody>" + "<tr>" +
                 "<th>PID</th><th>State</th><th>PC</th><th>IR</th><th>ACC</th><th>X</th><th>Y</th><th>Z</th><th>Base</th><th>Limit</th><th>Location</th>" +
@@ -235,7 +234,7 @@ module TSOS {
                     `<td> ${_MemoryManager.residentList[i].ZFlag.toString()} </td>` +
                     `<td> ${_MemoryManager.residentList[i].baseRegister.toString()} </td>` +
                     `<td> ${_MemoryManager.residentList[i].limitRegister.toString()} </td>` +
-                    `<td> ${location} </td>` +
+                    `<td> ${_MemoryManager.residentList[i].memSegment} </td>` +
                     "</tr>";
             }
             tableBody += "</tbody>";
