@@ -157,7 +157,7 @@ var TSOS;
                 }
                 if (splitFileDataArr[1] != "-") {
                     var nextLoc = splitFileDataArr[1] + "," + splitFileDataArr[2] + "," + splitFileDataArr[3];
-                    this.readFile(undefined, nextLoc, fileData, hexFile);
+                    return this.readFile(undefined, nextLoc, fileData, hexFile);
                 }
                 return fileData;
             }
@@ -228,7 +228,7 @@ var TSOS;
                     sessionStorage.setItem(newDataLoc, tempStorage.join(" "));
                     //Get the data still left if any and call write to file again
                     var dataStillLeft = fileData.substring(60, fileData.length);
-                    this.writeToFile(fileName, dataStillLeft, hexFile, nextDataTSB);
+                    return this.writeToFile(fileName, dataStillLeft, hexFile, nextDataTSB);
                 }
                 return true;
             }
