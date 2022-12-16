@@ -12,7 +12,9 @@ var TSOS;
             this.rollInData = "";
         }
         rollIn(diskPCB, segment) {
-            this.rollInData = _krnDiskDriver.readFile("@" + diskPCB.processID);
+            this.rollInData = _krnDiskDriver.readFile("@swap" + diskPCB.processID);
+            this.rollInData.replace(" ", "");
+            alert(this.rollInData);
             var byteToWrite = "";
             var addressCounter = 0;
             if (segment == 0) {
@@ -51,7 +53,7 @@ var TSOS;
                 this.rollOutData += _MemoryAccessor.read(memoryPCB, i) + " ";
             }
             this.rollOutData.trim();
-            //var splitData = this.rollInData.split(" ");
+            alert(this.rollOutData);
             _Memory.clearRange(memoryPCB.baseRegister, memoryPCB.limitRegister);
             memoryPCB.memSegment = -1;
             memoryPCB.baseRegister = -1;

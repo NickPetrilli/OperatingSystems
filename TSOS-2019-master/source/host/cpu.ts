@@ -129,7 +129,7 @@ module TSOS {
                         this.systemCall();
                         break;
                     default:
-                        alert("Illegal instruction " + this.instruction);
+                        alert("Illegal instruction " + this.instruction + " from " + this.currentPCB.processID);
                         this.isExecuting = false;
                         break;
                 } 
