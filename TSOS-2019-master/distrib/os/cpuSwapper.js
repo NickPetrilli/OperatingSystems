@@ -12,9 +12,10 @@ var TSOS;
             this.rollInData = "";
         }
         rollIn(diskPCB, segment) {
-            this.rollInData = _krnDiskDriver.readFile("@swap" + diskPCB.processID);
-            this.rollInData.replace(" ", "");
-            alert(this.rollInData);
+            this.rollInData = _krnDiskDriver.readFile("@swap" + diskPCB.processID, undefined, undefined, undefined);
+            //var rollInDataArr = this.rollInData.split(" ");
+            //alert(rollInDataArr);
+            //alert(this.rollInData);
             var byteToWrite = "";
             var addressCounter = 0;
             if (segment == 0) {
@@ -44,7 +45,9 @@ var TSOS;
             }
             diskPCB.isInMemory = true;
             var fileName = "@swap" + diskPCB.processID;
-            _krnDiskDriver.deleteFile(fileName);
+            if (_krnDiskDriver.deleteFile(fileName)) {
+                alert("File " + fileName + " deleted");
+            }
             TSOS.Control.updateMemoryDisplay();
             TSOS.Control.updateDiskDisplay();
         }

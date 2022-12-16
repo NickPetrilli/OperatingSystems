@@ -656,7 +656,7 @@ module TSOS {
                     _StdOut.putText("Must provide a file name to read from.");
                 }
                 else {
-                    var fileData = _krnDiskDriver.readFile(fileName);
+                    var fileData = _krnDiskDriver.readFile(fileName, undefined, undefined, undefined);
                     if (fileData != null) {
                         _StdOut.putText("Contents of file " + fileName + ": " + fileData);
                     }
@@ -678,15 +678,33 @@ module TSOS {
                     _StdOut.putText("Must provide a file name to write to.");
                 }
                 else {
-                    var dataToWrite = args[1].replace('"', '').replace('"', '');
-                    if (_krnDiskDriver.writeToFile(fileName, dataToWrite)) {
-                        _StdOut.putText("File updated: " + fileName);
-                        TSOS.Control.updateDiskDisplay();
+                    //var dataToWrite = args[1].replace('"', '').replace('"', '');
+                    var writeFirst = args[1];
+                    var writeLast = args[args.length - 1];
+                    var dataToWrite = "";
+                    if ((writeFirst.charAt(0) === "\"") && (writeLast.charAt(writeLast.length - 1) === "\"")) {
+                        if (args.length == 2) {
+                            dataToWrite = writeFirst.substring(1, (writeFirst.length - 1));
+                        }
+                        else {
+                            dataToWrite = writeFirst.substring(1, writeFirst.length) + " ";
+                            for (var i = 2; i < args.length - 1; i++) {
+                                dataToWrite += args[i] + " ";
+                            }
+                            dataToWrite += writeLast.substring(0, writeLast.length - 1);
+                        }
+
+                        if (_krnDiskDriver.writeToFile(fileName, dataToWrite)) {
+                            _StdOut.putText("File updated: " + fileName);
+                            TSOS.Control.updateDiskDisplay();
+                        }
+                        else {
+                            _StdOut.putText("File " + fileName + " doesn't exist and can't be written to.");
+                        }
                     }
                     else {
-                        _StdOut.putText("File " + fileName + " doesn't exist and can't be written to.");
+                        _StdOut.putText("Must enter file name followed by text to write in quotation marks.");
                     }
-
                 }
             }
             else {

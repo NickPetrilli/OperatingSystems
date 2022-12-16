@@ -19,9 +19,10 @@ module TSOS {
         }
         
         public rollIn(diskPCB: ProcessControlBlock, segment: number) {
-            this.rollInData = _krnDiskDriver.readFile("@swap" + diskPCB.processID);
-            this.rollInData.replace(" ", "");
-            alert(this.rollInData);
+            this.rollInData = _krnDiskDriver.readFile("@swap" + diskPCB.processID, undefined, undefined, undefined);
+            //var rollInDataArr = this.rollInData.split(" ");
+            //alert(rollInDataArr);
+            //alert(this.rollInData);
             var byteToWrite = "";
             var addressCounter = 0;
             if (segment == 0) {
@@ -51,7 +52,10 @@ module TSOS {
             }
             diskPCB.isInMemory = true;
             var fileName = "@swap" + diskPCB.processID;
-            _krnDiskDriver.deleteFile(fileName);
+            if (_krnDiskDriver.deleteFile(fileName)) {
+                alert("File " + fileName + " deleted");
+            }
+            
             TSOS.Control.updateMemoryDisplay();
             TSOS.Control.updateDiskDisplay();
         }
@@ -61,7 +65,7 @@ module TSOS {
                 this.rollOutData += _MemoryAccessor.read(memoryPCB, i) + " ";
             }
             this.rollOutData.trim();
-            //alert(this.rollOutData);
+            alert(this.rollOutData);
             _Memory.clearRange(memoryPCB.baseRegister, memoryPCB.limitRegister);
             memoryPCB.memSegment = -1;
             memoryPCB.baseRegister = -1;

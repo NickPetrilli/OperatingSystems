@@ -124,14 +124,40 @@ var TSOS;
             }
             return null;
         }
-        readFile(fileName) {
-            var fileDataTSB = this.getFileDataTSB(fileName);
+        /*
+        public readMultipleFiles(fileLoc: string, fileData: string, hexFile: boolean) {
+            var fileName = this.getFileDataTSB(fileLoc);
+            this.readFile(fileName, fileData, hexFile);
+        }
+        */
+        readFile(fileName, fileLoc, fileData, hexFile) {
+            if (hexFile == undefined) {
+                hexFile = false;
+            }
+            if (fileData == undefined) {
+                fileData = "";
+            }
+            var fileDataTSB;
+            if (fileName == undefined && fileLoc != undefined) {
+                fileDataTSB = fileLoc;
+            }
+            else {
+                fileDataTSB = this.getFileDataTSB(fileName);
+            }
             if (fileDataTSB != null) {
                 var fileDataArr = sessionStorage.getItem(fileDataTSB);
                 let splitFileDataArr = fileDataArr.split(" ");
-                var fileData = "";
                 for (let i = 4; i < splitFileDataArr.length; i++) {
-                    fileData += String.fromCharCode(this.hexToDecimal(splitFileDataArr[i]));
+                    if (hexFile) {
+                        fileData += splitFileDataArr[i];
+                    }
+                    else {
+                        fileData += String.fromCharCode(this.hexToDecimal(splitFileDataArr[i]));
+                    }
+                }
+                if (splitFileDataArr[1] != "-") {
+                    var nextLoc = splitFileDataArr[1] + "," + splitFileDataArr[2] + "," + splitFileDataArr[3];
+                    this.readFile(undefined, nextLoc, fileData, hexFile);
                 }
                 return fileData;
             }
@@ -289,14 +315,24 @@ var TSOS;
             if (dataTSBtoDelete != null) {
                 var dataToDelete = sessionStorage.getItem(dataTSBtoDelete).split(" ");
                 dataToDelete[0] = "0";
-                dataToDelete[1] = "-";
-                dataToDelete[2] = "-";
-                dataToDelete[3] = "-";
-                for (var i = 4; i < 64; i++) {
-                    dataToDelete[i] = "-";
+                if (dataToDelete[1] != "-") {
+                    var nextDataTSB = dataToDelete[1] + "," + dataToDelete[2] + "," + dataToDelete[3];
+                    dataToDelete[1] = "-";
+                    dataToDelete[2] = "-";
+                    dataToDelete[3] = "-";
+                    for (var i = 4; i < 85; i++) {
+                        dataToDelete[i] = "-";
+                    }
+                    sessionStorage.setItem(dataTSBtoDelete, dataToDelete.join(" "));
+                    this.deleteFileData(nextDataTSB);
                 }
-                sessionStorage.setItem(dataTSBtoDelete, dataToDelete.join(" "));
-                return true;
+                else {
+                    for (var i = 4; i < 64; i++) {
+                        dataToDelete[i] = "-";
+                    }
+                    sessionStorage.setItem(dataTSBtoDelete, dataToDelete.join(" "));
+                    return true;
+                }
             }
             else {
                 return false;
@@ -311,7 +347,7 @@ var TSOS;
             if (fileTSB != null) {
                 if (newFileTSB === null) {
                     this.createFile(newFileName);
-                    this.writeToFile(newFileName, this.readFile(fileName));
+                    this.writeToFile(newFileName, this.readFile(fileName, undefined, undefined, undefined));
                     return true;
                 }
                 else {
