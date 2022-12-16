@@ -19,6 +19,7 @@ module TSOS {
         }
         
         public rollIn(diskPCB: ProcessControlBlock, segment: number) {
+            //alert(diskPCB.processID);
             this.rollInData = _krnDiskDriver.readFile("@swap" + diskPCB.processID, undefined, undefined, undefined);
             //var rollInDataArr = this.rollInData.split(" ");
             //alert(rollInDataArr);
@@ -44,6 +45,7 @@ module TSOS {
             for (var i = 0; i < ((diskPCB.limitRegister - diskPCB.baseRegister) * 2); i += 2) {
                 if (i < (this.rollInData.length - 2)) {
                     byteToWrite = this.rollInData.charAt(i) + this.rollInData.charAt(i + 1);
+                    //alert(byteToWrite);
                     if (!((byteToWrite.charCodeAt(0) == 0) && (byteToWrite.charCodeAt(1) == 0))) {
                         _MemoryAccessor.write(diskPCB, addressCounter, byteToWrite);
                         addressCounter++;
@@ -65,7 +67,7 @@ module TSOS {
                 this.rollOutData += _MemoryAccessor.read(memoryPCB, i) + " ";
             }
             this.rollOutData.trim();
-            alert(this.rollOutData);
+            //alert(this.rollOutData);
             _Memory.clearRange(memoryPCB.baseRegister, memoryPCB.limitRegister);
             memoryPCB.memSegment = -1;
             memoryPCB.baseRegister = -1;

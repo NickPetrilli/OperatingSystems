@@ -43,7 +43,6 @@ var TSOS;
                 for (var i = 0; i < program.length; i++) {
                     programStr += program[i] + " ";
                 }
-                //alert(programStr);
                 _krnDiskDriver.createSwapFile(pcb.processID, programStr);
                 TSOS.Control.updateDiskDisplay();
             }
