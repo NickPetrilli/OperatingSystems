@@ -466,8 +466,8 @@ var TSOS;
         }
         shellKillAll(args) {
             var processes = _MemoryManager.getAllRunningProcesses();
-            for (var process in processes) {
-                _MemoryManager.killProcess(process);
+            for (var i = 0; i < processes.length; i++) {
+                _MemoryManager.killProcess(processes[i].processID);
             }
             _StdOut.putText("All processes have been killed.");
         }
