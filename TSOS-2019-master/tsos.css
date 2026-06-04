@@ -282,7 +282,7 @@ input[type="button"]:disabled {
 }
 
 #display {
-  background-color: #DFDBC3;
+  background-color: var(--surface-lo);
   border: 1px solid var(--border-hi);
   box-shadow: 0 0 12px rgba(0, 119, 187, 0.35), 0 0 4px rgba(0, 119, 187, 0.2);
   cursor: default;
