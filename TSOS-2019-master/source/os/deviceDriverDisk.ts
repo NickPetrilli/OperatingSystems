@@ -50,12 +50,11 @@ module TSOS {
 
         public createNewBlock(): string[] {
             //Each block is an array of size 64
+            //Index 0: used bit ("0" = free), indices 1-63: data/TSB ("-" = empty)
             let block = new Array(64);
-            for (var i = 0; i < 4; i++) {
-                block[i] = "0";
-            }
-            for (var j = 0; j < block.length; j++) {
-                block[j] = "-";
+            block[0] = "0";
+            for (var i = 1; i < block.length; i++) {
+                block[i] = "-";
             }
             return block;
         }
@@ -94,16 +93,13 @@ module TSOS {
         public createSwapFile(pid: number, fileData: string): boolean {
             var fileName = "@swap" + pid;
             if (this.createFile(fileName)) {
-                if (this.writeToFile(fileName, fileData, true)) {
-                    alert("Swap file " + fileName + " has been created.");
-                }
-                else {
-                    alert("Issue writing to file" + fileName);
+                if (!this.writeToFile(fileName, fileData, true)) {
+                    _Kernel.krnTrace("Error writing swap file " + fileName);
                     return false;
                 }
             }
             else {
-                alert("File " + fileName + " cannot be created.");
+                _Kernel.krnTrace("Error creating swap file " + fileName);
                 return false;
             }
             return true;
@@ -112,7 +108,7 @@ module TSOS {
         //Finds the next directory entry to store the filename that is being created
         public nextDirectoryEntry(): string {
             for (var i = 0; i < _Disk.numSectors; i++) {
-                for (var j = 0; j < _Disk.numTracks; j++) {
+                for (var j = 0; j < _Disk.numBlocks; j++) {
                     var data = sessionStorage.getItem("0," + i + "," + j).split(" ");
                     if (data[0] === "0") {
                         return "0," + i + "," + j;
@@ -160,12 +156,15 @@ module TSOS {
                 var fileDataArr = sessionStorage.getItem(fileDataTSB);
                 let splitFileDataArr = fileDataArr.split(" ");
                 for (let i = 4; i < splitFileDataArr.length; i++) {
+                    if (splitFileDataArr[i] === "-") {
+                        break;
+                    }
                     if (hexFile) {
                         fileData += splitFileDataArr[i];
                     }
                     else {
                         fileData += String.fromCharCode(this.hexToDecimal(splitFileDataArr[i]));
-                    }                   
+                    }
                 }
                 if (splitFileDataArr[1] != "-") {
                     var nextLoc = splitFileDataArr[1] + "," + splitFileDataArr[2] + "," + splitFileDataArr[3];

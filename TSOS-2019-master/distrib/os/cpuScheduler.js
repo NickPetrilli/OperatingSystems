@@ -9,6 +9,7 @@ var TSOS;
     class CpuScheduler {
         constructor() {
             this.quantum = 6;
+            this.rrQuantum = 6;
             this.scheduleMode = "rr";
             this.executingPCB = null;
             this.counter = 1;
@@ -18,6 +19,7 @@ var TSOS;
         }
         setQuantum(q) {
             this.quantum = q;
+            this.rrQuantum = q;
         }
         schedule() {
             switch (this.scheduleMode) {
@@ -44,9 +46,11 @@ var TSOS;
             }
         }
         scheduleFirstComeFirstServe() {
-            //FCFS is essentially Round Robin scheduling with the quantum set as the highest value
-            this.quantum = Number.MAX_VALUE;
-            this.scheduleRoundRobin();
+            // Run the next process if the CPU is idle; no quantum-based preemption
+            if (this.executingPCB === null && _MemoryManager.readyQueue.getSize() > 0) {
+                this.executingPCB = _MemoryManager.readyQueue.dequeue();
+                _CPU.loadProcess(this.executingPCB);
+            }
         }
         incrementCounter() {
             this.counter++;
@@ -67,6 +71,10 @@ var TSOS;
         }
         setSchedulingMode(mode) {
             this.scheduleMode = mode;
+            if (mode === "rr") {
+                // Restore the saved RR quantum in case we were in FCFS mode
+                this.quantum = this.rrQuantum;
+            }
         }
     }
     TSOS.CpuScheduler = CpuScheduler;

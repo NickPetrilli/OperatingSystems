@@ -11,6 +11,7 @@ module TSOS {
     export class CpuScheduler {
 
         private quantum: number; //Round Robin quantum
+        private rrQuantum: number; //Saved RR quantum, restored when switching from FCFS back to RR
         private scheduleMode: string; //Round Robin, FCFS
 
         public executingPCB: TSOS.ProcessControlBlock;
@@ -18,6 +19,7 @@ module TSOS {
 
         constructor() {
             this.quantum = 6;
+            this.rrQuantum = 6;
             this.scheduleMode = "rr";
 
             this.executingPCB = null;
@@ -30,6 +32,7 @@ module TSOS {
 
         public setQuantum(q: number): void {
             this.quantum = q;
+            this.rrQuantum = q;
         }
 
         public schedule(): void {
@@ -60,9 +63,11 @@ module TSOS {
         }
 
         public scheduleFirstComeFirstServe(): void {
-            //FCFS is essentially Round Robin scheduling with the quantum set as the highest value
-            this.quantum = Number.MAX_VALUE;
-            this.scheduleRoundRobin();
+            // Run the next process if the CPU is idle; no quantum-based preemption
+            if (this.executingPCB === null && _MemoryManager.readyQueue.getSize() > 0) {
+                this.executingPCB = _MemoryManager.readyQueue.dequeue();
+                _CPU.loadProcess(this.executingPCB);
+            }
         }
 
         public incrementCounter(): void {
@@ -89,6 +94,10 @@ module TSOS {
 
         public setSchedulingMode(mode: string): void {
             this.scheduleMode = mode;
+            if (mode === "rr") {
+                // Restore the saved RR quantum in case we were in FCFS mode
+                this.quantum = this.rrQuantum;
+            }
         }
 
     }

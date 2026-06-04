@@ -119,13 +119,15 @@ var TSOS;
             if (this.PC > 256) {
                 this.PC = this.PC % 256;
             }
-            this.currentPCB.update(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
-            //Stop executing if single step is on
-            if (TSOS.Cpu.singleStep) {
-                this.isExecuting = false;
+            // currentPCB is nulled by breakSystemCall; skip updates for that cycle
+            if (this.currentPCB !== null) {
+                this.currentPCB.update(this.PC, this.Acc, this.Xreg, this.Yreg, this.Zflag);
+                if (TSOS.Cpu.singleStep) {
+                    this.isExecuting = false;
+                }
+                TSOS.Control.updateCpuDisplay(this.currentPCB, this.instruction);
+                TSOS.Control.updatePcbDisplay(false, this.currentPCB, this.instruction);
             }
-            TSOS.Control.updateCpuDisplay(this.currentPCB, this.instruction);
-            TSOS.Control.updatePcbDisplay(false, this.currentPCB, this.instruction);
         } // end of cycle
         loadAccWithConstant() {
             this.PC++;

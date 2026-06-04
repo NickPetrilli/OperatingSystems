@@ -4,9 +4,7 @@
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
    <meta name="author"             content="Alan G. Labouseur" />
    <link rel="stylesheet" href="tsos.css" type="text/css" media="screen" />
-   <title>
-      NickOS
-   </title>
+   <title>NickOS</title>
 
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
    <script type="text/javascript" src="distrib/globals.js"></script>
@@ -40,8 +38,8 @@
    <!-- Other Routines -->
    <script type="text/javascript" src="distrib/utils.js"></script>
    <!-- Uncomment the line below to enable GLaDOS testing. -->
-   <script type="text/javascript" src="http://alanclasses.github.io/TSOS/test/glados-ip4.js"></script> 
-   
+   <script type="text/javascript" src="test/glados-ip4.js"></script>
+
    <script>
       setInterval(function () {
          var today = new Date();
@@ -69,63 +67,64 @@
       }, 1000);
    </script>
 
-   <style>
-      tr { 
-         border-bottom: 1px solid black;
-      }
-      td {
-         border-left: 1px solid black;
-      }
-      tr:nth-child(even) {
-         background-color: white;
-      }
-      tr:nth-child(odd) {
-         background-color: lightgray;
-      }
-   </style>
-   
 </head>
 
 <body onload="onDocumentLoad()">
 
-   <h1> NickOS <div id = "dateAndTime" ></div></h1>
+   <!-- ── Header Bar ───────────────────────────────────────────── -->
+   <header id="nickos-header">
+      <div id="header-logo">
+         <span class="logo-icon">&#9672;</span>NICKOS
+      </div>
+      <div id="header-status">
+         <div id="divStatus">
+            <script>
+               //starting status message
+               let status = "Status: I love Operating Systems";
+               document.getElementById("divStatus").innerHTML = status;
+            </script>
+         </div>
+      </div>
+      <div id="dateAndTime"></div>
+   </header>
 
-<div id="divMain" style="width:100%;">
-
-   <div id="divButtonBar" style="margin:4px;">
+   <!-- ── Control Bar ──────────────────────────────────────────── -->
+   <nav id="nickos-controls">
       <input type="button"
-             id = "btnStartOS"
+             id="btnStartOS"
              name="brnStartOS"
              class="start_button"
-             value="Start"
+             value="&#9654; START"
              tabindex="0"
              onclick="TSOS.Control.hostBtnStartOS_click(this);">
 
       <input type="button"
-             id = "btnHaltOS"
+             id="btnHaltOS"
              name="brnHaltOS"
              class="halt_button"
              disabled="disabled"
-             value="Halt"
+             value="&#9632; HALT"
              tabindex="1"
              onclick="TSOS.Control.hostBtnHaltOS_click(this);">
 
       <input type="button"
-             id = "btnReset"
+             id="btnReset"
              name="brnReset"
              class="reset_button"
              disabled="disabled"
-             value="Reset"
+             value="&#8635; RESET"
              tabindex="2"
              onclick="TSOS.Control.hostBtnReset_click(this);">
+
+      <div class="ctrl-sep"></div>
 
       <input type="button"
              id="btnSingleStep"
              name="btnSingleStep"
              class="singleStep_button"
              disabled="disabled"
-             value="Single-Step Execution: Off"
-             tabindex="2"
+             value="&#11036; SINGLE-STEP: OFF"
+             tabindex="3"
              onclick="TSOS.Control.hostBtnSingleStep_click(this);">
 
       <input type="button"
@@ -133,113 +132,102 @@
              name="btnStep"
              class="step_button"
              disabled="disabled"
-             value=">"
-             tabindex="2"
+             value="&#9655;"
+             tabindex="4"
              onclick="TSOS.Control.hostBtnStep_click(this);">
+   </nav>
 
-   </div>
+   <!-- ── Main Area ────────────────────────────────────────────── -->
+   <main id="nickos-main">
 
-   <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left; overflow-y: scroll; overflow-x: scroll;">
-      <canvas id="display"
-              width="500px"
-              height="500px"
-              tabindex="3">
-      </canvas>
-   </div>
-
-   <div id = "divStatus" style = "margin-left:520px;">
-      <script>
-         //starting status message
-         let status = "Status: I love Operating Systems";
-         document.getElementById("divStatus").innerHTML = status;
-      </script>
-
-   </div>
-
-   <div id="divLog" style="margin-left:520px;" >
-      <label>
-         Host Log
-         <br>
-         <textarea name="taHostLog"
-                   id  ="taHostLog"
-                   style="overflow-y: scroll;"
-                   rows="15"
-                   cols="48"
-         ></textarea>
-      </label>
-   </div>
-
-   <div id="divUserProgramInput" style="margin-left:520px;">
-      <label>
-         User Program Input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="8"
-                   cols="48"
-         ></textarea>
-      </label>
-   </div>
-
- 
-   <div id="divMemoryDisplay" style="margin-left: 520px">
-      <label>
-         Memory Display
-         <br>
-         <div id="divMemoryTable" style="height: 200px; width: 254px; overflow:auto" class="memoryTable">
-         <table name="memoryTable"
-                id="memoryTable"
-         ></table>  
+      <!-- Terminal Column -->
+      <section id="panel-terminal" class="panel">
+         <div class="panel-label">
+            <span class="dot dot-cyan"></span>TERMINAL
          </div>
-      </label>
-         
-   </div>
-
-  <div id="divCpuDisplay" style="margin-left: 520px">
-      <label>
-         CPU
-         <br>
-         <div id="divCpuTable" style="height: 50px; width: 200px;">
-         <table name="cpuTable"
-                id="cpuTable"
-                class="cpuTable"
-         ></table>
-         
+         <div id="divConsole">
+            <canvas id="display"
+                    width="500"
+                    height="500"
+                    tabindex="5">
+            </canvas>
          </div>
-      </label>
-   </div>   
+      </section>
 
-   <div id="divPcbDisplay" style="margin: 4px">
-      <label>
-         Ready Queue
-         <br>
-         <div id="divPcbTable" style="height: 50px; width: 200px;">
-         <table name="pcbTable"
-                id="pcbTable"
-                class="pcbTable"
-         ></table>
+      <!-- Info Column -->
+      <aside id="panel-info-col">
+
+         <!-- CPU Registers -->
+         <section id="panel-cpu" class="panel">
+            <div class="panel-label">
+               <span class="dot dot-amber"></span>CPU REGISTERS
+            </div>
+            <div class="panel-body" style="padding:4px 6px;">
+               <table name="cpuTable" id="cpuTable" class="cpuTable"></table>
+            </div>
+         </section>
+
+         <!-- Process Table -->
+         <section id="panel-pcb" class="panel">
+            <div class="panel-label">
+               <span class="dot dot-green"></span>PROCESS TABLE
+            </div>
+            <div id="divPcbTable">
+               <table name="pcbTable" id="pcbTable" class="pcbTable"></table>
+            </div>
+         </section>
+
+         <!-- Program Input -->
+         <section id="panel-input" class="panel">
+            <div class="panel-label">
+               <span class="dot dot-purple"></span>PROGRAM INPUT
+            </div>
+            <div class="panel-body">
+               <textarea name="taProgramInput"
+                         id="taProgramInput"
+                         rows="6"
+                         spellcheck="false"
+               ></textarea>
+            </div>
+         </section>
+
+      </aside>
+   </main>
+
+   <!-- ── Bottom Row ───────────────────────────────────────────── -->
+   <footer id="nickos-bottom">
+
+      <!-- Memory -->
+      <section id="panel-memory" class="panel">
+         <div class="panel-label">
+            <span class="dot dot-blue"></span>MEMORY
          </div>
-      </label>
+         <div id="divMemoryTable">
+            <table name="memoryTable" id="memoryTable" class="memoryTable"></table>
+         </div>
+      </section>
 
-   </div>
-
-   <div id="divDiskDisplay" style="margin-left: 520px">
-      <label>
-         Disk 
-         <br>
+      <!-- Disk -->
+      <section id="panel-disk" class="panel">
+         <div class="panel-label">
+            <span class="dot dot-amber"></span>DISK
+         </div>
          <div id="divDiskTable">
-         <table name="diskTable"
-                id="diskTable"
-                class="diskTable"
-         ></table>
+            <table name="diskTable" id="diskTable" class="diskTable"></table>
          </div>
-      </label>
+      </section>
 
-   </div>
-      
-</div>
+      <!-- Host Log -->
+      <section id="panel-log" class="panel">
+         <div class="panel-label">
+            <span class="dot dot-green"></span>HOST LOG
+         </div>
+         <div class="panel-body">
+            <div id="taHostLog"></div>
+         </div>
+      </section>
 
-
+   </footer>
 
 </body>
 </html>

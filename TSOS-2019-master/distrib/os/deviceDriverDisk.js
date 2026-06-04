@@ -43,12 +43,11 @@ var TSOS;
         }
         createNewBlock() {
             //Each block is an array of size 64
+            //Index 0: used bit ("0" = free), indices 1-63: data/TSB ("-" = empty)
             let block = new Array(64);
-            for (var i = 0; i < 4; i++) {
-                block[i] = "0";
-            }
-            for (var j = 0; j < block.length; j++) {
-                block[j] = "-";
+            block[0] = "0";
+            for (var i = 1; i < block.length; i++) {
+                block[i] = "-";
             }
             return block;
         }
@@ -84,16 +83,13 @@ var TSOS;
         createSwapFile(pid, fileData) {
             var fileName = "@swap" + pid;
             if (this.createFile(fileName)) {
-                if (this.writeToFile(fileName, fileData, true)) {
-                    alert("Swap file " + fileName + " has been created.");
-                }
-                else {
-                    alert("Issue writing to file" + fileName);
+                if (!this.writeToFile(fileName, fileData, true)) {
+                    _Kernel.krnTrace("Error writing swap file " + fileName);
                     return false;
                 }
             }
             else {
-                alert("File " + fileName + " cannot be created.");
+                _Kernel.krnTrace("Error creating swap file " + fileName);
                 return false;
             }
             return true;
@@ -101,7 +97,7 @@ var TSOS;
         //Finds the next directory entry to store the filename that is being created
         nextDirectoryEntry() {
             for (var i = 0; i < _Disk.numSectors; i++) {
-                for (var j = 0; j < _Disk.numTracks; j++) {
+                for (var j = 0; j < _Disk.numBlocks; j++) {
                     var data = sessionStorage.getItem("0," + i + "," + j).split(" ");
                     if (data[0] === "0") {
                         return "0," + i + "," + j;
@@ -148,6 +144,9 @@ var TSOS;
                 var fileDataArr = sessionStorage.getItem(fileDataTSB);
                 let splitFileDataArr = fileDataArr.split(" ");
                 for (let i = 4; i < splitFileDataArr.length; i++) {
+                    if (splitFileDataArr[i] === "-") {
+                        break;
+                    }
                     if (hexFile) {
                         fileData += splitFileDataArr[i];
                     }
