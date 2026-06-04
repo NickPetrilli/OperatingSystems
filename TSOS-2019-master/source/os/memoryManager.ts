@@ -17,7 +17,7 @@ module TSOS {
 
         public readyQueue: TSOS.Queue;
 
-        private allocated;
+        public allocated;
 
         constructor() {
             this.residentList = [];
