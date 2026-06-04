@@ -40,7 +40,7 @@ module TSOS {
             }
             //Else - nothing in the ready queue
             else {
-                alert("Empty ready queue");
+                _Kernel.krnTrace("Context switch fired with empty ready queue");
             }
         }
 
