@@ -225,7 +225,7 @@ module TSOS {
             for (let i = 0; i < _MemoryManager.residentList.length; i++) {
                 tableBody += "<tr>" +
                     `<td> ${_MemoryManager.residentList[i].processID.toString()} </td>` +
-                    `<td> ${_MemoryManager.residentList[i].processState} </td>` +
+                    `<td class="state-${_MemoryManager.residentList[i].processState.toLowerCase()}"> ${_MemoryManager.residentList[i].processState} </td>` +
                     `<td> ${_MemoryManager.residentList[i].programCounter.toString()} </td>` +
                     `<td> ${instruction} </td>` +
                     `<td> ${TSOS.Utils.toHexDigit(_MemoryManager.residentList[i].acc, 2)} </td>` +
@@ -268,20 +268,31 @@ module TSOS {
         }
 
         public static hostLog(msg: string, source: string = "?"): void {
-            // Note the OS CLOCK.
             var clock: number = _OSclock;
-
-            // Note the REAL clock in milliseconds since January 1, 1970.
             var now: number = new Date().getTime();
 
-            // Build the log string.
-            var str: string = "({ clock:" + clock + ", source:" + source + ", msg:" + msg + ", now:" + now  + " })"  + "\n";
+            // Pick a color class based on source and message content
+            var combined = (source + " " + msg).toLowerCase();
+            var colorClass: string;
+            if (combined.includes("error") || combined.includes("trap") || combined.includes("bsod")) {
+                colorClass = "log-error";
+            } else if (combined.includes("shutdown") || combined.includes("halt")) {
+                colorClass = "log-warn";
+            } else if (combined.includes("irq") || combined.includes("interrupt") || combined.includes("context switch")) {
+                colorClass = "log-irq";
+            } else if (combined.includes("cpu cycle")) {
+                colorClass = "log-cycle";
+            } else if (combined.includes("idle")) {
+                colorClass = "log-idle";
+            } else if (source === "host") {
+                colorClass = "log-host";
+            } else {
+                colorClass = "log-os";
+            }
 
-            // Update the log console.
-            var taLog = <HTMLInputElement> document.getElementById("taHostLog");
-            taLog.value = str + taLog.value;
-
-            // TODO in the future: Optionally update a log database or some streaming service.
+            var str = `<span class="${colorClass}">({ clock:${clock}, source:${source}, msg:${msg}, now:${now} })</span>\n`;
+            var logDiv = document.getElementById("taHostLog");
+            logDiv.innerHTML = str + logDiv.innerHTML;
         }
 
 
