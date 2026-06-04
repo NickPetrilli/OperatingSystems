@@ -48,7 +48,7 @@ module TSOS {
 
         //Used when a process terminates or is killed by the user
         public clearRange(base: number, limit: number): void {
-            for (var i = 0; i < (limit - base); i++) {
+            for (var i = 0; i <= (limit - base); i++) {
                 this.memory[base + i] = '00';
             }
         }
